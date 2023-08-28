@@ -12,6 +12,7 @@ import com.rp.trafego.models.Admin;
 
 @Controller
 public class AdminController {
+    
     @Autowired
     private AdminRepo repo;
 

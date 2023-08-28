@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TrafficproducerApplication<trafficproducer>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.trafficproducer.trafficproducer.TrafficproducerApplication",
+            "projectName": "trafficproducer",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -5,5 +5,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-topic:
-  traffic: traffic
+my-topics:
+  traffic: traffic-topic
+  infracao: infracao-topic

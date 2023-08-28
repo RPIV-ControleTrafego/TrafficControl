@@ -8,8 +8,9 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
-topic:
-  traffic: traffic
-
+my-topics:
+  traffic: traffic-topic
+  infracao: infracao-topic
+  
 server:
   port : 8081

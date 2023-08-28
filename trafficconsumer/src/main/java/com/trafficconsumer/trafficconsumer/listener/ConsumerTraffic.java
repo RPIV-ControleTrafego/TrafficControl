@@ -13,7 +13,7 @@ public class ConsumerTraffic {
 
     private final Logger logger = LoggerFactory.getLogger(ConsumerTraffic.class);
 
-    @KafkaListener(topics = "${topic.traffic}", groupId = "group_id")
+    @KafkaListener(topics = "${my-topics.traffic}", groupId = "group_id")
     public void consume(String message) throws IOException {
         logger.info(String.format("Consumindo mensagem {}", message));
         System.out.println("Consumindo mensagem: " + message);

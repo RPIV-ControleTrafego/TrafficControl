@@ -12,15 +12,14 @@ import com.rp.trafego.models.Admin;
 
 @Controller
 public class AdminController {
-    
+
     @Autowired
     private AdminRepo repo;
 
-    @GetMapping("/admins")
+    @GetMapping("/administradores")
     public String index(Model model) {
         List<Admin> admins = (List<Admin>)repo.findAll();
-
         model.addAttribute("admins", admins);
-        return "admins/index";
+        return "administradores/index";
     }
 }

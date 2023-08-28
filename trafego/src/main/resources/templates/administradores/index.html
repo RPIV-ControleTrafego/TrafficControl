@@ -138,13 +138,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="admin : ${admins}"></tr>
-                                            <td th:text="${admin.id}">1</td>
-                                            <td th:text="${admin.login}">Admin</td>
-                                            <td th:text="${admin.email}">admin@admin</td>
-                                            <td th:text="${admin.senha}">123456</td>
-                                            <td><a href="#" class="btn btn-warning">Alterar</td>
-                                            <td><a href="#" class="btn btn-danger">Excluir</td>
+                                        <tr th:each="admin : ${admins}">
+                                            <td th:text="${admin.id}"></td>
+                                            <td th:text="${admin.nome}"></td>
+                                            <td th:text="${admin.email}"></td>
+                                            <td th:text="${admin.senha}"></td>
+                                            <td><a th:href="@{'/administradores/' + ${admin.id}}" class="btn btn-warning">Alterar</td>
+                                            <td><a href="#" th:onclick="'if(confirm(\'Confirma ?\')) { window.location.href = \'' + @{/administradores/{id}(id=${admin.id})} + '/excluir\' } '" class="btn btn-danger">Excluir</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

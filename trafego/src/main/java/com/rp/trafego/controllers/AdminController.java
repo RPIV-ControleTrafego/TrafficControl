@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.rp.trafego.repository.AdminRepo;
 import com.rp.trafego.models.Admin;
@@ -22,4 +23,15 @@ public class AdminController {
         model.addAttribute("admins", admins);
         return "administradores/index";
     }
+
+    @GetMapping("/administradores/newAdmin")
+    public String novo() {
+        return "administradores/newAdmin";
+  }
+
+    @PostMapping("/administradores/criar")
+    public String criar(Admin admin){
+        repo.save(admin);
+        return "redirect:/administradores";
+  }
 }

@@ -9,19 +9,19 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Teste - Admin</title>
+    <title>Novo admin</title>
 
     <!-- Custom fonts for this template -->
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/styles.min.css" rel="stylesheet">
+    <link href="/css/styles.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -105,7 +105,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
                                 <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                    src="/img/undraw_profile.svg">
                             </a>
                         </li>
                     </ul>
@@ -116,43 +116,26 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Tabela</h1>
-                    <p class="mb-4">Lista de admins</a>.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Cadastro</h1>
+                    <p class="mb-4">Cadastrar novo admin do sistema</a>.</p>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <a href="/administradores/newAdmin" class="btn btn-primary" style="margin-right: 20px;">Novo</a>
-                            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Admins</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Nome</th>
-                                            <th>E-mail</th>
-                                            <th>Senha</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="admin : ${admins}">
-                                            <td th:text="${admin.id}"></td>
-                                            <td th:text="${admin.nome}"></td>
-                                            <td th:text="${admin.email}"></td>
-                                            <td th:text="${admin.senha}"></td>
-                                            <td><a th:href="@{'/administradores/' + ${admin.id}}" class="btn btn-warning">Alterar</td>
-                                            <td><a href="#" th:onclick="'if(confirm(\'Confirma ?\')) { window.location.href = \'' + @{/administradores/{id}(id=${admin.id})} + '/excluir\' } '" class="btn btn-danger">Excluir</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="card shadow mb-4" style="padding: 30px;">
+                        <form method="POST" action="/administradores/criar" onsubmit="return confirm('Confirmar ação')">
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                <input type="text" class="form-control" required id="nome" name="nome" placeholder="Digite o seu nome">
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" required id="email" name="email" placeholder="Digite o seu e-mail">
+                            </div>
+                            <div class="form-group">
+                                <label for="senha">Senha</label>
+                                <input type="password" class="form-control" required id="senha" name="senha" placeholder="Digite uma senha">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </form>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
             </div>

@@ -1,6 +1,7 @@
 package com.rp.trafego.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,14 +32,36 @@ public class AdminController {
     }
 
     @PostMapping("/administradores/criar")
-    public String criar(Admin admin){
+    public String criar(Admin admin) {
         repo.save(admin);
         return "redirect:/administradores";
     }
 
     @GetMapping("/administradores/{id}/excluir")
-    public String excluir(@PathVariable int id){
+    public String excluir(@PathVariable int id) {
         repo.deleteById(id);
+        return "redirect:/administradores";
+    }
+
+    @GetMapping("/administradores/{id}")
+    public String busca(@PathVariable int id, Model model) {
+        Optional<Admin> admin = repo.findById(id);
+        
+        try{
+            model.addAttribute("admin", admin.get());
+        }    catch(Exception err){ return "redirect:/administradores"; }
+
+        return "/administradores/editAdmin";
+    }
+
+    @PostMapping("/admins/{id}/update")
+    public String update(@PathVariable int id, Admin admin) {
+        if(!repo.existsById(id)) {
+            return "redirect:/administradores";
+        }
+
+        repo.save(admin);
+
         return "redirect:/administradores";
     }
 }

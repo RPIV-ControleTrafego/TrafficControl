@@ -2507,6 +2507,7 @@ fieldset:disabled a.btn {
   color: #fff;
   background-color: #f6c23e;
   border-color: #f6c23e;
+  align-self: center;
 }
 
 .btn-warning:hover {

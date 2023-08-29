@@ -144,8 +144,8 @@
                                             <td th:text="${admin.nome}"></td>
                                             <td th:text="${admin.email}"></td>
                                             <td th:text="${admin.senha}"></td>
-                                            <td><a th:href="@{'/administradores/' + ${admin.id}}" class="btn btn-warning">Alterar</td>
-                                            <td><a href="#" th:onclick="'if(confirm(\'Confirma ?\')) { window.location.href = \'' + @{/administradores/{id}(id=${admin.id})} + '/excluir\' } '" class="btn btn-danger">Excluir</td>
+                                            <td style="text-align: center"><a th:href="@{'/administradores/' + ${admin.id}}" class="btn btn-warning">Alterar</td>
+                                            <td style="text-align: center"><a href="#" th:onclick="'if(confirm(\'Tem certeza que deseja excluir o administrador?\')) { window.location.href = \'' + @{/administradores/{id}(id=${admin.id})} + '/excluir\' } '" class="btn btn-danger">Excluir</td>
                                         </tr>
                                     </tbody>
                                 </table>

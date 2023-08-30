@@ -9,13 +9,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TrafficMessage {
-   
-    int velocidadeVeiculo;
-    int velocidadeVia;
-    String placaVeiculo;
+public class AcidenteModel {
+    
+    int numEnvolvidos;
+
+    String gravidade;
+    
     String data;
-    String tipoVeiculo;
+    String hora;
+    String endereco;
+
 
 
 }

@@ -1,6 +1,5 @@
 package com.trafficconsumer.trafficconsumer.listener;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,30 +26,32 @@ public class ConsumerTraffic {
     @Autowired
     private InfracaoListener infracaoListener;
 
-
     @KafkaListener(topics = "${my-topics.traffic}", groupId = "traffic")
-    public void consume(String message) throws IOException {
-        logger.info(String.format("Consumindo mensagem {}", message));
-        // deserializar a mensagem
-        List<TrafficMessage> trafficMessages = objectMapper.readValue(message, new TypeReference<List<TrafficMessage>>() {});
+    public void consume(String message) {
+        try {
+           
+            // deserializar a mensagem
+            List<TrafficMessage> trafficMessages = objectMapper.readValue(message, new TypeReference<List<TrafficMessage>>() {});
 
-       
-        for (TrafficMessage trafficMessage : trafficMessages) {
-            String timestamp = trafficMessage.getTimestamp();
-          
+            for (TrafficMessage trafficMessage : trafficMessages) {
+                try {
+                    String placaVeiculo = trafficMessage.getPlacaVeiculo();
+                    int velocidadeVeiculo = trafficMessage.getVelocidadeVeiculo();
+                    
 
-            System.out.println("Consumindo mensagem:");
-            System.out.println("Timestamp: " + timestamp);
-        System.out.println("Tipo de Infração: " + trafficMessage.getViolationType());
-        System.out.println("Local: " + trafficMessage.getLocation());
+                    int velocidadeVia = trafficMessage.getVelocidadeVia();
+                    String tipoVeiculo = trafficMessage.getTipoVeiculo();
+                    String data = trafficMessage.getData();
+                    logger.info(String.format("Placa: %s, Velocidade do Veículo: %d, Velocidade da Via: %d, Tipo do Veículo: %s, Data: %s", placaVeiculo, velocidadeVeiculo, velocidadeVia, tipoVeiculo, data));
+                    if(velocidadeVeiculo > trafficMessage.getVelocidadeVia()){
+                        infracaoListener.sendMessage(message);
+                    }
+                } catch (Exception e) {
+                    logger.error("Error processing TrafficMessage:", e);
+                }
+            }
+        } catch (IOException e) {
+            logger.error("Error deserializing message:", e);
         }
-        
-           infracaoListener.sendMessage(message);
-      
-        
-
     }
-
-   
-
 }

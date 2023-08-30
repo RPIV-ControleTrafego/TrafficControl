@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.trafficproducer.trafficproducer.service.MensagemService;
 
 @RestController
-@RequestMapping("/mensagem")
+@RequestMapping("/traffic")
 public class MensagemResource {
 
     @Autowired

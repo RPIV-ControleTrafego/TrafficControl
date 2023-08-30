@@ -19,7 +19,7 @@ public class InfracaoListener {
 
      private final Logger logger = LoggerFactory.getLogger(ConsumerTraffic.class);
 
-    @KafkaListener(topics = "${my-topics.traffic}", groupId = "group_id")
+    @KafkaListener(topics = "${my-topics.infracao}", groupId = "group_id")
     public void consume(String message) throws IOException {
         logger.info(String.format("Infração consumida{}", message));
         System.out.println("Consumindo Infração: " + message);
@@ -27,6 +27,11 @@ public class InfracaoListener {
 
     public void sendMessage(String msg) {
         kafkaTemplate.send("infracao", msg);
-        System.out.println("Mensagem enviada: " + msg);
+        try {
+            consume(msg);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

@@ -37,6 +37,8 @@ public class InfracaoListener {
             for (InfracaoModel infracaoModel : infracoes) {
               
                 System.out.println("Data: " + infracaoModel.getData());
+                System.out.println("Velocidade do Veículo: " + infracaoModel.getVelocidadeVeiculo());
+                System.out.println("Velocidade da Via: " + infracaoModel.getVelocidadeVia());
 
                 // Salve a infração no repositório
                 sendInfracaoToRepository(infracaoModel);

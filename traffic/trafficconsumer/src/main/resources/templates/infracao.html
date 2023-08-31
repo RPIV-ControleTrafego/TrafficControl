@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Infracções</title>
+</head>
+<body>
+    <h1>Infracções</h1>
+    <table>
+        <tr>
+            <th>Data</th>
+            <th>Velocidade do Veículo</th>
+            <th>Velocidade da Via</th>
+        </tr>
+        <tr th:each="infracao : ${infracoes}">
+            <td th:text="${infracao.data}"></td>
+            <td th:text="${infracao.velocidadeVeiculo}"></td>
+            <td th:text="${infracao.velocidadeVia}"></td>
+        </tr>
+    </table>
+</body>
+</html>

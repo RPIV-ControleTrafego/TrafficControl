@@ -1,8 +1,10 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.updateBuildConfiguration": "automatic",
     "java.compile.nullAnalysis.mode": "automatic",
     "conventionalCommits.scopes": [
         "Configuração docker-kafka-spring",
-        "Novos consumidores e produtores"
+        "Novos consumidores e produtores",
+        "Conexão de dados com banco",
+        "Controler configurado para web"
     ]
 }

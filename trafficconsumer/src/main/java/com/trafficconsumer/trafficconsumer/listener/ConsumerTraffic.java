@@ -43,9 +43,9 @@ public class ConsumerTraffic {
                     String tipoVeiculo = trafficMessage.getTipoVeiculo();
                     String data = trafficMessage.getData();
                     logger.info(String.format("Placa: %s, Velocidade do Veículo: %d, Velocidade da Via: %d, Tipo do Veículo: %s, Data: %s", placaVeiculo, velocidadeVeiculo, velocidadeVia, tipoVeiculo, data));
-                    if(velocidadeVeiculo > trafficMessage.getVelocidadeVia()){
+                   
                         infracaoListener.sendMessage(message);
-                    }
+                    
                 } catch (Exception e) {
                     logger.error("Error processing TrafficMessage:", e);
                 }

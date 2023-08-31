@@ -1,7 +1,10 @@
 package com.trafficproducer.trafficproducer.resource;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,4 +26,6 @@ public class InfracaoResource {
         return ResponseEntity.ok().body("Infração enviada com sucesso: " + mensagem);
     }
 
+   
+        
 }

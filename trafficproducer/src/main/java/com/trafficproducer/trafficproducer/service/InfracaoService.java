@@ -3,6 +3,8 @@ package com.trafficproducer.trafficproducer.service;
 
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +30,11 @@ public class InfracaoService {
         logger.info("Infração de Transito -> {}", message);
         this.kafkaTemplate.send(topicinfracao, message);
 }
+
+
+
+    
+
+    
 
 }

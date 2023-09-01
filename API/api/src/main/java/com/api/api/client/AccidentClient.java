@@ -39,5 +39,47 @@ public class AccidentClient {
         ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents", AccidentDTO[].class);
         return Arrays.asList(Objects.requireNonNull(response.getBody()));
     }
+
+    public List<AccidentDTO> getAccidentBySeverity(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/severity", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByDate(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/date", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByHasInjuries(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/hasInjuries", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByHasFatalities(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/hasFatalities", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByAddress(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/address", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByDescription(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/description", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByType(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/type", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<AccidentDTO> getAccidentByHasInfraction(){
+        ResponseEntity<AccidentDTO[]> response = restTemplate.getForEntity(ACCIDENT_SERVICE_URL + "/accidents/hasInfraction", AccidentDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    
     
 }

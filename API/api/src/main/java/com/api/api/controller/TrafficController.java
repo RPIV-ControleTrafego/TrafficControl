@@ -37,7 +37,7 @@ public class TrafficController {
 
         LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Plate information: {}", carPlate);
 
-        kafkaProducerMessage.sendMessage(carPlate);
+        kafkaProducerMessage.sendTrafficMessage(carPlate);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -63,7 +63,7 @@ public class TrafficController {
 
         LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Type information: {}", carType);
 
-        kafkaProducerMessage.sendMessage(carType);
+        kafkaProducerMessage.sendTrafficMessage(carType);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -85,7 +85,7 @@ public class TrafficController {
 
         LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Color information: {}", carColor);
 
-        kafkaProducerMessage.sendMessage(carColor);
+        kafkaProducerMessage.sendTrafficMessage(carColor);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -4,6 +4,7 @@
     "conventionalCommits.scopes": [
         "Configuração docker-kafka-spring",
         "Novos consumidores e produtores",
-        "api spring"
+        "api spring",
+        "Microsserviço de tráfego"
     ]
 }

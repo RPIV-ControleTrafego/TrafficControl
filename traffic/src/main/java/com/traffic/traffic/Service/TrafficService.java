@@ -5,9 +5,16 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.traffic.traffic.dto.TrafficDto;
+import com.traffic.traffic.entity.TrafficEntity;
 
 @Service
 public class TrafficService implements ITrafficService {
+
+
+    public void newCarDetails(TrafficDto trafficDto) {
+        TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
+    }
+
 
     @Override
     public List<TrafficDto> getCarPlates() {
@@ -44,6 +51,33 @@ public class TrafficService implements ITrafficService {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removeCar'");
     }
+
+
+    private TrafficEntity mapCarDtoToEntity(TrafficDto trafficDto) {
+        TrafficEntity trafficEntity = new TrafficEntity();
+
+       
+
+        trafficEntity.setCarBrand(trafficDto.getCarBrand());
+        trafficEntity.setCarColor(trafficDto.getCarColor());
+        trafficEntity.setCarPlate(trafficDto.getCarPlate());
+        trafficEntity.setCarType(trafficDto.getCarType());
+
+       
+
+        return trafficEntity;
+    }
+
+    private TrafficDto mapCarEntityToDTO(TrafficEntity trafficEntity){
+
+        return TrafficDto.builder()
+                .carBrand(trafficEntity.getCarBrand())
+                .carType(trafficEntity.getCarType())
+                .carColor(trafficEntity.getCarColor())
+                .carPlate(trafficEntity.getCarPlate()).build();
+
+    }
+
     
 }
 

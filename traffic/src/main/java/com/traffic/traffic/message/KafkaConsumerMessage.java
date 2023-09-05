@@ -2,6 +2,8 @@ package com.traffic.traffic.message;
 
 
 import org.springframework.kafka.annotation.KafkaListener;
+
+import com.traffic.traffic.Service.TrafficService;
 import com.traffic.traffic.dto.TrafficDto;
 
 import org.slf4j.Logger;
@@ -16,13 +18,12 @@ public class KafkaConsumerMessage {
     private final Logger LOG = LoggerFactory.getLogger(KafkaConsumerMessage.class);
 
     @Autowired
-    private CarPostService carPostService;
+    private TrafficService trafficService;
+    @KafkaListener(topics = "traffic-topic", groupId = "traffic-topic")
+    public void listening(TrafficDto trafficInfo) {
 
-    @KafkaListener(topics = "car-post-topic", groupId = "store-posts-group")
-    public void listening(TrafficDto carPost) {
-
-        LOG.info("CAR STORE - Received Car Post information: {}", carPost);
-        carPostService.newPostDetails(carPost);
+        LOG.info("Traffic service - Received traffici nfo information: {}", trafficInfo);
+      trafficService.newCarDetails(trafficInfo);
 
     }
 

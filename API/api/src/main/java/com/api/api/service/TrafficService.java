@@ -44,5 +44,8 @@ public class TrafficService implements ITrafficService {
     public void removeCar(String carPlate) {
         trafficClient.removeCar(carPlate);
     }
+
+   
+
     
 }

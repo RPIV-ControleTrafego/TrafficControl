@@ -21,9 +21,19 @@ public class TrafficService implements ITrafficService {
 
     public void newCarDetails(TrafficDto trafficDto) {
         TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
-       trafficRepository.save(trafficEntity);
-       log.info("Entidade salva com sucesso no mongoDB" + trafficEntity);
+        
+      
+        
+        try {
+            // Salvar a entidade no MongoDB
+            trafficRepository.save(trafficEntity);
+            log.info("Entidade salva com sucesso no MongoDB: " + trafficEntity);
+        } catch (Exception e) {
+            log.error("Erro ao salvar a entidade no MongoDB: " + e.getMessage());
+            // Trate a exceção de acordo com os requisitos do seu aplicativo
+        }
     }
+    
 
 
     @Override

@@ -2,17 +2,27 @@ package com.traffic.traffic.Service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.entity.TrafficEntity;
+import com.traffic.traffic.repository.TrafficRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class TrafficService implements ITrafficService {
 
+    private final Logger log = LoggerFactory.getLogger(TrafficService.class);
+
+    @Autowired
+    private TrafficRepository trafficRepository;
 
     public void newCarDetails(TrafficDto trafficDto) {
         TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
+       trafficRepository.save(trafficEntity);
+       log.info("Entidade salva com sucesso no mongoDB" + trafficEntity);
     }
 
 

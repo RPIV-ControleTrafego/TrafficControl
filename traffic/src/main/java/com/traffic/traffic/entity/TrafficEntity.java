@@ -1,4 +1,5 @@
-package com.api.api.dto;
+package com.traffic.traffic.entity;
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -7,14 +8,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+
+@Document(collection = "trafficData")
 @Data
-@JsonInclude
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude
 @Builder
-public class TrafficDTO {
+public class TrafficEntity{
     
-    private String carId;
+
     private String carPlate;
     private String carType;
     private String carColor;

@@ -16,4 +16,6 @@ public interface ITrafficService {
 
         void changeCarPlate(TrafficDTO trafficDTO, String carPlate);
         void removeCar(String carPlate);
+
+        
 }

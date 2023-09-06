@@ -66,4 +66,40 @@ public class TrafficServiceTest {
 
        
     }
+
+
+    @Test
+    public void testGetCarTypes() {
+          // Crie algumas entidades de tráfego simuladas para o teste
+        TrafficEntity entity1 = TrafficEntity.builder()
+                .carPlate("ABC123")
+                .carType("Sedan")
+                .carColor("Blue")
+                .carBrand("Toyota")
+                .build();
+
+        TrafficEntity entity2 = TrafficEntity.builder()
+                .carPlate("XYZ789")
+                .carType("SUV")
+                .carColor("Red")
+                .carBrand("Honda")
+                .build();
+
+        List<TrafficEntity> trafficEntities = new ArrayList<>();
+        trafficEntities.add(entity1);
+        trafficEntities.add(entity2);
+
+        // Defina o comportamento simulado para o repositório quando o método findAll for chamado
+        when(trafficRepository.findAll()).thenReturn(trafficEntities);
+
+        // Chame o método que você deseja testar
+        List<TrafficDto> result = trafficService.getCarPlates();
+
+        // Verifique se o resultado é o esperado
+        assertEquals(2, result.size()); // Verifique se a lista de DTOs contém 2 elementos (por exemplo)
+        assertEquals("Sedan", result.get(0).getCarType()); // Verifique se o primeiro DTO tem a placa de carro esperada
+        assertEquals("SUV", result.get(1).getCarType()); // Verifique se o segundo DTO tem a placa de carro esperada
+
+}
+
 }

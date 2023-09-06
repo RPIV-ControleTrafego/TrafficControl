@@ -1,5 +1,6 @@
 package com.traffic.traffic.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TrafficService implements ITrafficService {
     @Autowired
     private TrafficRepository trafficRepository;
 
+   
+
     public void newCarDetails(TrafficDto trafficDto) {
         TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
         
@@ -36,11 +39,19 @@ public class TrafficService implements ITrafficService {
     
 
 
-    @Override
-    public List<TrafficDto> getCarPlates() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlates'");
+  @Override
+public List<TrafficDto> getCarPlates() {
+    List<TrafficEntity> trafficEntities = trafficRepository.findAll();
+    List<TrafficDto> trafficDtos = new ArrayList<>();
+
+    for (TrafficEntity trafficEntity : trafficEntities) {
+        // Converte cada entidade em um DTO, supondo que haja um método de conversão adequado.
+        TrafficDto trafficDto = mapCarEntityToDTO(trafficEntity);
+        trafficDtos.add(trafficDto);
     }
+
+    return trafficDtos;
+}
 
     @Override
     public List<TrafficDto> getCarTypes() {

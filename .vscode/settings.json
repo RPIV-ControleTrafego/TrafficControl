@@ -3,6 +3,8 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "conventionalCommits.scopes": [
         "Configuração docker-kafka-spring",
-        "Novos consumidores e produtores"
+        "Novos consumidores e produtores",
+        "api spring",
+        "Microsserviço de tráfego"
     ]
 }

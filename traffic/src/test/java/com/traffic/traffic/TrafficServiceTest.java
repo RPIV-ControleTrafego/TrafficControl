@@ -13,6 +13,7 @@ import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.entity.TrafficEntity;
 import com.traffic.traffic.repository.TrafficRepository;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,6 +31,7 @@ public class TrafficServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+       
     }
 
     @Test
@@ -134,6 +136,31 @@ public class TrafficServiceTest {
         assertEquals("Blue", result.get(0).getCarColor()); // Verifique se o primeiro DTO tem a placa de carro esperada
         assertEquals("Red", result.get(1).getCarColor()); // Verifique se o segundo DTO tem a placa de carro esperada
 
-}
+
+
+    }
+
+     @Test
+    public void testNewCarDetails() {
+        // Crie um objeto TrafficDto simulado para o teste
+        TrafficDto trafficDto = new TrafficDto();
+        trafficDto.setCarPlate("ABC123");
+        trafficDto.setCarType("Sedan");
+        trafficDto.setCarColor("Blue");
+        trafficDto.setCarBrand("Toyota");
+
+        // Simule o comportamento do método mapCarDtoToEntity
+        TrafficEntity trafficEntity = new TrafficEntity(/* preencha com dados simulados */);
+
+        // Defina o comportamento simulado para o repositório quando o método save for chamado
+        when(trafficRepository.save(trafficEntity)).thenReturn(trafficEntity);
+
+        // Chame o método que você deseja testar
+        trafficService.newCarDetails(trafficDto);
+
+        // Verifique se o método save do repositório foi chamado com a entidade correta
+        verify(trafficRepository).save(trafficEntity);
+    }
+
 
 }

@@ -91,19 +91,6 @@ public class TrafficClient {
         return Arrays.asList(Objects.requireNonNull(response.getBody()));
     }
 
-    
 
-   
 
-    // public void ownerPostsClient(OwnerPostDTO newUser){
-    //     restTemplate.postForEntity(USER_STORE_SERVICE_URI, newUser, OwnerPostDTO.class);
-    // }
-
-    // public void changeCarForSaleClient(CarPostDTO carPostDTO, String id){
-    //     restTemplate.put(POSTS_STORE_SERVICE_URI+"/car/"+id,carPostDTO,CarPostDTO.class);
-    // }
-
-    // public void deleteCarForSaleClient(String id){
-    //     restTemplate.delete(POSTS_STORE_SERVICE_URI+"/car/"+id);
-    // }
 }

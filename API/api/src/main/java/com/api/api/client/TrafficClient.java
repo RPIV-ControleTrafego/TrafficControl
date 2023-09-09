@@ -51,17 +51,46 @@ public class TrafficClient {
         restTemplate.delete(TRAFFIC_SERVICE_URL + "/car-plate/" + carPlate);
     }
 
-   
+    public List<TrafficDTO> getVeiculeOwnerName(String carPlate) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/car-plate/" + carPlate + "/owner-name", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
 
-    // public void ownerPostsClient(OwnerPostDTO newUser){
-    //     restTemplate.postForEntity(USER_STORE_SERVICE_URI, newUser, OwnerPostDTO.class);
-    // }
+    public List<TrafficDTO> getVeiculeOwnerCPF(String carPlate) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/car-plate/" + carPlate + "/owner-cpf", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
 
-    // public void changeCarForSaleClient(CarPostDTO carPostDTO, String id){
-    //     restTemplate.put(POSTS_STORE_SERVICE_URI+"/car/"+id,carPostDTO,CarPostDTO.class);
-    // }
+    public List<TrafficDTO> getCarPlateByCPF(String ownerCpf) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/owner-cpf/" + ownerCpf + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
 
-    // public void deleteCarForSaleClient(String id){
-    //     restTemplate.delete(POSTS_STORE_SERVICE_URI+"/car/"+id);
-    // }
+    public List<TrafficDTO> getCarPlateByOwnerName(String ownerName) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/owner-name/" + ownerName + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<TrafficDTO> getCarPlateByAdress(String addres) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/address/" + addres + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<TrafficDTO> getCarPlateByDate(String date) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/date/" + date + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<TrafficDTO> getCarPlateByTime(String time) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/time/" + time + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+    public List<TrafficDTO> getCarPlateBySpeed(double speed) {
+        ResponseEntity<TrafficDTO[]> response = restTemplate.getForEntity(TRAFFIC_SERVICE_URL + "/speed/" + speed + "/car-plate", TrafficDTO[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+    }
+
+
+
 }

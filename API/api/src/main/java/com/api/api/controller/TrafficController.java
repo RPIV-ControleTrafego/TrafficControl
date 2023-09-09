@@ -32,13 +32,13 @@ public class TrafficController {
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
 
-    @PostMapping("/car-plate")
-    public ResponseEntity<TrafficDTO> postCarPlate(@RequestBody TrafficDTO carPlate){
+    @PostMapping("/all")
+    public ResponseEntity<TrafficDTO> postCarPlate(@RequestBody TrafficDTO trafficDTO){
 
-        LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Plate information: {}", carPlate);
+        LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Plate information: {}", trafficDTO);
 
-        kafkaProducerMessage.sendTrafficMessage(carPlate);
-        return new ResponseEntity<>(HttpStatus.OK);
+        kafkaProducerMessage.sendTrafficMessage(trafficDTO);
+        return ResponseEntity.ok(trafficDTO);
     }
 
     @GetMapping("/car-plates")

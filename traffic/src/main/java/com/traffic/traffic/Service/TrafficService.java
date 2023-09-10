@@ -57,20 +57,20 @@ public class TrafficService implements ITrafficService {
     @Override
    public List<TrafficDto> listCarsPlate() {
     try {
-        // Realize a consulta no repositório para listar todos os carros
+      
         List<TrafficEntity> carEntities = trafficRepository.findAllCarPlate();
         log.info("Listando carros");
 
-        // Crie uma lista para armazenar os DTOs
+      
         List<TrafficDto> carDtos = new ArrayList<>();
 
-        // Mapeie cada entidade para um DTO e adicione à lista
+     
         for (TrafficEntity carEntity : carEntities) {
             TrafficDto carDto = mapCarEntityToDTO(carEntity);
             carDtos.add(carDto);
         }
 
-        // Retorna a lista de DTOs
+      
         return carDtos;
     } catch (Exception e) {
         log.error("Erro ao listar carros: " + e.getMessage());
@@ -149,19 +149,19 @@ public class TrafficService implements ITrafficService {
     @Override
 public String getOwnerNameByPlate(String carPlate) {
     try {
-        // Faça a consulta para obter o nome do proprietário do veículo
+     
         String ownerName = trafficRepository.findOwnerNameByPlate(carPlate);
 
-        // Verifique se o nome do proprietário foi encontrado
+      
         if (ownerName != null) {
             System.out.println("passou");
             return ownerName;
         } else {
             System.out.println("erro");
-            return null; // ou uma resposta apropriada, se necessário
+            return null; 
         }
     } catch (Exception e) {
-        // Trate a exceção, se necessário, e retorne null ou outra resposta apropriada
+      
         return null;
     }
 }

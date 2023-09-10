@@ -27,7 +27,7 @@ public class AccidentController {
     private KafkaProducerMessage kafkaProducerMessage;
 
     @PostMapping("/accidentpost")
-    public ResponseEntity postAccident(@RequestBody AccidentDTO accident){
+    public ResponseEntity<AccidentDTO> postAccident(@RequestBody AccidentDTO accident){
         LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Accident information: {}", accident);
         kafkaProducerMessage.sendAccidentMessage(accident);
         return new ResponseEntity<>(HttpStatus.OK);

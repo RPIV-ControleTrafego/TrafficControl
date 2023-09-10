@@ -1,6 +1,7 @@
 package com.traffic.traffic.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,32 +34,22 @@ public class TrafficService implements ITrafficService {
             // Trate a exceção de acordo com os requisitos do seu aplicativo
         }
     }
-    
-
 
     @Override
-    public List<TrafficDto> getCarPlates() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlates'");
+    public TrafficDto getCarByPlate(String carPlate) {
+    try {
+       
+
+        trafficRepository.findByCarPlate(carPlate);
+        log.info("Pesquisado carro utilizando placa " + carPlate);
+        return mapCarEntityToDTO(trafficRepository.findByCarPlate(carPlate).get(0));
+    } catch (Exception e) {
+        log.error("Placa não encontrada", e.getMessage());
+    }
+    return null;
     }
 
-    @Override
-    public List<TrafficDto> getCarTypes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarTypes'");
-    }
 
-    @Override
-    public List<TrafficDto> getCarColors() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarColors'");
-    }
-
-    @Override
-    public List<TrafficDto> getCarBrands() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarBrands'");
-    }
 
     @Override
     public void changeCarPlate(TrafficDto TrafficDto, String carPlate) {
@@ -82,6 +73,16 @@ public class TrafficService implements ITrafficService {
         trafficEntity.setCarColor(trafficDto.getCarColor());
         trafficEntity.setCarPlate(trafficDto.getCarPlate());
         trafficEntity.setCarType(trafficDto.getCarType());
+        trafficEntity.setAddress(trafficDto.getAddress());
+        trafficEntity.setDate(trafficDto.getDate());
+        trafficEntity.setDirection(trafficDto.getDirection());
+        trafficEntity.setMaxSpeed(trafficDto.getMaxSpeed());
+        trafficEntity.setSpeed(trafficDto.getSpeed());
+        trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
+        trafficEntity.setTime(trafficDto.getTime());
+        trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
+        trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+        
 
        
 
@@ -94,108 +95,123 @@ public class TrafficService implements ITrafficService {
                 .carBrand(trafficEntity.getCarBrand())
                 .carType(trafficEntity.getCarType())
                 .carColor(trafficEntity.getCarColor())
-                .carPlate(trafficEntity.getCarPlate()).build();
+                .carPlate(trafficEntity.getCarPlate())
+                .address(trafficEntity.getAddress())
+                .date(trafficEntity.getDate())
+                .direction(trafficEntity.getDirection())
+                .maxSpeed(trafficEntity.getMaxSpeed())
+                .speed(trafficEntity.getSpeed())
+                .streetDirection(trafficEntity.getStreetDirection())
+                .time(trafficEntity.getTime())
+                .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
+                .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
+
+                
+                
+                
+                .build();
+
+                
 
     }
 
+
+
+    @Override
+    public List<TrafficDto> getVeiculeOwnerName(String carPlate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getVeiculeOwnerName'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getVeiculeOwnerCPF(String carPlate) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getVeiculeOwnerCPF'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByCPF(String ownerCpf) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByCPF'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByOwnerName(String ownerName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByOwnerName'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByAdress(String addres) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByAdress'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByDate(String date) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByDate'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByTime(String time) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByTime'");
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateBySpeed(double speed) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateBySpeed'");
+    }
+
+
+
+   
+
+
+    
+
+
+    @Override
+    public void getCarTypes(TrafficDto trafficDto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarTypes'");
+    }
+
+
+
+    @Override
+    public void getCarColors(TrafficDto trafficDto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarColors'");
+    }
+
+
+
+    @Override
+    public void getCarBrands(TrafficDto trafficDto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarBrands'");
+    }
+
+
+
+    
     
 }
 
-
-// package com.store.car.service;
-
-// import com.store.car.dto.CarPostDTO;
-// import com.store.car.entity.CarPostEntity;
-// import com.store.car.repository.CarPostRepository;
-// import com.store.car.repository.OwnerPostRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
-
-// import java.util.ArrayList;
-// import java.util.Date;
-// import java.util.List;
-// import java.util.NoSuchElementException;
-
-// @Service
-// public class CarPostServiceImpl implements  CarPostService {
-
-//     @Autowired
-//     private CarPostRepository carPostRepository;
-
-//     @Autowired
-//     private OwnerPostRepository ownerPostRepository;
-
-//     @Override
-//     public void newPostDetails(CarPostDTO carPostDTO) {
-//         CarPostEntity carPostEntity = mapCarDtoToEntity(carPostDTO);
-//         carPostRepository.save(carPostEntity);
-//     }
-
-//     @Override
-//     public List<CarPostDTO> getCarSales() {
-//         List<CarPostDTO> listCarsSales = new ArrayList<>();
-//         carPostRepository.findAll().forEach(item->{
-//             listCarsSales.add(mapCarEntityToDTO(item));
-//         });
-//         return listCarsSales;
-//     }
-
-//     @Override
-//     public void changeCarSale(CarPostDTO carPostDTO, Long postId) {
-
-//         carPostRepository.findById(postId).ifPresentOrElse(item->{
-//             item.setDescription(carPostDTO.getDescription());
-//             item.setContact(carPostDTO.getContact());
-//             item.setPrice(carPostDTO.getPrice());
-//             item.setBrand(carPostDTO.getBrand());
-//             item.setEngineVersion(carPostDTO.getEngineVersion());
-//             item.setModel(carPostDTO.getModel());
-
-//             carPostRepository.save(item);
-
-//         }, ()-> {
-//             throw new NoSuchElementException();
-//         });
-//     }
-
-//     @Override
-//     public void removeCarSale(Long postId) {
-//         carPostRepository.deleteById(postId);
-//     }
-
-//     private CarPostEntity mapCarDtoToEntity(CarPostDTO carPostDTO) {
-//         CarPostEntity carPostEntity = new CarPostEntity();
-
-//         ownerPostRepository.findById(carPostDTO.getOwnerId()).ifPresentOrElse(item->{
-//             carPostEntity.setOwnerPost(item);
-//             carPostEntity.setContact(item.getContactNumber());
-//         }, ()-> {
-//             throw new RuntimeException();
-//         });
-
-//         carPostEntity.setModel(carPostDTO.getModel());
-//         carPostEntity.setBrand(carPostDTO.getBrand());
-//         carPostEntity.setPrice(carPostDTO.getPrice());
-//         carPostEntity.setCity(carPostDTO.getCity());
-//         carPostEntity.setDescription(carPostDTO.getDescription());
-//         carPostEntity.setEngineVersion(carPostDTO.getEngineVersion());
-//         carPostEntity.setCreatedDate(String.valueOf(new Date()));
-
-//         return carPostEntity;
-//     }
-
-//     private CarPostDTO mapCarEntityToDTO(CarPostEntity carPostEntity){
-
-//         return CarPostDTO.builder()
-//                 .brand(carPostEntity.getBrand())
-//                 .city(carPostEntity.getCity())
-//                 .model(carPostEntity.getModel())
-//                 .description(carPostEntity.getDescription())
-//                 .engineVersion(carPostEntity.getEngineVersion())
-//                 .createdDate(carPostEntity.getCreatedDate())
-//                 .ownerName(carPostEntity.getOwnerPost().getName())
-//                 .price(carPostEntity.getPrice()).build();
-
-//     }
-
-// }

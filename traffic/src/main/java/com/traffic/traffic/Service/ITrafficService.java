@@ -9,11 +9,22 @@ import com.traffic.traffic.dto.TrafficDto;
 @Service
 public interface ITrafficService {
         
-       List<TrafficDto> getCarPlates();
-         List<TrafficDto> getCarTypes();
-        List<TrafficDto> getCarColors();
-        List<TrafficDto> getCarBrands();
+         TrafficDto getCarByPlate(String carPlate);
+         void getCarTypes(TrafficDto trafficDto);
+         void   getCarColors(TrafficDto trafficDto);
+        void getCarBrands(TrafficDto trafficDto);
 
-        void changeCarPlate(TrafficDto TrafficDto, String carPlate);
+        void changeCarPlate(TrafficDto trafficDto, String carPlate);
         void removeCar(String carPlate);
+
+
+        List <TrafficDto> getVeiculeOwnerName(String carPlate);
+        List <TrafficDto> getVeiculeOwnerCPF(String carPlate);
+        List <TrafficDto> getCarPlateByCPF(String ownerCpf);
+        List <TrafficDto> getCarPlateByOwnerName(String ownerName);
+        List <TrafficDto> getCarPlateByAdress(String addres);
+        List <TrafficDto> getCarPlateByDate(String date);
+        List <TrafficDto> getCarPlateByTime(String time);
+        List <TrafficDto> getCarPlateBySpeed(double speed);
+        
 }

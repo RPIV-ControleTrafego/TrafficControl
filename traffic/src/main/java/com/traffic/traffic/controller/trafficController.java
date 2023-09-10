@@ -97,7 +97,7 @@ public class trafficController {
             String ownerName = trafficDto.getVeiculeOwnerName();
             
             // Retorne o nome do proprietário em um ResponseEntity de sucesso (status HTTP 200 OK)
-            return new ResponseEntity<>(ownerName, HttpStatus.OK);
+            return new ResponseEntity<>("Owner Name: "+ownerName, HttpStatus.OK);
         } catch (Exception e) {
             // Trate a exceção de acordo com os requisitos do seu aplicativo
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -13,7 +13,7 @@ public interface ITrafficService {
          void getCarTypes(TrafficDto trafficDto);
          void   getCarColors(TrafficDto trafficDto);
         void getCarBrands(TrafficDto trafficDto);
-
+        List<TrafficDto> listCarsPlate();
         void changeCarPlate(TrafficDto trafficDto, String carPlate);
         void removeCar(String carPlate);
 

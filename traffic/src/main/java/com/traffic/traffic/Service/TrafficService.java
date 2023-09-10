@@ -1,5 +1,6 @@
 package com.traffic.traffic.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,30 @@ public class TrafficService implements ITrafficService {
     }
     return null;
     }
+
+    @Override
+   public List<TrafficDto> listCarsPlate() {
+    try {
+        // Realize a consulta no repositório para listar todos os carros
+        List<TrafficEntity> carEntities = trafficRepository.findAllCarPlate();
+        log.info("Listando carros");
+
+        // Crie uma lista para armazenar os DTOs
+        List<TrafficDto> carDtos = new ArrayList<>();
+
+        // Mapeie cada entidade para um DTO e adicione à lista
+        for (TrafficEntity carEntity : carEntities) {
+            TrafficDto carDto = mapCarEntityToDTO(carEntity);
+            carDtos.add(carDto);
+        }
+
+        // Retorna a lista de DTOs
+        return carDtos;
+    } catch (Exception e) {
+        log.error("Erro ao listar carros: " + e.getMessage());
+        throw new RuntimeException("Erro ao listar carros", e);
+    }
+}
 
 
 

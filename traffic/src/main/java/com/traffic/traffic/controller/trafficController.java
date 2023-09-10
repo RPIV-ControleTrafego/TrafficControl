@@ -52,6 +52,30 @@ public class trafficController {
         }
     }
 
+
+    
+
+
+    @GetMapping("/car-plate/list")
+    public ResponseEntity<List<TrafficDto>> listCarsPlate() {
+        try {
+            // Realize a consulta no serviço para listar todos os carros
+            List<TrafficDto> trafficDtos = trafficService.listCarsPlate();
+
+            // Verifique se a lista está vazia
+            if (trafficDtos.isEmpty()) {
+                // Retorne um status HTTP 404 (Not Found) se a lista estiver vazia
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                // Retorne um status HTTP 200 (OK) com a lista de objetos encontrados em JSON
+                return new ResponseEntity<>(trafficDtos, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            // Trate a exceção de acordo com os requisitos do seu aplicativo
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
   
 }
 

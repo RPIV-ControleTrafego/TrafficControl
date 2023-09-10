@@ -76,6 +76,36 @@ public class trafficController {
         }
     }
 
+    @GetMapping("/car-plate/owner/{carPlate}")
+    public ResponseEntity<String> getOwnerByPlate(@PathVariable String carPlate) {
+        try {
+            // Verifique se a placa é nula ou vazia e trate-a adequadamente
+            if (carPlate == null || carPlate.isEmpty()) {
+                // Retorne um status HTTP 400 (Bad Request) para indicar que a entrada é inválida
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+    
+            // Realize a pesquisa no serviço usando o número da placa
+            TrafficDto trafficDto = trafficService.getCarByPlate(carPlate);
+    
+            // Verifique se trafficDto é nulo e retorne um status HTTP 404 (Not Found) se for o caso
+            if (trafficDto == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+    
+            // Supondo que trafficDto.getVeiculeOwnerName() retorna o nome do proprietário do veículo
+            String ownerName = trafficDto.getVeiculeOwnerName();
+            
+            // Retorne o nome do proprietário em um ResponseEntity de sucesso (status HTTP 200 OK)
+            return new ResponseEntity<>(ownerName, HttpStatus.OK);
+        } catch (Exception e) {
+            // Trate a exceção de acordo com os requisitos do seu aplicativo
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
+
   
 }
 

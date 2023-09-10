@@ -1,6 +1,7 @@
 package com.traffic.traffic.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,8 +22,11 @@ public class TrafficService implements ITrafficService {
     @Autowired
     private TrafficRepository trafficRepository;
 
+
+  
+
     public void newCarDetails(TrafficDto trafficDto) {
-        TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
+     TrafficEntity  trafficEntity = mapCarDtoToEntity(trafficDto);
         
       
         
@@ -143,11 +147,25 @@ public class TrafficService implements ITrafficService {
 
 
     @Override
-    public List<TrafficDto> getVeiculeOwnerName(String carPlate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getVeiculeOwnerName'");
-    }
+public String getOwnerNameByPlate(String carPlate) {
+    try {
+        // Faça a consulta para obter o nome do proprietário do veículo
+        String ownerName = trafficRepository.findOwnerNameByPlate(carPlate);
 
+        // Verifique se o nome do proprietário foi encontrado
+        if (ownerName != null) {
+            System.out.println("passou");
+            return ownerName;
+        } else {
+            System.out.println("erro");
+            return null; // ou uma resposta apropriada, se necessário
+        }
+    } catch (Exception e) {
+        // Trate a exceção, se necessário, e retorne null ou outra resposta apropriada
+        return null;
+    }
+}
+    
 
 
     @Override

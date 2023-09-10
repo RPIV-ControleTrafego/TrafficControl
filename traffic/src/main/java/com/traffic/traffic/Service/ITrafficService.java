@@ -18,7 +18,7 @@ public interface ITrafficService {
         void removeCar(String carPlate);
 
 
-        List <TrafficDto> getVeiculeOwnerName(String carPlate);
+       String getOwnerNameByPlate(String carPlate);
         List <TrafficDto> getVeiculeOwnerCPF(String carPlate);
         List <TrafficDto> getCarPlateByCPF(String ownerCpf);
         List <TrafficDto> getCarPlateByOwnerName(String ownerName);

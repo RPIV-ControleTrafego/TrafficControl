@@ -1,6 +1,10 @@
 package com.traffic.traffic.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.traffic.traffic.Service.ITrafficService;
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.repository.TrafficRepository;
@@ -106,7 +112,100 @@ public class trafficController {
         }
     }
 
-    
+
+ @GetMapping("/car/types")
+public ResponseEntity<List<String>> getCarTypes() {
+    try {
+        List<String> carTypeStrings = trafficService.getCarTypes();
+        List<String> carTypes = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Faz um parse no JSON para extrair o tipo de carro
+        for (String carTypeString : carTypeStrings) {
+            JsonNode carTypeNode = objectMapper.readTree(carTypeString);
+            if (carTypeNode.has("carType")) {
+                String carType = carTypeNode.get("carType").asText();
+                carTypes.add(carType);
+            }
+        }
+
+        // Use a Set to ensure uniqueness
+        Set<String> uniqueCarTypes = new HashSet<>(carTypes);
+
+        if (uniqueCarTypes.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            
+            return new ResponseEntity<>(new ArrayList<>(uniqueCarTypes), HttpStatus.OK);
+        }
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+
+@GetMapping("/car/colors")
+public ResponseEntity<List<String>> getCarColors() {
+    try {
+        List<String> carColorStrings = trafficService.getCarColors();
+        List<String> carColors = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Parse JSON strings and extract the "carColor" field
+        for (String carColorString : carColorStrings) {
+            JsonNode carColorNode = objectMapper.readTree(carColorString);
+            if (carColorNode.has("carColor")) {
+                String carColor = carColorNode.get("carColor").asText();
+                carColors.add(carColor);
+            }
+        }
+
+        // Use a Set to ensure uniqueness
+        Set<String> uniqueCarColors = new HashSet<>(carColors);
+
+        if (uniqueCarColors.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ArrayList<>(uniqueCarColors), HttpStatus.OK);
+        }
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
+@GetMapping("/car/brands")
+public ResponseEntity<List<String>> getCarBrands() {
+    try {
+        List<String> carBrandStrings = trafficService.getCarBrands();
+        List<String> carBrands = new ArrayList<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Parse JSON strings and extract the "carBrand" field
+        for (String carBrandString : carBrandStrings) {
+            JsonNode carBrandNode = objectMapper.readTree(carBrandString);
+            if (carBrandNode.has("carBrand")) {
+                String carBrand = carBrandNode.get("carBrand").asText();
+                carBrands.add(carBrand);
+            }
+        }
+
+        // Use a Set to ensure uniqueness
+        Set<String> uniqueCarBrands = new HashSet<>(carBrands);
+
+        if (uniqueCarBrands.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(new ArrayList<>(uniqueCarBrands), HttpStatus.OK);
+        }
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 
   
 }

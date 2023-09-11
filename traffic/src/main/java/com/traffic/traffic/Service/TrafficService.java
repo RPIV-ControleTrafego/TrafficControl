@@ -2,11 +2,14 @@ package com.traffic.traffic.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.entity.TrafficEntity;
@@ -154,10 +157,10 @@ public String getOwnerNameByPlate(String carPlate) {
 
       
         if (ownerName != null) {
-            System.out.println("passou");
+            log.info("Pesquisado Nome através da placa" + carPlate);
             return ownerName;
         } else {
-            System.out.println("erro");
+            log.error("Placa não encontrada");
             return null; 
         }
     } catch (Exception e) {
@@ -169,41 +172,106 @@ public String getOwnerNameByPlate(String carPlate) {
 
 
     @Override
-    public List<TrafficDto> getVeiculeOwnerCPF(String carPlate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getVeiculeOwnerCPF'");
+    public String getVehicleOwnerCPF(String carPlate) {
+       try {
+     
+        String ownerCPF = trafficRepository.findOwnerCPFByPlate(carPlate);
+
+      
+   
+           log.info("Pesquisado Nome através da placa" + carPlate);
+            return ownerCPF;
+       
+    } catch (Exception e) {
+         log.error("CPF não encontrado em busca de placa por cpf"+ carPlate);
+         return "Nome não encontrado, verifique a placa";
+    }
     }
 
 
 
     @Override
-    public List<TrafficDto> getCarPlateByCPF(String ownerCpf) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByCPF'");
+    public String getCarPlateByCPF(String ownerCpf) {
+        
+        try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByOwnerCPF(ownerCpf);
+        
+                log.info("Pesquisado placa através do CPF" + ownerCpf);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("CPF não encontrado em busca de placa por cpf"+ ownerCpf);
+            return  "Placa não encontrada, verifique o CPF";
+        }
     }
 
 
 
     @Override
-    public List<TrafficDto> getCarPlateByOwnerName(String ownerName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByOwnerName'");
+    public String getCarPlateByOwnerName(String ownerName) {
+           try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByOwnerName(ownerName);
+        
+                log.info("Pesquisado placa através do Nome" + ownerName);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Nome não encontrado em pesquisa de placa por nome:  " + ownerName);
+            return  "CPF não encontrado, verifique o nome";
+        }
     }
 
 
 
     @Override
-    public List<TrafficDto> getCarPlateByAdress(String addres) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByAdress'");
+    public String getCarPlateByAdress(String addres) {
+           try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByAdress(addres);
+        
+                log.info("Pesquisado placa através de Endereço" + addres);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Placa não encontrada em pesquisa de placa usando endereço:  " + addres);
+            return  "Placa não encontrada, verifique o endereço";
+        }
     }
+    
 
 
 
     @Override
-    public List<TrafficDto> getCarPlateByDate(String date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByDate'");
+    public String getCarPlateByDate(String date) {
+          try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByDate(date);
+        
+                log.info("Pesquisado placa através de data" + date);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Placa não encontrada em pesquisa de placa usando data:  " + date);
+            return  "Placa não encontrada, verifique a data";
+        }
     }
 
 
@@ -217,11 +285,27 @@ public String getOwnerNameByPlate(String carPlate) {
 
 
     @Override
-    public List<TrafficDto> getCarPlateBySpeed(double speed) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateBySpeed'");
+public List<String> getCarPlateBySpeed(double speedMax, double speedMin) {
+    if (speedMax < speedMin) {
+        log.error("Velocidade máxima menor que a mínima");
+        return Collections.emptyList();
     }
 
+    try {
+        // Encontra carros entre a velocidade máxima e mínima
+        List<String> carPlate = trafficRepository.findAll().stream()
+                .filter(trafficEntity -> trafficEntity.getSpeed() >= speedMin && trafficEntity.getSpeed() <= speedMax)
+                .map(TrafficEntity::getCarPlate)
+                .collect(Collectors.toList());
+
+        log.info("Pesquisado placa através de velocidade" + speedMax + speedMin);
+        return carPlate;
+
+    } catch (Exception e) {
+        log.error("Ocorreu um erro ao pesquisar placas usando velocidade: " + speedMax + speedMin, e);
+        return Collections.emptyList();
+    }
+}
 
 
    
@@ -230,31 +314,64 @@ public String getOwnerNameByPlate(String carPlate) {
     
 
 
+@Override
+public List<String> getCarTypes() {
+    try {
+        List<String> carTypes = trafficRepository.findAllCarTypes();
+        log.info("Pesquisado tipos de carro: " + carTypes);
+
+        // Use a Set to ensure uniqueness and then convert it back to a List
+        Set<String> uniqueCarTypes = new HashSet<>(carTypes);
+
+        return new ArrayList<>(uniqueCarTypes);
+    } catch (Exception e) {
+        log.error("Tipos de carro não encontrados", e.getMessage());
+        return Collections.emptyList();
+    }
+}
+
+
     @Override
-    public void getCarTypes(TrafficDto trafficDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarTypes'");
+    public List<String> getCarColors() {
+        try {
+
+            List<String> carColors = trafficRepository.findAllCarColors();
+           
+            log.info("Pesquisado cores de carro" + carColors);
+            return carColors;
+
+            
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao pesquisar cores de carro", e);
+            return Collections.emptyList();
+        }
     }
 
 
 
     @Override
-    public void getCarColors(TrafficDto trafficDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarColors'");
+    public List<String> getCarBrands() {
+            try {
+
+            List<String> carBrands = trafficRepository.findAllCarBrands();
+           
+            log.info("Pesquisado cores de carro" + carBrands);
+            return carBrands;
+
+            
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao pesquisar marcas de carro", e);
+            return Collections.emptyList();
+        }
     }
 
 
 
-    @Override
-    public void getCarBrands(TrafficDto trafficDto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarBrands'");
+    private TrafficDto mapCarTypeToDto(String carType) {
+        TrafficDto trafficDto = new TrafficDto();
+        trafficDto.setCarType(carType);
+        return trafficDto;
     }
-
-
-
-    
     
 }
 

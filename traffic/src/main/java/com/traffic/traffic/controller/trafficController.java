@@ -39,7 +39,7 @@ public class trafficController {
         try {
             
             if (carPlate == null || carPlate.isEmpty()) {
-                // Retorne um status HTTP 400 (Bad Request) para indicar que a entrada é inválida
+                // HTTP 400 (Bad Request) para indicar que a entrada é inválida
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
@@ -89,7 +89,7 @@ public class trafficController {
         try {
            
             if (carPlate == null || carPlate.isEmpty()) {
-                // Retorne um status HTTP 400 (Bad Request) para indicar que a entrada é inválida
+                // HTTP 400 (Bad Request) para indicar que a entrada é inválida
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
     
@@ -130,7 +130,7 @@ public ResponseEntity<List<String>> getCarTypes() {
             }
         }
 
-        // Use a Set to ensure uniqueness
+    
         Set<String> uniqueCarTypes = new HashSet<>(carTypes);
 
         if (uniqueCarTypes.isEmpty()) {
@@ -154,7 +154,7 @@ public ResponseEntity<List<String>> getCarColors() {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Parse JSON strings and extract the "carColor" field
+     // Faz um parse no JSON para extrair a cor do carro
         for (String carColorString : carColorStrings) {
             JsonNode carColorNode = objectMapper.readTree(carColorString);
             if (carColorNode.has("carColor")) {
@@ -163,7 +163,7 @@ public ResponseEntity<List<String>> getCarColors() {
             }
         }
 
-        // Use a Set to ensure uniqueness
+       // set é uma coleção que não permite duplicatas
         Set<String> uniqueCarColors = new HashSet<>(carColors);
 
         if (uniqueCarColors.isEmpty()) {
@@ -185,7 +185,7 @@ public ResponseEntity<List<String>> getCarBrands() {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Parse JSON strings and extract the "carBrand" field
+        // Faz um parse no JSON para extrair a marca do carro
         for (String carBrandString : carBrandStrings) {
             JsonNode carBrandNode = objectMapper.readTree(carBrandString);
             if (carBrandNode.has("carBrand")) {
@@ -194,7 +194,7 @@ public ResponseEntity<List<String>> getCarBrands() {
             }
         }
 
-        // Use a Set to ensure uniqueness
+       // set é uma coleção que não permite duplicatas
         Set<String> uniqueCarBrands = new HashSet<>(carBrands);
 
         if (uniqueCarBrands.isEmpty()) {

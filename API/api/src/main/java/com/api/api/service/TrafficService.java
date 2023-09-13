@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.api.Generator.TrafficGenerator;
 import com.api.api.client.TrafficClient;
 import com.api.api.dto.TrafficDTO;
 
@@ -14,6 +15,7 @@ public class TrafficService implements ITrafficService {
     @Autowired
     private TrafficClient trafficClient;
 
+    
 
     @Override
     public List<TrafficDTO> getCarPlates() {
@@ -85,7 +87,25 @@ public class TrafficService implements ITrafficService {
         return trafficClient.getCarPlateBySpeed(speed);
     }
 
-   
+    public void mapGeneratortoDTO(TrafficDTO trafficDTO, TrafficGenerator trafficGenerator) {
+        // Extrair os atributos relevantes do TrafficGenerator e atribuí-los ao TrafficDTO
+        trafficDTO.setCarPlate(trafficGenerator.getCarPlate());
+        trafficDTO.setCarType(trafficGenerator.getCarType());
+        trafficDTO.setCarColor(trafficGenerator.getCarColor());
+        trafficDTO.setCarBrand(trafficGenerator.getCarBrand());
+        trafficDTO.setVeiculeOwnerName(trafficGenerator.getFullName());
+        trafficDTO.setTime(trafficGenerator.getTime());
+        trafficDTO.setDate(trafficGenerator.getDate());
+        trafficDTO.setAddress(trafficGenerator.getAddress());
+        trafficDTO.setSpeed(trafficGenerator.getSpeed());
+        trafficDTO.setMaxSpeed(trafficGenerator.getMaxSpeed());
+        trafficDTO.setDirection(trafficGenerator.getDirection());
+        trafficDTO.setStreetDirection(trafficGenerator.getStreetDirection());
+        
+        // Adicione qualquer outro atributo necessário aqui
+    
+        // Agora, trafficDTO contém os atributos do TrafficGenerator
+    }
 
     
 }

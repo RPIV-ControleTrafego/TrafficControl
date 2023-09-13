@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.api.api.Generator.TrafficGenerator;
 import com.api.api.dto.TrafficDTO;
 import com.api.api.message.KafkaProducerMessage;
 import com.api.api.service.ITrafficService;
@@ -32,113 +33,115 @@ public class TrafficController {
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
 
-    @PostMapping("/all")
+   
     public ResponseEntity<TrafficDTO> postCarPlate(@RequestBody TrafficDTO trafficDTO){
 
+        TrafficGenerator trafficGenerator = new TrafficGenerator();
+        
         LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Plate information: {}", trafficDTO);
 
         kafkaProducerMessage.sendTrafficMessage(trafficDTO);
         return ResponseEntity.ok(trafficDTO);
     }
 
-    @GetMapping("/car-plates")
-    public ResponseEntity<List<TrafficDTO>> getCarPlates(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlates());
-    }
+    // @GetMapping("/car-plates")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlates(){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlates());
+    // }
 
-    @PutMapping("/car-plate/{carPlate}")
-    public ResponseEntity<TrafficDTO> changeCarPlate(@RequestBody TrafficDTO carPlate, @PathVariable("carPlate") String carPlateId){
-        trafficService.changeCarPlate(carPlate, carPlateId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    // @PutMapping("/car-plate/{carPlate}")
+    // public ResponseEntity<TrafficDTO> changeCarPlate(@RequestBody TrafficDTO carPlate, @PathVariable("carPlate") String carPlateId){
+    //     trafficService.changeCarPlate(carPlate, carPlateId);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
-    @DeleteMapping("/car-plate/{carPlate}")
-    public ResponseEntity<TrafficDTO> deleteCarPlate(@PathVariable("carPlate") String carPlateId){
-        trafficService.removeCar(carPlateId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    // @DeleteMapping("/car-plate/{carPlate}")
+    // public ResponseEntity<TrafficDTO> deleteCarPlate(@PathVariable("carPlate") String carPlateId){
+    //     trafficService.removeCar(carPlateId);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
-    @PostMapping("/car-type")
-    public ResponseEntity<TrafficDTO> postCarType(@RequestBody TrafficDTO carType){
+    // @PostMapping("/car-type")
+    // public ResponseEntity<TrafficDTO> postCarType(@RequestBody TrafficDTO carType){
 
-        LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Type information: {}", carType);
+    //     LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Type information: {}", carType);
 
-        kafkaProducerMessage.sendTrafficMessage(carType);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    //     kafkaProducerMessage.sendTrafficMessage(carType);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
-    @GetMapping("/car-types")
-    public ResponseEntity<List<TrafficDTO>> getCarTypes(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarTypes());
-    }
+    // @GetMapping("/car-types")
+    // public ResponseEntity<List<TrafficDTO>> getCarTypes(){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarTypes());
+    // }
 
    
 
-    @DeleteMapping("/car-type/{carType}")
-    public ResponseEntity<TrafficDTO> deleteCarType(@PathVariable("carType") String carTypeId){
-        trafficService.removeCar(carTypeId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    // @DeleteMapping("/car-type/{carType}")
+    // public ResponseEntity<TrafficDTO> deleteCarType(@PathVariable("carType") String carTypeId){
+    //     trafficService.removeCar(carTypeId);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
-    @PostMapping("/car-color")
-    public ResponseEntity postCarColor(@RequestBody TrafficDTO carColor){
+    // @PostMapping("/car-color")
+    // public ResponseEntity postCarColor(@RequestBody TrafficDTO carColor){
 
-        LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Color information: {}", carColor);
+    //     LOG.info("USANDO EVENTOS/MENSAGENS KAFKA - Producer Car Color information: {}", carColor);
 
-        kafkaProducerMessage.sendTrafficMessage(carColor);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    //     kafkaProducerMessage.sendTrafficMessage(carColor);
+    //     return new ResponseEntity<>(HttpStatus.OK);
+    // }
 
-    @GetMapping("/car-colors")
-    public ResponseEntity<List<TrafficDTO>> getCarColors(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarColors());
-    }
+    // @GetMapping("/car-colors")
+    // public ResponseEntity<List<TrafficDTO>> getCarColors(){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarColors());
+    // }
 
-    @GetMapping("/car-brand")
-    public ResponseEntity<List<TrafficDTO>> getCarBrands(){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarBrands());
-    }
+    // @GetMapping("/car-brand")
+    // public ResponseEntity<List<TrafficDTO>> getCarBrands(){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarBrands());
+    // }
 
 
-    @GetMapping("/car-plate/{carPlate}/owner-name")
-    public ResponseEntity<List<TrafficDTO>> getVeiculeOwnerName(@PathVariable("carPlate") String carPlate){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getVeiculeOwnerName(carPlate));
-    }
+    // @GetMapping("/car-plate/{carPlate}/owner-name")
+    // public ResponseEntity<List<TrafficDTO>> getVeiculeOwnerName(@PathVariable("carPlate") String carPlate){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getVeiculeOwnerName(carPlate));
+    // }
 
-    @GetMapping("/car-plate/{carPlate}/owner-cpf")
-    public ResponseEntity<List<TrafficDTO>> getVeiculeOwnerCPF(@PathVariable("carPlate") String carPlate){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getVeiculeOwnerCPF(carPlate));
-    }
+    // @GetMapping("/car-plate/{carPlate}/owner-cpf")
+    // public ResponseEntity<List<TrafficDTO>> getVeiculeOwnerCPF(@PathVariable("carPlate") String carPlate){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getVeiculeOwnerCPF(carPlate));
+    // }
 
-    @GetMapping("/owner-cpf/{ownerCpf}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateByCPF(@PathVariable("ownerCpf") String ownerCpf){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByCPF(ownerCpf));
-    }
+    // @GetMapping("/owner-cpf/{ownerCpf}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateByCPF(@PathVariable("ownerCpf") String ownerCpf){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByCPF(ownerCpf));
+    // }
 
-    @GetMapping("/owner-name/{ownerName}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateByOwnerName(@PathVariable("ownerName") String ownerName){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByOwnerName(ownerName));
-    }
+    // @GetMapping("/owner-name/{ownerName}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateByOwnerName(@PathVariable("ownerName") String ownerName){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByOwnerName(ownerName));
+    // }
 
-    @GetMapping("/address/{address}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateByAdress(@PathVariable("address") String address){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByAdress(address));
-    }
+    // @GetMapping("/address/{address}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateByAdress(@PathVariable("address") String address){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByAdress(address));
+    // }
 
-    @GetMapping("/date/{date}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateByDate(@PathVariable("date") String date){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByDate(date));
-    }
+    // @GetMapping("/date/{date}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateByDate(@PathVariable("date") String date){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByDate(date));
+    // }
 
-    @GetMapping("/time/{time}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateByTime(@PathVariable("time") String time){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByTime(time));
-    }
+    // @GetMapping("/time/{time}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateByTime(@PathVariable("time") String time){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateByTime(time));
+    // }
 
-    @GetMapping("/speed/{speed}/car-plate")
-    public ResponseEntity<List<TrafficDTO>> getCarPlateBySpeed(@PathVariable("speed") double speed){
-        return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateBySpeed(speed));
-    }
+    // @GetMapping("/speed/{speed}/car-plate")
+    // public ResponseEntity<List<TrafficDTO>> getCarPlateBySpeed(@PathVariable("speed") double speed){
+    //     return ResponseEntity.status(HttpStatus.FOUND).body(trafficService.getCarPlateBySpeed(speed));
+    // }
 
 
     

@@ -69,29 +69,29 @@ class TrafficGeneratorTests {
 		assertTrue(carBrand.matches("Ford|Toyota|Chevrolet|Peugeot|Renault|Mazda|Lexus|BYD|Mitsubishi"));
 	}
 
-	@Test
-	public void testGetVehicleOwnerName() {
-		TrafficGenerator trafficGenerator = new TrafficGenerator();
+	// @Test
+	// public void testGetVehicleOwnerName() {
+	// 	TrafficGenerator trafficGenerator = new TrafficGenerator();
 
-		// Obtenha o nome do proprietário do veículo da instância gerada
-		String vehicleOwnerName = trafficGenerator.getVehicleOwnerName();
+	// 	// Obtenha o nome do proprietário do veículo da instância gerada
+	// 	String vehicleOwnerName = trafficGenerator.getVehicleOwnerName();
 
-		// Verifique se o nome do proprietário do veículo está dentro da faixa esperada
-		// "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Helen", "Ivy", "Jack", "Liam", "Mia", "Noah", "Olivia", "Sophia"
-		assertTrue(vehicleOwnerName.matches("Alice|Bob|Charlie|David|Eva|Frank|Grace|Helen|Ivy|Jack|Liam|Mia|Noah|Olivia|Sophia"));
-	}
+	// 	// Verifique se o nome do proprietário do veículo está dentro da faixa esperada
+	// 	// "Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Helen", "Ivy", "Jack", "Liam", "Mia", "Noah", "Olivia", "Sophia"
+	// 	assertTrue(vehicleOwnerName.matches("Alice|Bob|Charlie|David|Eva|Frank|Grace|Helen|Ivy|Jack|Liam|Mia|Noah|Olivia|Sophia"));
+	// }
 
-	@Test
-	public void testGetVehicleOwnerSurName() {
-		TrafficGenerator trafficGenerator = new TrafficGenerator();
+	// @Test
+	// public void testGetVehicleOwnerSurName() {
+	// 	TrafficGenerator trafficGenerator = new TrafficGenerator();
 
-		// Obtenha o sobrenome do proprietário do veículo da instância gerada
-		String vehicleOwnerSurName = trafficGenerator.getVehicleOwnerSurName();
+	// 	// Obtenha o sobrenome do proprietário do veículo da instância gerada
+	// 	String vehicleOwnerSurName = trafficGenerator.getVehicleOwnerSurName();
 
-		// Verifique se o sobrenome do proprietário do veículo está dentro da faixa esperada
-		// "Smith", "Johnson", "Brown", "Lee", "Wilson", "Davis", "Martinez", "Garcia", "Anderson", "Taylor", "Moore", "Jackson", "White", "Harris", "Clark"
-		assertTrue(vehicleOwnerSurName.matches("Smith|Johnson|Brown|Lee|Wilson|Davis|Martinez|Garcia|Anderson|Taylor|Moore|Jackson|White|Harris|Clark"));
-	}
+	// 	// Verifique se o sobrenome do proprietário do veículo está dentro da faixa esperada
+	// 	// "Smith", "Johnson", "Brown", "Lee", "Wilson", "Davis", "Martinez", "Garcia", "Anderson", "Taylor", "Moore", "Jackson", "White", "Harris", "Clark"
+	// 	assertTrue(vehicleOwnerSurName.matches("Smith|Johnson|Brown|Lee|Wilson|Davis|Martinez|Garcia|Anderson|Taylor|Moore|Jackson|White|Harris|Clark"));
+	// }
 
 	
 	@Test

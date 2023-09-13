@@ -155,6 +155,8 @@ public class TrafficGenerator {
         this.vehicleOwnerName = this.vehicleOwnerName + " " + this.vehicleOwnerSurName;
     }
 
+
+
     private void geraDate() {
         // Gere uma data aleatória entre, por exemplo, 01/01/2000 e 31/12/2023
         int minYear = 2000;
@@ -214,13 +216,7 @@ public class TrafficGenerator {
         return carBrand;
     }
 
-    public String getVehicleOwnerName() {
-        return vehicleOwnerName;
-    }
-
-    public String getVehicleOwnerSurName() {
-        return vehicleOwnerSurName;
-    }
+   
 
     public  String getFullName(){
         geraFullName();

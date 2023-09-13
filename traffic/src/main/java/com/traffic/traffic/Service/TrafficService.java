@@ -320,7 +320,7 @@ public List<String> getCarTypes() {
         List<String> carTypes = trafficRepository.findAllCarTypes();
         log.info("Pesquisado tipos de carro: " + carTypes);
 
-        // Use a Set to ensure uniqueness and then convert it back to a List
+        // Remove duplicatas da lista
         Set<String> uniqueCarTypes = new HashSet<>(carTypes);
 
         return new ArrayList<>(uniqueCarTypes);

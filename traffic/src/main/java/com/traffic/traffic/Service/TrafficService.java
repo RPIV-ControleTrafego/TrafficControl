@@ -114,7 +114,7 @@ public class TrafficService implements ITrafficService {
         trafficEntity.setTime(trafficDto.getTime());
         trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
         trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
-        
+        trafficEntity.setViolation(trafficDto.getViolation());
 
        
 
@@ -137,7 +137,7 @@ public class TrafficService implements ITrafficService {
                 .time(trafficEntity.getTime())
                 .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
                 .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
-
+                .violation(trafficEntity.getViolation())
                 
                 
                 

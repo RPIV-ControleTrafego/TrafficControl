@@ -35,6 +35,7 @@ public class TrafficEntity{
     private int maxSpeed;
     private String direction; // north, south, east, west
     private String streetDirection; // north, south, east, west
+    private String violation;
     
     
 }

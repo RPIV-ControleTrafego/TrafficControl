@@ -8,12 +8,8 @@ import java.time.LocalDate;
 
 
 public class TrafficGenerator {
-    private String[] carTypes = {"hatch", "sedan", "SUV", "crossover", "pickup"};
-    private String[] carColors = {"red", "blue", "black", "white", "silver", "gray", "brown", "yellow", "green"};
-    private String[] carBrands = {"Ford", "Toyota", "Chevrolet", "Peugeot", "Renault", "Mazda", "Lexus", "BYD", "Mitsubishi"};
-    private String[] ownerNames = {"Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Helen", "Ivy", "Jack", "Liam", "Mia", "Noah", "Olivia", "Sophia"};
-    private String[] ownerSurNames = {"Smith", "Johnson", "Brown", "Lee", "Wilson", "Davis", "Martinez", "Garcia", "Anderson", "Taylor", "Moore", "Jackson", "White", "Harris", "Clark"};
-    private String carId;
+   
+    
     private String carPlate;
     private String carType;
     private String carColor;
@@ -25,12 +21,13 @@ public class TrafficGenerator {
     private String address;
     private double speed;
     private int maxSpeed;
-    private int[] maxSpeedsList = {60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260};
+     private String violation;
+     private double maxSpeedGenerated = 250; // Velocidade máxima 
     private String direction; // north, south, east, west
-    private String[] directions = {"north", "south", "east", "west"};
-    private String streetDirection; 
-    private String[] streetDirections = {"north", "south", "east", "west"};
 
+    private String streetDirection; 
+    
+   
     private static Random geradorCarPlate = new Random();
     private static Random geradorCarType = new Random();
     private static Random geradorCarColor = new Random();
@@ -43,10 +40,26 @@ public class TrafficGenerator {
     private static Random geradorDirection = new Random();
     private static Random geradorStreetDirection = new Random();
     private static Random geradorTime = new Random();
+    private static Random geradorSpeed = new Random();
+    private static Random geradorViolation = new Random();  
+
+
+
+
     private String[] streets = {"Main Street", "Elm Street", "Maple Avenue", "Oak Lane", "Cedar Road"};
     private String[] cities = {"New York", "Los Angeles", "Chicago", "Houston", "Miami"};
     private String[] states = {"CA", "NY", "TX", "FL", "IL"};
     private String[] zipCodes = {"10001", "90001", "60601", "77001", "33101"};
+     private String[] carTypes = {"hatch", "sedan", "SUV", "crossover", "pickup"};
+    private String[] carColors = {"red", "blue", "black", "white", "silver", "gray", "brown", "yellow", "green"};
+    private String[] carBrands = {"Ford", "Toyota", "Chevrolet", "Peugeot", "Renault", "Mazda", "Lexus", "BYD", "Mitsubishi"};
+    private String[] ownerNames = {"Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Helen", "Ivy", "Jack", "Liam", "Mia", "Noah", "Olivia", "Sophia"};
+    private String[] ownerSurNames = {"Smith", "Johnson", "Brown", "Lee", "Wilson", "Davis", "Martinez", "Garcia", "Anderson", "Taylor", "Moore", "Jackson", "White", "Harris", "Clark"};
+    private String[] streetDirections = {"north", "south", "east", "west"};
+    private String[] directions = {"north", "south", "east", "west"};
+    private int[] maxSpeedsList = {60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260};
+    private String[] violationList = {"red light", "stop sign", "no seat belt", "no helmet",  "no license", "no insurance", "no registration", "drunk driving", "reckless driving", "hit and run", "tailgating", "jaywalking", "illegal turn", "parking violation" }; // no plate 
+
 
 
     public TrafficGenerator() {
@@ -57,40 +70,55 @@ public class TrafficGenerator {
         geraVehicleOwnerName();
         geraVehicleOwnerSurName();
         geraDate();
-         geraSpeed();
+        geraSpeed();
         geraAddress();
         geraMaxSpeed();
         geraTime();
         geraDate();
         geraDirection();
         geraStreetDirection();
+        geraViolation();
     }
 
+    private int carPlateCount = 0; 
+
     private void geraCarPlate() {
-        // Supondo que você queira gerar uma placa com o formato "ABC-1234"
+      
         StringBuilder plate = new StringBuilder();
         
-        // Gere três letras aleatórias
+      
         for (int i = 0; i < 3; i++) {
             char randomLetter = (char) (geradorCarPlate.nextInt(26) + 'A');
             plate.append(randomLetter);
         }
         
-        // Adicione um hífen
+      
         plate.append('-');
         
-        // Gere quatro dígitos aleatórios
+     
         for (int i = 0; i < 4; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             plate.append(randomDigit);
         }
         
         this.carPlate = plate.toString();
+    
+        carPlateCount++; 
+    
+    
+        if (carPlateCount >= 15) {
+            geraCarPlateEmpty();
+            carPlateCount = 0;
+        }
+    }
+    
+    private void geraCarPlateEmpty() {
+        this.carPlate = "-------"; 
     }
 
 
     private void geraTime() {
-        // Gere uma hora aleatória no formato "HH:mm:ss"
+        //formato "HH:mm:ss"
         int hour = geradorTime.nextInt(24);
         int minute = geradorTime.nextInt(60);
         int second = geradorTime.nextInt(60);
@@ -109,9 +137,7 @@ public class TrafficGenerator {
 
     }
 
-    private static Random geradorSpeed = new Random();
-    private double maxSpeedGenerated = 250; // Velocidade máxima (ajuste conforme necessário)
-
+ 
  
 
     private void geraSpeed() {
@@ -158,13 +184,13 @@ public class TrafficGenerator {
 
 
     private void geraDate() {
-        // Gere uma data aleatória entre, por exemplo, 01/01/2000 e 31/12/2023
-        int minYear = 2000;
+        // Gere uma data aleatória entre 01/01/2010 e 31/12/2023
+        int minYear = 2010;
         int maxYear = 2023;
 
         int year = geradorDate.nextInt(maxYear - minYear + 1) + minYear;
-        int month = geradorDate.nextInt(12) + 1; // Mês de 1 a 12
-        int day = geradorDate.nextInt(31) + 1;   // Dia de 1 a 31
+        int month = geradorDate.nextInt(12) + 1;
+        int day = geradorDate.nextInt(31) + 1;  
 
         this.date = LocalDate.of(year, month, day).toString();
     }
@@ -182,6 +208,16 @@ public class TrafficGenerator {
     private void geraStreetDirection() {
         int randomIndex = geradorStreetDirection.nextInt(streetDirections.length);
         this.streetDirection = streetDirections[randomIndex];
+    }
+
+
+    private void geraViolation(){
+        int randomIndex = geradorViolation.nextInt(violationList.length);
+        this.violation = violationList[randomIndex];
+    }
+
+    public String getViolation() {
+        return violation;
     }
 
     public String getDirection() {
@@ -229,7 +265,7 @@ public class TrafficGenerator {
 
 
 
-    // Outros métodos e atributos do gerador de tráfego...
+   
 }
 
 

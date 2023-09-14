@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SendInfo {
-    // Seus autowireds e outros campos
+   
 
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;

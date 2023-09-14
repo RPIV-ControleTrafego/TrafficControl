@@ -101,7 +101,7 @@ public class TrafficService implements ITrafficService {
         trafficDTO.setMaxSpeed(trafficGenerator.getMaxSpeed());
         trafficDTO.setDirection(trafficGenerator.getDirection());
         trafficDTO.setStreetDirection(trafficGenerator.getStreetDirection());
-        
+        trafficDTO.setViolation(trafficGenerator.getViolation());
         // Adicione qualquer outro atributo necessário aqui
     
         // Agora, trafficDTO contém os atributos do TrafficGenerator

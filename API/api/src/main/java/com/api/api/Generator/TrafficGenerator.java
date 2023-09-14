@@ -16,6 +16,7 @@ public class TrafficGenerator {
     private String carBrand;
     private String vehicleOwnerName;
     private String vehicleOwnerSurName;
+    private String vehicleOwnerCPF;
     private String time;
     private String date;
     private String address;
@@ -78,14 +79,25 @@ public class TrafficGenerator {
         geraDirection();
         geraStreetDirection();
         geraViolation();
+        geraOwnerCPF();
     }
 
-    private int carPlateCount = 0; 
+  
 
     private void geraCarPlate() {
       
         StringBuilder plate = new StringBuilder();
-        
+
+         double randomValue = geradorViolation.nextDouble();
+    
+      
+        double desiredRate = 0.3;
+
+        if (randomValue < desiredRate) {
+            geraCarPlateEmpty();
+            return;
+        }
+
       
         for (int i = 0; i < 3; i++) {
             char randomLetter = (char) (geradorCarPlate.nextInt(26) + 'A');
@@ -103,17 +115,40 @@ public class TrafficGenerator {
         
         this.carPlate = plate.toString();
     
-        carPlateCount++; 
-    
-    
-        if (carPlateCount >= 15) {
-            geraCarPlateEmpty();
-            carPlateCount = 0;
-        }
+        
     }
     
     private void geraCarPlateEmpty() {
         this.carPlate = "-------"; 
+    }
+
+
+    private void geraOwnerCPF(){
+        StringBuilder cpf = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            int randomDigit = geradorCarPlate.nextInt(10);
+            cpf.append(randomDigit);
+        }
+        cpf.append('.');
+        for (int i = 0; i < 3; i++) {
+            int randomDigit = geradorCarPlate.nextInt(10);
+            cpf.append(randomDigit);
+        }
+        cpf.append('.');
+        for (int i = 0; i < 3; i++) {
+            int randomDigit = geradorCarPlate.nextInt(10);
+            cpf.append(randomDigit);
+        }
+        cpf.append('-');
+        for (int i = 0; i < 2; i++) {
+            int randomDigit = geradorCarPlate.nextInt(10);
+            cpf.append(randomDigit);
+        }
+        this.vehicleOwnerCPF = cpf.toString();
+    }
+
+    public String getVehicleOwnerCPF() {
+        return vehicleOwnerCPF;
     }
 
 

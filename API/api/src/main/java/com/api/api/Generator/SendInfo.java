@@ -19,7 +19,7 @@ public class SendInfo {
     @Autowired
     private TrafficService trafficService;
 
-    @Scheduled(fixedRate = 1000) // Executa a cada 1 segundo
+    @Scheduled(fixedRate = 2000) // 1s = 1000ms
     public void postCarPlate() {
         TrafficGenerator trafficGenerator = new TrafficGenerator();
         TrafficDTO trafficDTO = new TrafficDTO();

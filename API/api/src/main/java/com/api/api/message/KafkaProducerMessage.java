@@ -7,7 +7,10 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import com.api.api.dto.AccidentDTO;
+import com.api.api.dto.InfractionDTO;
 import com.api.api.dto.TrafficDTO;
+
+import lombok.AllArgsConstructor.AnyAnnotation;
 
 @Component
 public class KafkaProducerMessage {
@@ -29,4 +32,15 @@ public class KafkaProducerMessage {
     public void sendAccidentMessage(AccidentDTO accidentDTO){
         accidentKafkaTemplate.send(ACCIDENT_KAFKA_TOPIC, accidentDTO);
     }
+
+    @Autowired
+    private KafkaTemplate<String, InfractionDTO> kafkaTemplate;
+
+    private final String KAFKA_TOPIC = "infraction-topic";
+
+    public void sendMessage(InfractionDTO infractionDTO){
+        kafkaTemplate.send(KAFKA_TOPIC, infractionDTO);
+    }
+
+    
 }

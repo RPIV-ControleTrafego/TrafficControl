@@ -28,5 +28,6 @@ public class TrafficDTO {
     private int maxSpeed;
     private String direction; // north, south, east, west
     private String streetDirection; // north, south, east, west
+    private String violation;
 
 }

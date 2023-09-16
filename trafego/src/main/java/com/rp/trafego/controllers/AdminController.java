@@ -57,8 +57,15 @@ public class AdminController {
      * @return Uma string que representa o nome da visão para a página de adição de novo administrador.
      */
     @GetMapping("/administradores/newAdmin")
-    public String novo() {
-        return "administradores/newAdmin";
+    public String novo(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Boolean usuarioAutenticado = (Boolean) session.getAttribute("usuarioAutenticado");
+
+        if(usuarioAutenticado != null && usuarioAutenticado) {
+            return "administradores/newAdmin";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     /**
@@ -102,16 +109,23 @@ public class AdminController {
      * @return Uma string que representa o nome da visão para a página de edição de administrador.
      */
     @GetMapping("/administradores/{id}")
-    public String busca(@PathVariable int id, Model model) {
-        Optional<Admin> admin = repository.findById(id);
+    public String busca(@PathVariable int id, Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Boolean usuarioAutenticado = (Boolean) session.getAttribute("usuarioAutenticado");
 
-        try {
-            model.addAttribute("admin", admin.get());
-        } catch (Exception err) {
-            return "redirect:/administradores";
+        if (usuarioAutenticado != null && usuarioAutenticado) {
+            Optional<Admin> admin = repository.findById(id);
+
+            try {
+                model.addAttribute("admin", admin.get());
+            } catch (Exception err) {
+                return "redirect:/administradores";
+            }
+
+            return "/administradores/editAdmin";
+        } else {
+            return "redirect:/login";
         }
-
-        return "/administradores/editAdmin";
     }
 
     /**

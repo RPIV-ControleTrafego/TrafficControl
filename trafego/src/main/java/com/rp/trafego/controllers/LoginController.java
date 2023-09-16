@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 // imports - classes do projeto
 import com.rp.trafego.models.Admin;
@@ -27,10 +27,13 @@ public class LoginController {
     }
 
     @PostMapping("/logar")
-    public String logar(Model model, Admin adminParameter, String remember) {
+    public String logar(Model model, Admin adminParameter, String remember, HttpServletRequest request) {
         Admin admin = this.repository.loginCheck(adminParameter.getEmail(), adminParameter.getSenha());
 
         if (admin != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("usuarioAutenticado", true);
+
             return "redirect:/";
         }
 
@@ -39,7 +42,9 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public String logout() {     
+    public String logout(HttpServletRequest request) {   
+        HttpSession session = request.getSession();
+        session.removeAttribute("usuarioAutenticado");  
         return "redirect:/login";
     }
 }

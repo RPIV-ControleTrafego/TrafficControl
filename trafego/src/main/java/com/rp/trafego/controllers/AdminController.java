@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 // imports - classes do projeto
 import com.rp.trafego.repository.AdminRepo;
 import com.rp.trafego.models.Admin;
@@ -35,10 +38,17 @@ public class AdminController {
      * @return Uma string que representa o nome da visão a ser renderizada.
      */
     @GetMapping("/administradores")
-    public String index(Model model) {
-        List<Admin> admins = (List<Admin>) repository.findAll();
-        model.addAttribute("admins", admins);
-        return "administradores/index";
+    public String index(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Boolean usuarioAutenticado = (Boolean) session.getAttribute("usuarioAutenticado");
+
+        if (usuarioAutenticado != null && usuarioAutenticado) {
+            List<Admin> admins = (List<Admin>) repository.findAll();
+            model.addAttribute("admins", admins);
+            return "administradores/index";
+        } else {
+            return "redirect:/login";
+        }
     }
 
     /**

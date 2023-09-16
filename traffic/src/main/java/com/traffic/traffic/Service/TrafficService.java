@@ -42,6 +42,7 @@ public class TrafficService implements ITrafficService {
         verifyInfractionDirection(trafficDto, infractionDTO);
         verifyInfractionspeed(trafficDto, infractionDTO);
         verifyViolations(trafficDto, infractionDTO);
+        verifyPlateEmpty(trafficDto, infractionDTO);
         
         
         try {
@@ -364,8 +365,23 @@ public List<String> getCarTypes() {
     else {
         return false;
     }
+
+    
     }
 
+
+    public boolean verifyPlateEmpty(TrafficDto trafficDto,InfractionDTO infractionDto){
+        if(trafficDto.getCarPlate() == null){
+              mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+              infractionDto.setViolation("No plate");
+            kafkaProducerMessage.sendMessage(infractionDto);
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
 
 
 

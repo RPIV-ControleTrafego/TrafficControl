@@ -4,5 +4,9 @@
     "conventionalCommits.scopes": [
         "Configuração docker-kafka-spring",
         "Novos consumidores e produtores"
+    ],
+    "java.project.sourcePaths": [
+        "dash/trafego/src/main/java/com/rp/trafego/config",
+        "dash/trafego"
     ]
 }

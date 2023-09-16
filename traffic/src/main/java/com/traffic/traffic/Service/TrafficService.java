@@ -1,10 +1,15 @@
 package com.traffic.traffic.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.entity.TrafficEntity;
@@ -20,10 +25,11 @@ public class TrafficService implements ITrafficService {
     @Autowired
     private TrafficRepository trafficRepository;
 
-   
+
+  
 
     public void newCarDetails(TrafficDto trafficDto) {
-        TrafficEntity trafficEntity = mapCarDtoToEntity(trafficDto);
+     TrafficEntity  trafficEntity = mapCarDtoToEntity(trafficDto);
         
       
         
@@ -36,40 +42,46 @@ public class TrafficService implements ITrafficService {
             // Trate a exceção de acordo com os requisitos do seu aplicativo
         }
     }
-    
 
+    @Override
+    public TrafficDto getCarByPlate(String carPlate) {
+    try {
+       
 
-  @Override
-public List<TrafficDto> getCarPlates() {
-    List<TrafficEntity> trafficEntities = trafficRepository.findAll();
-    List<TrafficDto> trafficDtos = new ArrayList<>();
-
-    for (TrafficEntity trafficEntity : trafficEntities) {
-        // Converte cada entidade em um DTO, supondo que haja um método de conversão adequado.
-        TrafficDto trafficDto = mapCarEntityToDTO(trafficEntity);
-        trafficDtos.add(trafficDto);
+        trafficRepository.findByCarPlate(carPlate);
+        log.info("Pesquisado carro utilizando placa " + carPlate);
+        return mapCarEntityToDTO(trafficRepository.findByCarPlate(carPlate).get(0));
+    } catch (Exception e) {
+        log.error("Placa não encontrada", e.getMessage());
+    }
+    return null;
     }
 
-    return trafficDtos;
+    @Override
+   public List<TrafficDto> listCarsPlate() {
+    try {
+      
+        List<TrafficEntity> carEntities = trafficRepository.findAllCarPlate();
+        log.info("Listando carros");
+
+      
+        List<TrafficDto> carDtos = new ArrayList<>();
+
+     
+        for (TrafficEntity carEntity : carEntities) {
+            TrafficDto carDto = mapCarEntityToDTO(carEntity);
+            carDtos.add(carDto);
+        }
+
+      
+        return carDtos;
+    } catch (Exception e) {
+        log.error("Erro ao listar carros: " + e.getMessage());
+        throw new RuntimeException("Erro ao listar carros", e);
+    }
 }
 
-    @Override
-    public List<TrafficDto> getCarTypes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarTypes'");
-    }
 
-    @Override
-    public List<TrafficDto> getCarColors() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarColors'");
-    }
-
-    @Override
-    public List<TrafficDto> getCarBrands() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCarBrands'");
-    }
 
     @Override
     public void changeCarPlate(TrafficDto TrafficDto, String carPlate) {
@@ -93,6 +105,16 @@ public List<TrafficDto> getCarPlates() {
         trafficEntity.setCarColor(trafficDto.getCarColor());
         trafficEntity.setCarPlate(trafficDto.getCarPlate());
         trafficEntity.setCarType(trafficDto.getCarType());
+        trafficEntity.setAddress(trafficDto.getAddress());
+        trafficEntity.setDate(trafficDto.getDate());
+        trafficEntity.setDirection(trafficDto.getDirection());
+        trafficEntity.setMaxSpeed(trafficDto.getMaxSpeed());
+        trafficEntity.setSpeed(trafficDto.getSpeed());
+        trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
+        trafficEntity.setTime(trafficDto.getTime());
+        trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
+        trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+        trafficEntity.setViolation(trafficDto.getViolation());
 
        
 
@@ -105,108 +127,251 @@ public List<TrafficDto> getCarPlates() {
                 .carBrand(trafficEntity.getCarBrand())
                 .carType(trafficEntity.getCarType())
                 .carColor(trafficEntity.getCarColor())
-                .carPlate(trafficEntity.getCarPlate()).build();
+                .carPlate(trafficEntity.getCarPlate())
+                .address(trafficEntity.getAddress())
+                .date(trafficEntity.getDate())
+                .direction(trafficEntity.getDirection())
+                .maxSpeed(trafficEntity.getMaxSpeed())
+                .speed(trafficEntity.getSpeed())
+                .streetDirection(trafficEntity.getStreetDirection())
+                .time(trafficEntity.getTime())
+                .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
+                .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
+                .violation(trafficEntity.getViolation())
+                
+                
+                
+                .build();
+
+                
 
     }
 
+
+
+    @Override
+public String getOwnerNameByPlate(String carPlate) {
+    try {
+     
+        String ownerName = trafficRepository.findOwnerNameByPlate(carPlate);
+
+      
+        if (ownerName != null) {
+            log.info("Pesquisado Nome através da placa" + carPlate);
+            return ownerName;
+        } else {
+            log.error("Placa não encontrada");
+            return null; 
+        }
+    } catch (Exception e) {
+      
+        return null;
+    }
+}
     
+
+
+    @Override
+    public String getVehicleOwnerCPF(String carPlate) {
+       try {
+     
+        String ownerCPF = trafficRepository.findOwnerCPFByPlate(carPlate);
+
+      
+   
+           log.info("Pesquisado Nome através da placa" + carPlate);
+            return ownerCPF;
+       
+    } catch (Exception e) {
+         log.error("CPF não encontrado em busca de placa por cpf"+ carPlate);
+         return "Nome não encontrado, verifique a placa";
+    }
+    }
+
+
+
+    @Override
+    public String getCarPlateByCPF(String ownerCpf) {
+        
+        try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByOwnerCPF(ownerCpf);
+        
+                log.info("Pesquisado placa através do CPF" + ownerCpf);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("CPF não encontrado em busca de placa por cpf"+ ownerCpf);
+            return  "Placa não encontrada, verifique o CPF";
+        }
+    }
+
+
+
+    @Override
+    public String getCarPlateByOwnerName(String ownerName) {
+           try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByOwnerName(ownerName);
+        
+                log.info("Pesquisado placa através do Nome" + ownerName);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Nome não encontrado em pesquisa de placa por nome:  " + ownerName);
+            return  "CPF não encontrado, verifique o nome";
+        }
+    }
+
+
+
+    @Override
+    public String getCarPlateByAdress(String addres) {
+           try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByAdress(addres);
+        
+                log.info("Pesquisado placa através de Endereço" + addres);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Placa não encontrada em pesquisa de placa usando endereço:  " + addres);
+            return  "Placa não encontrada, verifique o endereço";
+        }
+    }
+    
+
+
+
+    @Override
+    public String getCarPlateByDate(String date) {
+          try{
+            
+
+            String carPlate = trafficRepository.findCarPlateByDate(date);
+        
+                log.info("Pesquisado placa através de data" + date);
+                return carPlate;
+       
+              
+       
+
+        }catch(Exception e){
+                  log.error("Placa não encontrada em pesquisa de placa usando data:  " + date);
+            return  "Placa não encontrada, verifique a data";
+        }
+    }
+
+
+
+    @Override
+    public List<TrafficDto> getCarPlateByTime(String time) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByTime'");
+    }
+
+
+
+    @Override
+public List<String> getCarPlateBySpeed(double speedMax, double speedMin) {
+    if (speedMax < speedMin) {
+        log.error("Velocidade máxima menor que a mínima");
+        return Collections.emptyList();
+    }
+
+    try {
+        // Encontra carros entre a velocidade máxima e mínima
+        List<String> carPlate = trafficRepository.findAll().stream()
+                .filter(trafficEntity -> trafficEntity.getSpeed() >= speedMin && trafficEntity.getSpeed() <= speedMax)
+                .map(TrafficEntity::getCarPlate)
+                .collect(Collectors.toList());
+
+        log.info("Pesquisado placa através de velocidade" + speedMax + speedMin);
+        return carPlate;
+
+    } catch (Exception e) {
+        log.error("Ocorreu um erro ao pesquisar placas usando velocidade: " + speedMax + speedMin, e);
+        return Collections.emptyList();
+    }
 }
 
 
-// package com.store.car.service;
+   
 
-// import com.store.car.dto.CarPostDTO;
-// import com.store.car.entity.CarPostEntity;
-// import com.store.car.repository.CarPostRepository;
-// import com.store.car.repository.OwnerPostRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
 
-// import java.util.ArrayList;
-// import java.util.Date;
-// import java.util.List;
-// import java.util.NoSuchElementException;
+    
 
-// @Service
-// public class CarPostServiceImpl implements  CarPostService {
 
-//     @Autowired
-//     private CarPostRepository carPostRepository;
+@Override
+public List<String> getCarTypes() {
+    try {
+        List<String> carTypes = trafficRepository.findAllCarTypes();
+        log.info("Pesquisado tipos de carro: " + carTypes);
 
-//     @Autowired
-//     private OwnerPostRepository ownerPostRepository;
+        // Remove duplicatas da lista
+        Set<String> uniqueCarTypes = new HashSet<>(carTypes);
 
-//     @Override
-//     public void newPostDetails(CarPostDTO carPostDTO) {
-//         CarPostEntity carPostEntity = mapCarDtoToEntity(carPostDTO);
-//         carPostRepository.save(carPostEntity);
-//     }
+        return new ArrayList<>(uniqueCarTypes);
+    } catch (Exception e) {
+        log.error("Tipos de carro não encontrados", e.getMessage());
+        return Collections.emptyList();
+    }
+}
 
-//     @Override
-//     public List<CarPostDTO> getCarSales() {
-//         List<CarPostDTO> listCarsSales = new ArrayList<>();
-//         carPostRepository.findAll().forEach(item->{
-//             listCarsSales.add(mapCarEntityToDTO(item));
-//         });
-//         return listCarsSales;
-//     }
 
-//     @Override
-//     public void changeCarSale(CarPostDTO carPostDTO, Long postId) {
+    @Override
+    public List<String> getCarColors() {
+        try {
 
-//         carPostRepository.findById(postId).ifPresentOrElse(item->{
-//             item.setDescription(carPostDTO.getDescription());
-//             item.setContact(carPostDTO.getContact());
-//             item.setPrice(carPostDTO.getPrice());
-//             item.setBrand(carPostDTO.getBrand());
-//             item.setEngineVersion(carPostDTO.getEngineVersion());
-//             item.setModel(carPostDTO.getModel());
+            List<String> carColors = trafficRepository.findAllCarColors();
+           
+            log.info("Pesquisado cores de carro" + carColors);
+            return carColors;
 
-//             carPostRepository.save(item);
+            
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao pesquisar cores de carro", e);
+            return Collections.emptyList();
+        }
+    }
 
-//         }, ()-> {
-//             throw new NoSuchElementException();
-//         });
-//     }
 
-//     @Override
-//     public void removeCarSale(Long postId) {
-//         carPostRepository.deleteById(postId);
-//     }
 
-//     private CarPostEntity mapCarDtoToEntity(CarPostDTO carPostDTO) {
-//         CarPostEntity carPostEntity = new CarPostEntity();
+    @Override
+    public List<String> getCarBrands() {
+            try {
 
-//         ownerPostRepository.findById(carPostDTO.getOwnerId()).ifPresentOrElse(item->{
-//             carPostEntity.setOwnerPost(item);
-//             carPostEntity.setContact(item.getContactNumber());
-//         }, ()-> {
-//             throw new RuntimeException();
-//         });
+            List<String> carBrands = trafficRepository.findAllCarBrands();
+           
+            log.info("Pesquisado cores de carro" + carBrands);
+            return carBrands;
 
-//         carPostEntity.setModel(carPostDTO.getModel());
-//         carPostEntity.setBrand(carPostDTO.getBrand());
-//         carPostEntity.setPrice(carPostDTO.getPrice());
-//         carPostEntity.setCity(carPostDTO.getCity());
-//         carPostEntity.setDescription(carPostDTO.getDescription());
-//         carPostEntity.setEngineVersion(carPostDTO.getEngineVersion());
-//         carPostEntity.setCreatedDate(String.valueOf(new Date()));
+            
+        } catch (Exception e) {
+            log.error("Ocorreu um erro ao pesquisar marcas de carro", e);
+            return Collections.emptyList();
+        }
+    }
 
-//         return carPostEntity;
-//     }
 
-//     private CarPostDTO mapCarEntityToDTO(CarPostEntity carPostEntity){
 
-//         return CarPostDTO.builder()
-//                 .brand(carPostEntity.getBrand())
-//                 .city(carPostEntity.getCity())
-//                 .model(carPostEntity.getModel())
-//                 .description(carPostEntity.getDescription())
-//                 .engineVersion(carPostEntity.getEngineVersion())
-//                 .createdDate(carPostEntity.getCreatedDate())
-//                 .ownerName(carPostEntity.getOwnerPost().getName())
-//                 .price(carPostEntity.getPrice()).build();
+    private TrafficDto mapCarTypeToDto(String carType) {
+        TrafficDto trafficDto = new TrafficDto();
+        trafficDto.setCarType(carType);
+        return trafficDto;
+    }
+    
+}
 
-//     }
-
-// }

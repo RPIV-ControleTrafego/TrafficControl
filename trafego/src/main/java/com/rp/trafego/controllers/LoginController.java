@@ -1,5 +1,7 @@
 package com.rp.trafego.controllers;
 
+import java.io.IOException;
+
 // imports - bibiliotecas
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,11 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 // imports - classes do projeto
 import com.rp.trafego.models.Admin;
 import com.rp.trafego.repository.AdminRepo;
+import com.rp.trafego.service.CookieService;
 
 /**
  * Controlador responsável por manipular as requisições relacionadas ao login.
@@ -44,12 +48,14 @@ public class LoginController {
      *         ou uma mensagem de erro se as credenciais forem inválidas.
      */
     @PostMapping("/logar")
-    public String logar(Model model, Admin adminParameter, String remember, HttpServletRequest request) {
+    public String logar(Model model, Admin adminParameter, String remember, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Admin admin = this.repository.loginCheck(adminParameter.getEmail(), adminParameter.getSenha());
 
         if (admin != null) {
             HttpSession session = request.getSession();
             session.setAttribute("usuarioAutenticado", true);
+
+            CookieService.setCookie(response, "usuarioId", String.valueOf(admin.getId()), 5);
 
             return "redirect:/";
         }

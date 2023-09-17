@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.accident.serviceaccident.dto.AccidentDTO;
 
-import lombok.AllArgsConstructor.AnyAnnotation;
-
 @Component
 public class KafkaProducerMessage {
 

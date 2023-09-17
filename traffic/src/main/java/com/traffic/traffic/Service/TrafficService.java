@@ -8,12 +8,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Service;
 
-
+import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.entity.TrafficEntity;
+import com.traffic.traffic.message.KafkaConsumerMessage;
+import com.traffic.traffic.message.KafkaProducerMessage;
 import com.traffic.traffic.repository.TrafficRepository;
+
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,14 +29,21 @@ public class TrafficService implements ITrafficService {
 
     @Autowired
     private TrafficRepository trafficRepository;
-
-
+    @Autowired
+    private KafkaProducerMessage kafkaProducerMessage;
+    
   
 
     public void newCarDetails(TrafficDto trafficDto) {
      TrafficEntity  trafficEntity = mapCarDtoToEntity(trafficDto);
+   
+
+        InfractionDTO infractionDTO = new InfractionDTO();
+        verifyInfractionDirection(trafficDto, infractionDTO);
+        verifyInfractionspeed(trafficDto, infractionDTO);
+        verifyViolations(trafficDto, infractionDTO);
+        verifyPlateEmpty(trafficDto, infractionDTO);
         
-      
         
         try {
             // Salvar a entidade no MongoDB
@@ -96,57 +108,7 @@ public class TrafficService implements ITrafficService {
     }
 
 
-    private TrafficEntity mapCarDtoToEntity(TrafficDto trafficDto) {
-        TrafficEntity trafficEntity = new TrafficEntity();
-
-       
-
-        trafficEntity.setCarBrand(trafficDto.getCarBrand());
-        trafficEntity.setCarColor(trafficDto.getCarColor());
-        trafficEntity.setCarPlate(trafficDto.getCarPlate());
-        trafficEntity.setCarType(trafficDto.getCarType());
-        trafficEntity.setAddress(trafficDto.getAddress());
-        trafficEntity.setDate(trafficDto.getDate());
-        trafficEntity.setDirection(trafficDto.getDirection());
-        trafficEntity.setMaxSpeed(trafficDto.getMaxSpeed());
-        trafficEntity.setSpeed(trafficDto.getSpeed());
-        trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
-        trafficEntity.setTime(trafficDto.getTime());
-        trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
-        trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
-        trafficEntity.setViolation(trafficDto.getViolation());
-
-       
-
-        return trafficEntity;
-    }
-
-    private TrafficDto mapCarEntityToDTO(TrafficEntity trafficEntity){
-
-        return TrafficDto.builder()
-                .carBrand(trafficEntity.getCarBrand())
-                .carType(trafficEntity.getCarType())
-                .carColor(trafficEntity.getCarColor())
-                .carPlate(trafficEntity.getCarPlate())
-                .address(trafficEntity.getAddress())
-                .date(trafficEntity.getDate())
-                .direction(trafficEntity.getDirection())
-                .maxSpeed(trafficEntity.getMaxSpeed())
-                .speed(trafficEntity.getSpeed())
-                .streetDirection(trafficEntity.getStreetDirection())
-                .time(trafficEntity.getTime())
-                .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
-                .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
-                .violation(trafficEntity.getViolation())
-                
-                
-                
-                .build();
-
-                
-
-    }
-
+   
 
 
     @Override
@@ -372,6 +334,131 @@ public List<String> getCarTypes() {
         trafficDto.setCarType(carType);
         return trafficDto;
     }
+
+    public boolean verifyInfractionspeed(TrafficDto trafficDto, InfractionDTO infractionDto) {
+
+        if (trafficDto.getSpeed() > trafficDto.getMaxSpeed()) {
+            mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+            kafkaProducerMessage.sendMessage(infractionDto);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public boolean verifyInfractionDirection(TrafficDto trafficDto, InfractionDTO infractionDto) {
+        if (trafficDto.getDirection() != trafficDto.getStreetDirection()) {
+             mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+            kafkaProducerMessage.sendMessage(infractionDto);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean verifyViolations(TrafficDto trafficDto,InfractionDTO infractionDto){
+        if(trafficDto.getViolation() != null){
+            mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+            kafkaProducerMessage.sendMessage(infractionDto);
+            return true;
+    } 
+    else {
+        return false;
+    }
+
+    
+    }
+
+
+    public boolean verifyPlateEmpty(TrafficDto trafficDto,InfractionDTO infractionDto){
+        if(trafficDto.getCarPlate() == null){
+              mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+              infractionDto.setViolation("No plate");
+            kafkaProducerMessage.sendMessage(infractionDto);
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
+
+     private TrafficEntity mapCarDtoToEntity(TrafficDto trafficDto) {
+        TrafficEntity trafficEntity = new TrafficEntity();
+
+       
+
+        trafficEntity.setCarBrand(trafficDto.getCarBrand());
+        trafficEntity.setCarColor(trafficDto.getCarColor());
+        trafficEntity.setCarPlate(trafficDto.getCarPlate());
+        trafficEntity.setCarType(trafficDto.getCarType());
+        trafficEntity.setAddress(trafficDto.getAddress());
+        trafficEntity.setDate(trafficDto.getDate());
+        trafficEntity.setDirection(trafficDto.getDirection());
+        trafficEntity.setMaxSpeed(trafficDto.getMaxSpeed());
+        trafficEntity.setSpeed(trafficDto.getSpeed());
+        trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
+        trafficEntity.setTime(trafficDto.getTime());
+        trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
+        trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+        trafficEntity.setViolation(trafficDto.getViolation());
+
+       
+
+        return trafficEntity;
+    }
+
+    private TrafficDto mapCarEntityToDTO(TrafficEntity trafficEntity){
+
+        return TrafficDto.builder()
+                .carBrand(trafficEntity.getCarBrand())
+                .carType(trafficEntity.getCarType())
+                .carColor(trafficEntity.getCarColor())
+                .carPlate(trafficEntity.getCarPlate())
+                .address(trafficEntity.getAddress())
+                .date(trafficEntity.getDate())
+                .direction(trafficEntity.getDirection())
+                .maxSpeed(trafficEntity.getMaxSpeed())
+                .speed(trafficEntity.getSpeed())
+                .streetDirection(trafficEntity.getStreetDirection())
+                .time(trafficEntity.getTime())
+                .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
+                .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
+                .violation(trafficEntity.getViolation())
+                
+                
+                
+                .build();
+
+                
+
+    }
+
+    private InfractionDTO mapCarDtoToInfractionDTO(TrafficDto trafficDto, InfractionDTO infractionDto) {
+        
+        infractionDto.setCarBrand(trafficDto.getCarBrand());
+        infractionDto.setCarColor(trafficDto.getCarColor());
+        infractionDto.setCarPlate(trafficDto.getCarPlate());
+        infractionDto.setCarType(trafficDto.getCarType());
+        // infractionDto.setAddress(trafficDto.getAddress());
+        infractionDto.setDate(trafficDto.getDate());
+        // infractionDto.setDirection(trafficDto.getDirection());
+        // infractionDto.setMaxSpeed(trafficDto.getMaxSpeed());
+        // infractionDto.setSpeed(trafficDto.getSpeed());
+        // infractionDto.setStreetDirection(trafficDto.getStreetDirection());
+        // infractionDto.setTime(trafficDto.getTime());
+        infractionDto.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
+        infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+        infractionDto.setViolation(trafficDto.getViolation());
+
+
+
+        return infractionDto;
+    }
+
+   
     
 }
 

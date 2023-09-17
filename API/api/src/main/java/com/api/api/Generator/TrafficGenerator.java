@@ -119,7 +119,7 @@ public class TrafficGenerator {
     }
     
     private void geraCarPlateEmpty() {
-        this.carPlate = "-------"; 
+        this.carPlate = null; 
     }
 
 

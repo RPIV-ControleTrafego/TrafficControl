@@ -30,6 +30,16 @@
             "projectName": "traffic",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceinfractionApplication<serviceinfraction>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.infraction.serviceinfraction.ServiceinfractionApplication",
+            "projectName": "serviceinfraction",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

@@ -59,7 +59,7 @@ public class TrafficGenerator {
     private String[] streetDirections = {"north", "south", "east", "west"};
     private String[] directions = {"north", "south", "east", "west"};
     private int[] maxSpeedsList = {60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260};
-    private String[] violationList = {"red light", "stop sign", "no seat belt", "no helmet",  "no license", "no insurance", "no registration", "drunk driving", "reckless driving", "hit and run", "tailgating", "jaywalking", "illegal turn", "parking violation"}; 
+    // private String[] violationList = {"red light", "stop sign", "no seat belt", "no helmet",  "no license", "no insurance", "no registration", "drunk driving", "reckless driving", "hit and run", "tailgating", "jaywalking", "illegal turn", "parking violation"}; 
 
 
 

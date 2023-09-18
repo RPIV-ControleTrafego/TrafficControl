@@ -25,7 +25,7 @@ public class KafkaConsumerMessage {
     @Autowired
     private InfractionService infractionService;
     
-    @KafkaListener(topics = "traffic-topic", groupId = "traffic-topic")
+    @KafkaListener(topics = "infraction-topic", groupId = "infraction-topic")
     public void listening(InfractionDTO infractionInfo) {
 
         LOG.info("Traffic service - Received traffici nfo information: {}", infractionInfo);

@@ -364,7 +364,7 @@ public List<String> getCarTypes() {
 
             
             if(trafficDto.getDirection() != trafficDto.getStreetDirection()){
-                infractionDto.setViolation("Wrong direction");
+                infractionDto.setViolation("wrong direction");
             }
           
             kafkaProducerMessage.sendMessage(infractionDto);
@@ -381,7 +381,7 @@ public List<String> getCarTypes() {
     public boolean verifyPlateEmpty(TrafficDto trafficDto,InfractionDTO infractionDto){
         if(trafficDto.getCarPlate() == null){
               mapCarDtoToInfractionDTO(trafficDto, infractionDto);
-              infractionDto.setViolation("No plate");
+              infractionDto.setViolation("no plate");
             kafkaProducerMessage.sendMessage(infractionDto);
             return true;
         }

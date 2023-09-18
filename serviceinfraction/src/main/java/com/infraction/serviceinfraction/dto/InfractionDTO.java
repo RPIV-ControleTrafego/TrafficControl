@@ -26,6 +26,16 @@ public class InfractionDTO {
     private String carBrand;
     private String veiculeOwnerName;
     private String veiculeOwneCPF;
+    private double speed;
+    private double maxSpeed;
+    private double finePrice;
+
+
+
+    public void setFinePrice(double finePrice) {
+        this.finePrice = 0.0;
+    }
+
     
 
 

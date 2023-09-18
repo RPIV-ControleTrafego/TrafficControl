@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.infraction.serviceinfraction.calculator.FinePriceCalculator;
 import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
@@ -27,6 +28,13 @@ public class InfractionService implements IinfractionService{
 
         try {
             infractionEntity = mapInfractionDTOTInfractionEntity(infractionInfo);
+            boolean fineCalculated = calculateFine(infractionInfo);
+
+            if (fineCalculated) {
+                log.info("Traffic service - Fine price calculated: {}", infractionInfo.getFinePrice());
+            }
+
+
             infractionRepository.save(infractionEntity);
             log.info("Traffic service - Traffic info saved successfully");
         } catch (Exception e) {
@@ -47,12 +55,22 @@ private InfractionEntity mapInfractionDTOTInfractionEntity(InfractionDTO infract
     .carBrand(infractionDTO.getCarBrand())
     .veiculeOwnerName(infractionDTO.getVeiculeOwnerName())
     .veiculeOwneCPF(infractionDTO.getVeiculeOwneCPF())
+    .speed(infractionDTO.getSpeed())
+    .maxSpeed(infractionDTO.getMaxSpeed())
     .build();
 }
 
 
- 
+  private boolean calculateFine(InfractionDTO infractionDTO) {
+      
+        double finePrice = FinePriceCalculator.calculateFinePrice(infractionDTO.getViolation().toLowerCase(), infractionDTO);
+        infractionDTO.setFinePrice(finePrice);
+        return finePrice > 0;  
+    }
 
 
 
-}
+ }
+
+
+

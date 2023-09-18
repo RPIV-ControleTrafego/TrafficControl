@@ -24,6 +24,7 @@ public class FinePriceCalculator {
         finePrices.put("illegal turn", 80.0);
         finePrices.put("parking violation", 100.0);
         finePrices.put("speeding", 45.0);
+        finePrices.put("wrong direction", 25.0);
     }
 
     public static double calculateFinePrice(String violation, InfractionDTO infractionDTO) {

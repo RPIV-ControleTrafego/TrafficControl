@@ -27,6 +27,8 @@ public class InfractionDTO {
     private String carBrand;
     private String veiculeOwnerName;
     private String veiculeOwneCPF;
+    private double speed;
+    private double maxSpeed;
     
 
 

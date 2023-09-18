@@ -31,7 +31,7 @@ public class InfractionService implements IinfractionService{
             boolean fineCalculated = calculateFine(infractionInfo);
 
             if (fineCalculated) {
-                log.info("Traffic service - Fine price calculated: {}", infractionInfo.getFinePrice());
+                log.info("Traffic service - Fine price calculated: {}", infractionInfo.getFinePrice(), infractionInfo.getViolation());
             }
 
 

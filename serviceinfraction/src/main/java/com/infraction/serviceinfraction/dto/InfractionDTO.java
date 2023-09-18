@@ -27,14 +27,11 @@ public class InfractionDTO {
     private String veiculeOwnerName;
     private String veiculeOwneCPF;
     private double speed;
-    private double maxSpeed;
+    private int maxSpeed;
     private double finePrice;
 
 
 
-    public void setFinePrice(double finePrice) {
-        this.finePrice = 0.0;
-    }
 
     
 

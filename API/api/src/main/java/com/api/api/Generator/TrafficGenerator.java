@@ -251,7 +251,7 @@ public class TrafficGenerator {
         double randomValue = geradorViolation.nextDouble();
     
       
-        double desiredRate = 0.4;
+        double desiredRate = 0.12;
     
    
         if (randomValue < desiredRate) {

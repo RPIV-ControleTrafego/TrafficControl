@@ -1,5 +1,7 @@
 package com.accident.serviceaccident.Generator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -12,18 +14,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class SendInfo {
    
-
+private static final Logger LOG = LoggerFactory.getLogger(SendInfo.class);
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
 
     @Autowired
     private AccidentService AccidentService;
 
-    @Scheduled(fixedRate = 2000) // 1s = 1000ms
-    public void postCarPlate() {
+    @Scheduled(fixedRate = 2000)
+    public void postCarAccident() {
         AccidentGenerator AccidentGenerator = new AccidentGenerator();
         AccidentDTO AccidentDTO = new AccidentDTO();
-        AccidentService.mapGeneratortoDTO(AccidentDTO, AccidentGenerator);
+        AccidentService.mapGeneratorDTO(AccidentGenerator, AccidentDTO);
+        LOG.info("Sending Accident Message to Kafka: {}", AccidentDTO);
 
         kafkaProducerMessage.sendAccidentMessage(AccidentDTO);
     }

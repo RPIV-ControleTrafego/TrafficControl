@@ -30,6 +30,16 @@
             "projectName": "traffic",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceaccidentApplication<serviceaccident>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.accident.serviceaccident.ServiceaccidentApplication",
+            "projectName": "serviceaccident",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

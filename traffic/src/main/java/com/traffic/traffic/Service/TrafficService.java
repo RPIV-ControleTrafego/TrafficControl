@@ -339,6 +339,7 @@ public List<String> getCarTypes() {
 
         if (trafficDto.getSpeed() > trafficDto.getMaxSpeed()) {
             mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+            infractionDto.setViolation("speeding");
             kafkaProducerMessage.sendMessage(infractionDto);
             return true;
         } else {
@@ -349,6 +350,7 @@ public List<String> getCarTypes() {
     public boolean verifyInfractionDirection(TrafficDto trafficDto, InfractionDTO infractionDto) {
         if (trafficDto.getDirection() != trafficDto.getStreetDirection()) {
              mapCarDtoToInfractionDTO(trafficDto, infractionDto);
+            infractionDto.setViolation("wrong direction");
             kafkaProducerMessage.sendMessage(infractionDto);
             return true;
         } else {
@@ -459,7 +461,10 @@ public List<String> getCarTypes() {
         // infractionDto.setTime(trafficDto.getTime());
         infractionDto.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
         infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
-        infractionDto.setViolation(trafficDto.getViolation());
+        if(trafficDto.getViolation() != null ){
+            infractionDto.setViolation(trafficDto.getViolation());
+        }
+       
 
 
 

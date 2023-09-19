@@ -8,7 +8,8 @@
             "mainClass": "com.api.api.ApiApplication",
             "projectName": "api",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=42443 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=api"
         },
         {
             "type": "java",
@@ -29,7 +30,8 @@
             "mainClass": "com.traffic.traffic.TrafficApplication",
             "projectName": "traffic",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=34175 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=traffic"
         },
         {
             "type": "java",
@@ -38,6 +40,16 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.infraction.serviceinfraction.ServiceinfractionApplication",
             "projectName": "serviceinfraction",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ServiceaccidentApplication<serviceaccident>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.accident.serviceaccident.ServiceaccidentApplication",
+            "projectName": "serviceaccident",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }

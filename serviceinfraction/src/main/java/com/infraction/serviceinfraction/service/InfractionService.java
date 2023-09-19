@@ -52,7 +52,7 @@ public class InfractionService implements IinfractionService{
 private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infractionDTO){
     return InfractionEntity.builder()
     .carPlate(infractionDTO.getCarPlate())
-    .addres(infractionDTO.getAddres())
+    .addres(infractionDTO.getAddress())
     .date(infractionDTO.getDate())
     .violation(infractionDTO.getViolation())
     .carType(infractionDTO.getCarType())

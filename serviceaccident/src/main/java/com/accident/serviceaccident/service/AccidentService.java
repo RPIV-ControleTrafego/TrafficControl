@@ -15,6 +15,18 @@ public class AccidentService implements IAccidentService{
     // @Autowired
     // private AccidentClient accidentClient;
 
+    // @Autowired
+    // private AccidentGenerator accidentGenerator;
+
+    
+
+    public void newInfo(AccidentDTO accidentDTO){
+        AccidentGenerator accidentGenerator = new AccidentGenerator(); 
+        
+        mapGeneratorDTO(accidentGenerator, accidentDTO);
+
+        
+    }
     // @Override
     // public List<AccidentDTO> getAllAccidents() {
     //     return accidentClient.getAccidents();

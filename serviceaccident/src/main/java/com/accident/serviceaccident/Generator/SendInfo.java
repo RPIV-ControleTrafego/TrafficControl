@@ -13,21 +13,24 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SendInfo {
-   
-private static final Logger LOG = LoggerFactory.getLogger(SendInfo.class);
+
+    private static final Logger LOG = LoggerFactory.getLogger(SendInfo.class);
+
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
 
     @Autowired
-    private AccidentService AccidentService;
+    private AccidentService accidentService;
 
     @Scheduled(fixedRate = 2000)
     public void postCarAccident() {
-        AccidentGenerator AccidentGenerator = new AccidentGenerator();
-        AccidentDTO AccidentDTO = new AccidentDTO();
-        AccidentService.mapGeneratorDTO(AccidentGenerator, AccidentDTO);
-        LOG.info("Sending Accident Message to Kafka: {}", AccidentDTO);
+        AccidentGenerator accidentGenerator = new AccidentGenerator();
+        AccidentDTO accidentDTO = new AccidentDTO();
 
-        kafkaProducerMessage.sendAccidentMessage(AccidentDTO);
+        // Map the generated data to AccidentDTO
+        accidentService.mapGeneratorDTO(accidentGenerator, accidentDTO);
+
+        LOG.info("Sending Accident Message to Kafka: {}", accidentDTO);
+        kafkaProducerMessage.sendAccidentMessage(accidentDTO);
     }
 }

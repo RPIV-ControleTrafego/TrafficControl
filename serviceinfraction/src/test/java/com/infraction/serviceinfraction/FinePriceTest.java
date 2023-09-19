@@ -1,4 +1,4 @@
-package com.infraction;
+package com.infraction.serviceinfraction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

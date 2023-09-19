@@ -1,8 +1,16 @@
 package com.accident.serviceaccident.Generator;
 
 import java.util.Random;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccidentGenerator {
 
     private String accidentId;
@@ -24,6 +32,8 @@ public class AccidentGenerator {
     private static Random geradorDescription = new Random();
     private static Random geradorType = new Random();
     private static Random geradorHasInfraction = new Random();
+
+    
 
     
 }

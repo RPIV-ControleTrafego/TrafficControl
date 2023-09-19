@@ -450,7 +450,7 @@ public List<String> getCarTypes() {
         infractionDto.setCarColor(trafficDto.getCarColor());
         infractionDto.setCarPlate(trafficDto.getCarPlate());
         infractionDto.setCarType(trafficDto.getCarType());
-        // infractionDto.setAddress(trafficDto.getAddress());
+        infractionDto.setAddress(trafficDto.getAddress());
         infractionDto.setDate(trafficDto.getDate());
         // infractionDto.setDirection(trafficDto.getDirection());
         infractionDto.setMaxSpeed(trafficDto.getMaxSpeed());

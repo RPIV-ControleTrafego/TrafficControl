@@ -18,7 +18,7 @@ public class InfractionDTO {
     
    
     private String carPlate;
-    private String addres;
+    private String address;
     private String date;
     private String violation;
     private String carType;
@@ -30,10 +30,6 @@ public class InfractionDTO {
     private int maxSpeed;
     private double finePrice;
 
-
-
-
-    
 
 
     

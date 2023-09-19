@@ -9,6 +9,8 @@ import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
 
+import java.util.concurrent.ExecutionException;
+
 import org.slf4j.Logger;
 
 @Service
@@ -24,27 +26,30 @@ public class InfractionService implements IinfractionService{
 
     @Override
     public void newInfraction(InfractionDTO infractionInfo) {
-        log.info("Traffic service - Received traffici info information: {}", infractionInfo);
-
+        log.info("Traffic service - Received traffic information: {}", infractionInfo);
+    
         try {
-            infractionEntity = mapInfractionDTOTInfractionEntity(infractionInfo);
+            infractionEntity = mapInfractionDTOToInfractionEntity(infractionInfo);
             boolean fineCalculated = calculateFine(infractionInfo);
-
+    
             if (fineCalculated) {
-                log.info("Traffic service - Fine price calculated: {}", infractionInfo.getFinePrice(), infractionInfo.getViolation());
+                double finePrice = infractionInfo.getFinePrice();
+                String violation = infractionInfo.getViolation();
+                log.info("Traffic service - Fine price calculated: {} for violation: {}", finePrice, violation);
+                infractionEntity.setFinePrice(finePrice);
             }
-
-
+    
             infractionRepository.save(infractionEntity);
-            log.info("Traffic service - Traffic info saved successfully");
+            log.info("Traffic service - Traffic info saved successfully: {}", infractionEntity);
+        } catch (RuntimeException e) {
+            log.error("Traffic service - Specific error saving traffic info: {}", e.getMessage());
         } catch (Exception e) {
             log.error("Traffic service - Error saving traffic info: {}", e.getMessage());
+        }
     }
-    
-}
 
 
-private InfractionEntity mapInfractionDTOTInfractionEntity(InfractionDTO infractionDTO){
+private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infractionDTO){
     return InfractionEntity.builder()
     .carPlate(infractionDTO.getCarPlate())
     .addres(infractionDTO.getAddres())
@@ -64,9 +69,11 @@ private InfractionEntity mapInfractionDTOTInfractionEntity(InfractionDTO infract
   private boolean calculateFine(InfractionDTO infractionDTO) {
       
         double finePrice = FinePriceCalculator.calculateFinePrice(infractionDTO.getViolation().toLowerCase(), infractionDTO);
+
         infractionDTO.setFinePrice(finePrice);
         return finePrice > 0;  
     }
+
 
 
 

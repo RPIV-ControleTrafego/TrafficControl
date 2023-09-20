@@ -103,6 +103,7 @@ public class TrafficService implements ITrafficService {
         trafficDTO.setStreetDirection(trafficGenerator.getStreetDirection());
         trafficDTO.setViolation(trafficGenerator.getViolation());
         trafficDTO.setVeiculeOwneCPF(trafficGenerator.getVehicleOwnerCPF());
+        trafficDTO.setPollutionLevel(trafficGenerator.getPollutionLevel());
         // Adicione qualquer outro atributo necessário aqui
     
         // Agora, trafficDTO contém os atributos do TrafficGenerator

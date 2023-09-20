@@ -1,5 +1,6 @@
 package com.api.api.Generator;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SendInfo {
-   
+    private final Logger log = org.slf4j.LoggerFactory.getLogger(SendInfo.class);
 
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
@@ -24,7 +25,7 @@ public class SendInfo {
         TrafficGenerator trafficGenerator = new TrafficGenerator();
         TrafficDTO trafficDTO = new TrafficDTO();
         trafficService.mapGeneratortoDTO(trafficDTO, trafficGenerator);
-
+        log.info("Produzindo e enviando para o kafka: " + trafficDTO);
         kafkaProducerMessage.sendTrafficMessage(trafficDTO);
     }
 }

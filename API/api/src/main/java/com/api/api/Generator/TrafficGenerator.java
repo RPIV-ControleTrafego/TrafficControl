@@ -1,6 +1,8 @@
 package com.api.api.Generator;
 
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.time.LocalDate;
 
@@ -59,7 +61,85 @@ public class TrafficGenerator {
     private String[] streetDirections = {"north", "south", "east", "west"};
     private String[] directions = {"north", "south", "east", "west"};
     private int[] maxSpeedsList = {60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260};
-    private String[] violationList = {"red light", "stop sign", "no seat belt", "no helmet",  "no license", "no insurance", "no registration", "drunk driving", "reckless driving", "hit and run", "tailgating", "jaywalking", "illegal turn", "parking violation"};  
+    private String[] violationList = {"red light", "stop sign", "no seat belt", "no helmet",  "no license", "no insurance", "no registration", "drunk driving", "reckless driving", "hit and run", "tailgating", "jaywalking", "illegal turn", "parking violation"}; 
+    
+    private static final Map<String, Double> carBrandPollution = new HashMap<>();
+
+    static{
+        carBrandPollution.put("Ford", 0.5);
+        carBrandPollution.put("Toyota", 0.4);
+        carBrandPollution.put("Chevrolet", 0.3);
+        carBrandPollution.put("Peugeot", 0.2);
+        carBrandPollution.put("Renault", 0.1);
+        carBrandPollution.put("Mazda", 0.2);
+        carBrandPollution.put("Lexus", 0.3);
+        carBrandPollution.put("BYD", 0.4);
+        carBrandPollution.put("Mitsubishi", 0.5);
+
+    }
+    
+    private static final Map<String, Double> carTypePollution = new HashMap<>();
+
+    static{
+        carTypePollution.put("hatch", 0.5);
+        carTypePollution.put("sedan", 0.4);
+        carTypePollution.put("SUV", 0.3);
+        carTypePollution.put("crossover", 0.2);
+        carTypePollution.put("pickup", 0.1);
+    }
+
+    private static final Map<String, Map<String, Double>> carBrandTypePollution = new HashMap<>();
+
+static {
+    // Ford possui os tipos sedan e hatch
+    Map<String, Double> fordPollution = new HashMap<>();
+    fordPollution.put("sedan", 0.5);
+    fordPollution.put("hatch", 0.4);
+    carBrandTypePollution.put("Ford", fordPollution);
+
+    // Toyota possui outros tipos, por exemplo
+    Map<String, Double> toyotaPollution = new HashMap<>();
+    toyotaPollution.put("sedan", 0.3);
+    toyotaPollution.put("SUV", 0.2);
+    carBrandTypePollution.put("Toyota", toyotaPollution);
+
+    // Chevrolet possui os tipos SUV e pickup
+    Map<String, Double> chevroletPollution = new HashMap<>();
+    chevroletPollution.put("SUV", 0.4);
+    chevroletPollution.put("pickup", 0.3);
+    carBrandTypePollution.put("Chevrolet", chevroletPollution);
+
+    // Peugeot possui apenas o tipo sedan
+    Map<String, Double> peugeotPollution = new HashMap<>();
+    peugeotPollution.put("sedan", 0.2);
+    carBrandTypePollution.put("Peugeot", peugeotPollution);
+
+    // Renault possui apenas o tipo hatch
+    Map<String, Double> renaultPollution = new HashMap<>();
+    renaultPollution.put("hatch", 0.3);
+    carBrandTypePollution.put("Renault", renaultPollution);
+    
+    // Mazda possui os tipos sedan e crossover
+    Map<String, Double> mazdaPollution = new HashMap<>();
+    mazdaPollution.put("sedan", 0.4);
+    mazdaPollution.put("crossover", 0.3);
+    carBrandTypePollution.put("Mazda", mazdaPollution);
+    
+    // Lexus possui apenas o tipo SUV
+    Map<String, Double> lexusPollution = new HashMap<>();
+    lexusPollution.put("SUV", 0.5);
+    carBrandTypePollution.put("Lexus", lexusPollution);
+    
+    // BYD possui apenas o tipo hatch
+    Map<String, Double> bydPollution = new HashMap<>();
+    bydPollution.put("hatch", 0.4);
+    carBrandTypePollution.put("BYD", bydPollution);
+    
+    // Mitsubishi possui apenas o tipo SUV
+    Map<String, Double> mitsubishiPollution = new HashMap<>();
+    mitsubishiPollution.put("SUV", 0.5);
+    carBrandTypePollution.put("Mitsubishi", mitsubishiPollution);
+}
 
 
 
@@ -80,6 +160,7 @@ public class TrafficGenerator {
         geraStreetDirection();
         geraViolation();
         geraOwnerCPF();
+        calculatePollutionLevel(carType, carBrand);
     }
 
   
@@ -309,8 +390,33 @@ public class TrafficGenerator {
         return time;
     }
 
+    
+    
+    private double calculatePollutionLevel(String carType, String carBrand) {
+        double pollutionLevel = 0;
+    
+        if (carBrandTypePollution.containsKey(carBrand)) {
+            Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
+            if (typePollution.containsKey(carType)) {
+                pollutionLevel = typePollution.get(carType);
+                
+                // Adicionando uma pequena variação aleatória
+                double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
+                pollutionLevel += randomVariation;
+            } else {
+                throw new IllegalArgumentException("Tipo de carro não encontrado para a marca fornecida.");
+            }
+        } else {
+            throw new IllegalArgumentException("Marca de carro não encontrada.");
+        }
+    
+        return pollutionLevel;
+    }   
 
-
+    public double getPollutionLevel() {
+        return calculatePollutionLevel(this.carType, this.carBrand);
+    }
+    
    
 }
 

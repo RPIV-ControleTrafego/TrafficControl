@@ -393,26 +393,25 @@ static {
     
     
     private double calculatePollutionLevel(String carType, String carBrand) {
-        double pollutionLevel = 0;
-    
+        
         if (carBrandTypePollution.containsKey(carBrand)) {
             Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
             if (typePollution.containsKey(carType)) {
-                pollutionLevel = typePollution.get(carType);
-                
+                double pollutionLevel = typePollution.get(carType);
+    
                 // Adicionando uma pequena variação aleatória
                 double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
                 pollutionLevel += randomVariation;
+              
+                return pollutionLevel;
             } else {
-                throw new IllegalArgumentException("Tipo de carro não encontrado para a marca fornecida.");
+                throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
             }
         } else {
-            throw new IllegalArgumentException("Marca de carro não encontrada.");
+            throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
         }
+    }
     
-        return pollutionLevel;
-    }   
-
     public double getPollutionLevel() {
         return calculatePollutionLevel(this.carType, this.carBrand);
     }

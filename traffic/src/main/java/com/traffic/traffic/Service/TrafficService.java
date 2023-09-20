@@ -329,11 +329,7 @@ public List<String> getCarTypes() {
 
 
 
-    private TrafficDto mapCarTypeToDto(String carType) {
-        TrafficDto trafficDto = new TrafficDto();
-        trafficDto.setCarType(carType);
-        return trafficDto;
-    }
+   
 
     public boolean verifyInfractionspeed(TrafficDto trafficDto, InfractionDTO infractionDto) {
 
@@ -414,7 +410,7 @@ public List<String> getCarTypes() {
         trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
         trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
         trafficEntity.setViolation(trafficDto.getViolation());
-
+        trafficEntity.setPollutionlevel(trafficDto.getPollutionlevel());
        
 
         return trafficEntity;

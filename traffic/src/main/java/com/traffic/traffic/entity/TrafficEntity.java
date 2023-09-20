@@ -36,7 +36,7 @@ public class TrafficEntity{
     private String direction; // north, south, east, west
     private String streetDirection; // north, south, east, west
     private String violation;
-    private double pollutionlevel;
+    private double pollutionLevel;
     
     
 }

@@ -4,6 +4,8 @@ package com.api.api.Generator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
 
@@ -91,54 +93,15 @@ public class TrafficGenerator {
     private static final Map<String, Map<String, Double>> carBrandTypePollution = new HashMap<>();
 
 static {
-    // Ford possui os tipos sedan e hatch
-    Map<String, Double> fordPollution = new HashMap<>();
-    fordPollution.put("sedan", 0.5);
-    fordPollution.put("hatch", 0.4);
-    carBrandTypePollution.put("Ford", fordPollution);
-
-    // Toyota possui outros tipos, por exemplo
-    Map<String, Double> toyotaPollution = new HashMap<>();
-    toyotaPollution.put("sedan", 0.3);
-    toyotaPollution.put("SUV", 0.2);
-    carBrandTypePollution.put("Toyota", toyotaPollution);
-
-    // Chevrolet possui os tipos SUV e pickup
-    Map<String, Double> chevroletPollution = new HashMap<>();
-    chevroletPollution.put("SUV", 0.4);
-    chevroletPollution.put("pickup", 0.3);
-    carBrandTypePollution.put("Chevrolet", chevroletPollution);
-
-    // Peugeot possui apenas o tipo sedan
-    Map<String, Double> peugeotPollution = new HashMap<>();
-    peugeotPollution.put("sedan", 0.2);
-    carBrandTypePollution.put("Peugeot", peugeotPollution);
-
-    // Renault possui apenas o tipo hatch
-    Map<String, Double> renaultPollution = new HashMap<>();
-    renaultPollution.put("hatch", 0.3);
-    carBrandTypePollution.put("Renault", renaultPollution);
-    
-    // Mazda possui os tipos sedan e crossover
-    Map<String, Double> mazdaPollution = new HashMap<>();
-    mazdaPollution.put("sedan", 0.4);
-    mazdaPollution.put("crossover", 0.3);
-    carBrandTypePollution.put("Mazda", mazdaPollution);
-    
-    // Lexus possui apenas o tipo SUV
-    Map<String, Double> lexusPollution = new HashMap<>();
-    lexusPollution.put("SUV", 0.5);
-    carBrandTypePollution.put("Lexus", lexusPollution);
-    
-    // BYD possui apenas o tipo hatch
-    Map<String, Double> bydPollution = new HashMap<>();
-    bydPollution.put("hatch", 0.4);
-    carBrandTypePollution.put("BYD", bydPollution);
-    
-    // Mitsubishi possui apenas o tipo SUV
-    Map<String, Double> mitsubishiPollution = new HashMap<>();
-    mitsubishiPollution.put("SUV", 0.5);
-    carBrandTypePollution.put("Mitsubishi", mitsubishiPollution);
+    carBrandTypePollution.put("Ford", Map.of("sedan", 0.5, "hatch", 0.4));
+    carBrandTypePollution.put("Toyota", Map.of("sedan", 0.3, "SUV", 0.2));
+    carBrandTypePollution.put("Chevrolet", Map.of("SUV", 0.4, "pickup", 0.3));
+    carBrandTypePollution.put("Peugeot", Map.of("sedan", 0.2));
+    carBrandTypePollution.put("Renault", Map.of("hatch", 0.3));
+    carBrandTypePollution.put("Mazda", Map.of("sedan", 0.4, "crossover", 0.3));
+    carBrandTypePollution.put("Lexus", Map.of("SUV", 0.5));
+    carBrandTypePollution.put("BYD", Map.of("hatch", 0.4));
+    carBrandTypePollution.put("Mitsubishi", Map.of("SUV", 0.5));
 }
 
 
@@ -165,13 +128,13 @@ static {
 
   
 
+    /**
+     * Generates a random car plate number by combining random letters and digits.
+     * There is a small chance that the generated car plate will be empty.
+     */
     private void geraCarPlate() {
-      
         StringBuilder plate = new StringBuilder();
-
-         double randomValue = geradorViolation.nextDouble();
-    
-      
+        double randomValue = geradorViolation.nextDouble();
         double desiredRate = 0.09;
 
         if (randomValue < desiredRate) {
@@ -179,24 +142,19 @@ static {
             return;
         }
 
-      
         for (int i = 0; i < 3; i++) {
             char randomLetter = (char) (geradorCarPlate.nextInt(26) + 'A');
             plate.append(randomLetter);
         }
-        
-      
+
         plate.append('-');
-        
-     
+
         for (int i = 0; i < 4; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             plate.append(randomDigit);
         }
-        
+
         this.carPlate = plate.toString();
-    
-        
     }
     
     private void geraCarPlateEmpty() {
@@ -204,27 +162,35 @@ static {
     }
 
 
-    private void geraOwnerCPF(){
+    private void geraOwnerCPF() {
         StringBuilder cpf = new StringBuilder();
+
         for (int i = 0; i < 3; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             cpf.append(randomDigit);
         }
+
         cpf.append('.');
+    
         for (int i = 0; i < 3; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             cpf.append(randomDigit);
         }
+
         cpf.append('.');
+    
         for (int i = 0; i < 3; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             cpf.append(randomDigit);
         }
+
         cpf.append('-');
+    
         for (int i = 0; i < 2; i++) {
             int randomDigit = geradorCarPlate.nextInt(10);
             cpf.append(randomDigit);
         }
+
         this.vehicleOwnerCPF = cpf.toString();
     }
 
@@ -242,15 +208,28 @@ static {
         this.time = String.format("%02d:%02d:%02d", hour, minute, second);
     }
 
+    /**
+     * Generates a random address by selecting a random street, city, state, and zip code from predefined arrays
+     * and concatenating them together.
+     */
     private void geraAddress() {
-        String street = streets[geradorAddress.nextInt(streets.length)];
-        String city = cities[geradorAddress.nextInt(cities.length)];
-        String state = states[geradorAddress.nextInt(states.length)];
-        String zipCode = zipCodes[geradorAddress.nextInt(zipCodes.length)];
+        String street = getRandomElement(streets);
+        String city = getRandomElement(cities);
+        String state = getRandomElement(states);
+        String zipCode = getRandomElement(zipCodes);
 
-        this.address = street + ", " + city + ", " + state + " " + zipCode;
+        this.address = String.format("%s, %s, %s %s", street, city, state, zipCode);
+    }
 
-
+    /**
+     * Returns a random element from the given array.
+     *
+     * @param array the array to select a random element from
+     * @param <T>   the type of elements in the array
+     * @return a random element from the array
+     */
+    private <T> T getRandomElement(T[] array) {
+        return array[geradorAddress.nextInt(array.length)];
     }
 
  
@@ -300,17 +279,22 @@ static {
 
 
     private void geraDate() {
-        // Gere uma data aleatória entre 01/01/2010 e 31/12/2023
-        int minYear = 2010;
-        int maxYear = 2023;
+    // Generate a random date between January 1, 2010, and December 31, 2023
+    int minYear = 2010;
+    int maxYear = 2023;
 
-        int year = geradorDate.nextInt(maxYear - minYear + 1) + minYear;
-        int month = geradorDate.nextInt(12) + 1;
-        int day = geradorDate.nextInt(31) + 1;  
+    int year = ThreadLocalRandom.current().nextInt(minYear, maxYear + 1);
+    int month = ThreadLocalRandom.current().nextInt(1, 13);
+    int day = ThreadLocalRandom.current().nextInt(1, 32);
 
-        this.date = LocalDate.of(year, month, day).toString();
+    try {
+        LocalDate date = LocalDate.of(year, month, day);
+        this.date = date.toString();
+    } catch (DateTimeException e) {
+        // Handle the exception here
+        System.err.println("Failed to generate a valid date: " + e.getMessage());
     }
-
+}
     private void geraMaxSpeed() {
         int randomIndex = geradorMaxSpeed.nextInt(maxSpeedsList.length);
         this.maxSpeed = maxSpeedsList[randomIndex];
@@ -327,19 +311,20 @@ static {
     }
 
 
-    private void geraViolation() {
-        // gera valor aleatorio de infração, para que nem todos os carros tenham infração
+    /**
+     * Generates a random violation for a car, with a desired rate of occurrence.
+     * 
+     * @return The randomly selected violation or null.
+     */
+    private String geraViolation() {
         double randomValue = geradorViolation.nextDouble();
-    
-      
         double desiredRate = 0.12;
-    
-   
+
         if (randomValue < desiredRate) {
             int randomIndex = geradorViolation.nextInt(violationList.length);
-            this.violation = violationList[randomIndex];
+            return violationList[randomIndex];
         } else {
-            this.violation = null; 
+            return null;
         }
     }
 
@@ -386,37 +371,53 @@ static {
         return this.vehicleOwnerName;
     }
 
+   
+
     public String getTime() {
         return time;
     }
 
     
     
+
+
+
+
+   
     private double calculatePollutionLevel(String carType, String carBrand) {
-        
-        if (carBrandTypePollution.containsKey(carBrand)) {
-            Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
-            if (typePollution.containsKey(carType)) {
-                double pollutionLevel = typePollution.get(carType);
-    
-                // Adicionando uma pequena variação aleatória
-                double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
-                pollutionLevel += randomVariation;
-              
-                return pollutionLevel;
-            } else {
-                throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
-            }
-        } else {
+        if (!carBrandTypePollution.containsKey(carBrand)) {
             throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
         }
+
+        Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
+        if (!typePollution.containsKey(carType)) {
+            throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
+        }
+
+        double pollutionLevel = typePollution.get(carType);
+        double randomVariation = getRandomVariation();
+        pollutionLevel += randomVariation;
+
+        return pollutionLevel;
     }
-    
+
+    private double getRandomVariation() {
+        double random = Math.random() - 0.5;
+        double randomVariation = random * 0.1; // Variation between -0.05 and 0.05
+        return randomVariation;
+    }
+
     public double getPollutionLevel() {
         return calculatePollutionLevel(this.carType, this.carBrand);
     }
-    
-   
 }
+
+
+
+
+
+
+
+
 
 

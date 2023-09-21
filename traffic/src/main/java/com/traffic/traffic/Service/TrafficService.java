@@ -410,7 +410,7 @@ public List<String> getCarTypes() {
         trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
         trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
         trafficEntity.setViolation(trafficDto.getViolation());
-        trafficEntity.setPollutionlevel(trafficDto.getPollutionlevel());
+        trafficEntity.setPollutionLevel(trafficDto.getPollutionLevel());
        
 
         return trafficEntity;
@@ -433,6 +433,7 @@ public List<String> getCarTypes() {
                 .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
                 .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
                 .violation(trafficEntity.getViolation())
+                .pollutionLevel(trafficEntity.getPollutionLevel())
                 
                 
                 

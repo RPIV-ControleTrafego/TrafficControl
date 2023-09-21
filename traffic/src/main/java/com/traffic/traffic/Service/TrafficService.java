@@ -389,7 +389,7 @@ public List<String> getCarTypes() {
          trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
          trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
          trafficEntity.setViolation(trafficDto.getViolation());
-       
+         trafficEntity.setPollutionlevel(trafficDto.getPollutionlevel());
     
          return trafficEntity;
      }

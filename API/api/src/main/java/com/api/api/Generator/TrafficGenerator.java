@@ -393,24 +393,42 @@ static {
     
     
     private double calculatePollutionLevel(String carType, String carBrand) {
-        
-        if (carBrandTypePollution.containsKey(carBrand)) {
-            Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
-            if (typePollution.containsKey(carType)) {
-                double pollutionLevel = typePollution.get(carType);
+        int maxTries = 3;  // Número máximo de tentativas
+        int tries = 0;
     
-                // Adicionando uma pequena variação aleatória
-                double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
-                pollutionLevel += randomVariation;
-              
-                return pollutionLevel;
-            } else {
-                throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
+        while (tries < maxTries) {
+            try {
+                if (carBrandTypePollution.containsKey(carBrand)) {
+                    Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
+                    if (typePollution.containsKey(carType)) {
+                        double pollutionLevel = typePollution.get(carType);
+    
+                        
+                        double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
+                        pollutionLevel += randomVariation;
+    
+                        return pollutionLevel;
+                    } else {
+                        throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
+                    }
+                } else {
+                    throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
+                }
+            } catch (Exception e) {
+                // Ocorreu um erro, vamos tentar novamente
+                tries++;
+    
+                if (tries >= maxTries) {
+                    // Se atingiu o número máximo de tentativas e ainda há um erro, podemos lançar a exceção
+                    throw e;
+                }
             }
-        } else {
-            throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
         }
+    
+        // Se chegou aqui, significa que todas as tentativas falharam
+        throw new RuntimeException("Unable to calculate pollution level.");
     }
+    
     
     public double getPollutionLevel() {
         return calculatePollutionLevel(this.carType, this.carBrand);

@@ -415,17 +415,17 @@ static {
                     throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
                 }
             } catch (Exception e) {
-                // Ocorreu um erro, vamos tentar novamente
+               
                 tries++;
     
                 if (tries >= maxTries) {
-                    // Se atingiu o número máximo de tentativas e ainda há um erro, podemos lançar a exceção
+                   
                     throw e;
                 }
             }
         }
     
-        // Se chegou aqui, significa que todas as tentativas falharam
+    
         throw new RuntimeException("Unable to calculate pollution level.");
     }
     

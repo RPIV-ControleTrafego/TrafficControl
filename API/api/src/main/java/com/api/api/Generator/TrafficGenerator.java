@@ -1,7 +1,9 @@
 package com.api.api.Generator;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.time.LocalDate;
@@ -393,42 +395,54 @@ static {
     
     
     private double calculatePollutionLevel(String carType, String carBrand) {
-        int maxTries = 3;  // Número máximo de tentativas
+        int maxTries = 3;  
         int tries = 0;
     
         while (tries < maxTries) {
             try {
                 if (carBrandTypePollution.containsKey(carBrand)) {
-                    Map<String, Double> typePollution = carBrandTypePollution.get(carBrand);
-                    if (typePollution.containsKey(carType)) {
-                        double pollutionLevel = typePollution.get(carType);
+                    List<String> availableTypes = new ArrayList<>(carBrandTypePollution.get(carBrand).keySet());
     
-                        
-                        double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
-                        pollutionLevel += randomVariation;
-    
-                        return pollutionLevel;
-                    } else {
-                        throw new IllegalArgumentException("Car type '" + carType + "' not found for the brand '" + carBrand + "'.");
+                    for (String type : availableTypes) {
+                        if (type.equals(carType)) {
+                            double pollutionLevel = carBrandTypePollution.get(carBrand).get(carType);
+                            double randomVariation = (Math.random() - 0.5) * 0.1; // Variação entre -0.05 e 0.05
+                            pollutionLevel += randomVariation;
+                            return pollutionLevel;
+                        }
                     }
+    
+                   
+                    System.err.println("Car type '" + carType + "' not found for the brand '" + carBrand + "'. Trying another type...");
+                    carType = getNextAvailableCarType(carBrand, availableTypes);
                 } else {
                     throw new IllegalArgumentException("Car brand '" + carBrand + "' not found.");
                 }
-            } catch (Exception e) {
-               
+            } catch (IllegalArgumentException e) {
+                System.err.println(e.getMessage());
                 tries++;
     
                 if (tries >= maxTries) {
-                   
-                    throw e;
+                    throw new IllegalArgumentException("Exceeded maximum attempts to find a valid car type.");
                 }
             }
         }
     
-    
-        throw new RuntimeException("Unable to calculate pollution level.");
+        throw new IllegalArgumentException("Exceeded maximum attempts to find a valid car type.");
     }
     
+    private String getNextAvailableCarType(String carBrand, List<String> availableTypes) {
+      
+        int currentIndex = availableTypes.indexOf(carType);
+    
+      
+        if (currentIndex == availableTypes.size() - 1) {
+            return availableTypes.get(0);
+        } else {
+           
+            return availableTypes.get(currentIndex + 1);
+        }
+    }
     
     public double getPollutionLevel() {
         return calculatePollutionLevel(this.carType, this.carBrand);

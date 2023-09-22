@@ -9,6 +9,11 @@ import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -48,6 +53,16 @@ public class InfractionService implements IinfractionService{
         }
     }
 
+public List<InfractionEntity> getInfractionsInDate(String date) {
+    log.info("Traffic service - Retrieving infractions for date: {}", date);
+
+    try {
+        return infractionRepository.findByDateGreaterThanEqual(date);
+    } catch (RuntimeException e) {
+        log.error("Traffic service - Error retrieving infractions for date: {}", e.getMessage());
+        throw e;
+    }
+}
 
 private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infractionDTO){
     return InfractionEntity.builder()
@@ -64,7 +79,6 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .maxSpeed(infractionDTO.getMaxSpeed())
     .build();
 }
-
 
   private boolean calculateFine(InfractionDTO infractionDTO) {
       

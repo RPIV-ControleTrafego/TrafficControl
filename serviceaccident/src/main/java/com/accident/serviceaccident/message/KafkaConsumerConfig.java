@@ -4,6 +4,8 @@ package com.accident.serviceaccident.message;
 
 
 
+import com.accident.serviceaccident.dto.AccidentDTO;
+
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,8 +18,6 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.accident.serviceaccident.dto.AccidentDTO;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,12 +29,12 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, AccidentDTO > consumerFactory() {
+    public ConsumerFactory<String, AccidentDTO> consumerFactory() {
 
         Map<String, Object> props = new HashMap<>();
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "traffic-topic");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "accident-topic");
         props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
@@ -42,21 +42,12 @@ public class KafkaConsumerConfig {
                 new JsonDeserializer<>(AccidentDTO.class, false));
     }
 
-    // @Bean
-    // public ConcurrentKafkaListenerContainerFactory<String, TrafficDto> kafkaListenerContainerFactory() {
-    //     ConcurrentKafkaListenerContainerFactory<String, TrafficDto>
-    //             factory = new ConcurrentKafkaListenerContainerFactory<>();
-    //     factory.setConsumerFactory(consumerFactory());
-    //     return factory;
-    // }
-
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, AccidentDTO> accidentKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, AccidentDTO> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, AccidentDTO>
                 factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
-    
 
 }

@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.api.Generator.AccidentGenerator;
+import com.api.api.Generator.TrafficGenerator;
 import com.api.api.client.AccidentClient;
 import com.api.api.dto.AccidentDTO;
+import com.api.api.dto.TrafficDTO;
 
 @Service
 public class AccidentService implements IAccidentService{
@@ -77,19 +79,42 @@ public class AccidentService implements IAccidentService{
         return accidentClient.getAccidentByHasInfraction();
     }
 
-     public void mapGeneratorDTO(AccidentGenerator accidentGenerator, AccidentDTO accidentDTO){
-
-        accidentDTO.setAddress(accidentGenerator.getAddress());
-        accidentDTO.setDate(accidentGenerator.getDate());
-        accidentDTO.setDescription(accidentGenerator.getDescription());
-        accidentDTO.setHasFatalities(accidentGenerator.getHasFatalities());
-        accidentDTO.setHasInfraction(accidentGenerator.getHasInfraction());
-        accidentDTO.setHasInjuries(accidentGenerator.getHasInjuries());
-        accidentDTO.setSeverity(accidentGenerator.getSeverity());
-        accidentDTO.setType(accidentGenerator.getType());
-
-    }
-
+  
+    // public void mapGeneratortoDTO(TrafficDTO trafficDTO, TrafficGenerator trafficGenerator) {
+    //     // Extrair os atributos relevantes do TrafficGenerator e atribuí-los ao TrafficDTO
+    //     trafficDTO.setCarPlate(trafficGenerator.getCarPlate());
+    //     trafficDTO.setCarType(trafficGenerator.getCarType());
+    //     trafficDTO.setCarColor(trafficGenerator.getCarColor());
+    //     trafficDTO.setCarBrand(trafficGenerator.getCarBrand());
+    //     trafficDTO.setVeiculeOwnerName(trafficGenerator.getFullName());
+    //     trafficDTO.setTime(trafficGenerator.getTime());
+    //     trafficDTO.setDate(trafficGenerator.getDate());
+    //     trafficDTO.setAddress(trafficGenerator.getAddress());
+    //     trafficDTO.setSpeed(trafficGenerator.getSpeed());
+    //     trafficDTO.setMaxSpeed(trafficGenerator.getMaxSpeed());
+    //     trafficDTO.setDirection(trafficGenerator.getDirection());
+    //     trafficDTO.setStreetDirection(trafficGenerator.getStreetDirection());
+    //     trafficDTO.setViolation(trafficGenerator.getViolation());
+    //     trafficDTO.setVeiculeOwneCPF(trafficGenerator.getVehicleOwnerCPF());
+    //     trafficDTO.setPollutionLevel(trafficGenerator.getPollutionLevel());
+    //     // Adicione qualquer outro atributo necessário aqui
     
+    //     // Agora, trafficDTO contém os atributos do TrafficGenerator
+    // }
+
+    public void mapGeneratorToDTO(AccidentDTO accidentDTO, AccidentGenerator accidentGenerator) {
+        // Extrair os atributos relevantes do AccidentGenerator e atribuí-los ao AccidentDTO
+        accidentDTO.setSeverity(accidentGenerator.getSeverity());
+        accidentDTO.setDate(accidentGenerator.getDate());
+        accidentDTO.setHasInjuries(accidentGenerator.getHasInjuries());
+        accidentDTO.setHasFatalities(accidentGenerator.getHasFatalities());
+        accidentDTO.setAddress(accidentGenerator.getAddress());
+        accidentDTO.setDescription(accidentGenerator.getDescription());
+        accidentDTO.setType(accidentGenerator.getType());
+        accidentDTO.setHasInfraction(accidentGenerator.getHasInfraction());
+        // Adicione qualquer outro atributo necessário aqui
+    
+        // Agora, accidentDTO contém os atributos do AccidentGenerator
+    }
 
 }

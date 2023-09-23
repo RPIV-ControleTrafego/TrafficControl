@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccidentDTO{
     
-    private String accidentId;
     private String severity;
     private String date;
     private boolean hasInjuries;

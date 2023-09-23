@@ -10,5 +10,5 @@ public interface AccidentRepository extends MongoRepository<AccidentEntity, Stri
 
 
     
-    List<AccidentEntity> findByCarPlate(String carPlate);
+    
 }

@@ -30,16 +30,16 @@ public class SendInfo {
         TrafficGenerator trafficGenerator = new TrafficGenerator();
         TrafficDTO trafficDTO = new TrafficDTO();
         trafficService.mapGeneratortoDTO(trafficDTO, trafficGenerator);
-        log.info("Produzindo e enviando para o kafka: " + trafficDTO);
+        log.info("Produzindo informações de Transito: " + trafficDTO);
         kafkaProducerMessage.sendTrafficMessage(trafficDTO);
     }
 
-    @Scheduled(fixedRate = 2000) // 1s = 1000ms
+    @Scheduled(fixedRate = 5000) // 1s = 1000ms
     public void postAccident() {
         AccidentGenerator accidentGenerator = new AccidentGenerator();
         AccidentDTO accidentDTO = new AccidentDTO();
-        accidentService.mapGeneratorDTO(accidentGenerator, accidentDTO);
-
+        accidentService.mapGeneratorToDTO(accidentDTO, accidentGenerator);
+        log.info("Produzindo informações de Acidente: " + accidentDTO);
         kafkaProducerMessage.sendAccidentMessage(accidentDTO);
     }
 }

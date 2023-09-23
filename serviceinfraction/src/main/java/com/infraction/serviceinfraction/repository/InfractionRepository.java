@@ -21,5 +21,14 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
   
     @Query("{ 'date' : { $gte: ?0 } }")
     List<InfractionEntity> findByDateGreaterThanEqual(String date);
+    @Query("{ 'speed' : { $gte: ?0 } }'}")
+    List<InfractionEntity> findSpeedInfractioGreaterThan(int speed);
+    @Query("{ 'speed' : { $lte: ?0 } }'}")
+    List<InfractionEntity> findSpeedInfractionLowerThan(int speed);
+    @Query("{ 'carPlate' : ?0 }")
+    List<InfractionEntity> findInfractionByCarPlate(String carPlate);
+    @Query("{ 'veiculeOwneCPF' : ?0 }")
+    List<InfractionEntity> findInfractionByVeiculeOwnerCpf(String veiculeOwnerCpf);
+
 }
 

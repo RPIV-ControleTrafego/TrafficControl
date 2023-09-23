@@ -28,10 +28,10 @@ public class KafkaConsumerMessage {
     @Autowired
     private AccidentService accidentService;
     
-    @KafkaListener(topics = "infraction-topic", groupId = "infraction-topic")
+    @KafkaListener(topics = "accident-topic", groupId = "accident-topic")
     public void listening(AccidentDTO infractionInfo) {
 
-        LOG.info("Traffic service - Received traffici nfo information: {}", infractionInfo);
+        LOG.info("Accident service - Received accident info: {}", infractionInfo);
       accidentService.newAccidentDetails(infractionInfo);
       
    

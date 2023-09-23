@@ -112,9 +112,8 @@ public class AccidentService implements IAccidentService{
         accidentDTO.setDescription(accidentGenerator.getDescription());
         accidentDTO.setType(accidentGenerator.getType());
         accidentDTO.setHasInfraction(accidentGenerator.getHasInfraction());
-        // Adicione qualquer outro atributo necessário aqui
-    
+        
         // Agora, accidentDTO contém os atributos do AccidentGenerator
     }
-
+    
 }

@@ -1,4 +1,4 @@
-package com.accident.serviceaccident.Generator;
+package com.api.api.Generator;
 
 import java.util.Random;
 

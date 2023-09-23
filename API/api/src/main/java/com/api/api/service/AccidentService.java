@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.api.Generator.AccidentGenerator;
 import com.api.api.client.AccidentClient;
 import com.api.api.dto.AccidentDTO;
 
@@ -75,5 +76,20 @@ public class AccidentService implements IAccidentService{
     public List<AccidentDTO> getAccidentsByHasInfraction(String hasInfraction) {
         return accidentClient.getAccidentByHasInfraction();
     }
+
+     public void mapGeneratorDTO(AccidentGenerator accidentGenerator, AccidentDTO accidentDTO){
+
+        accidentDTO.setAddress(accidentGenerator.getAddress());
+        accidentDTO.setDate(accidentGenerator.getDate());
+        accidentDTO.setDescription(accidentGenerator.getDescription());
+        accidentDTO.setHasFatalities(accidentGenerator.getHasFatalities());
+        accidentDTO.setHasInfraction(accidentGenerator.getHasInfraction());
+        accidentDTO.setHasInjuries(accidentGenerator.getHasInjuries());
+        accidentDTO.setSeverity(accidentGenerator.getSeverity());
+        accidentDTO.setType(accidentGenerator.getType());
+
+    }
+
+    
 
 }

@@ -2,105 +2,50 @@ package com.accident.serviceaccident.service;
 
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.accident.serviceaccident.Generator.AccidentGenerator;
+import com.accident.serviceaccident.Entity.AccidentEntity;
 // import com.accident.serviceaccident.client.AccidentClient;
 import com.accident.serviceaccident.dto.AccidentDTO;
+import com.accident.serviceaccident.repository.AccidentRepository;
+
+import ch.qos.logback.classic.Logger;
+
 
 @Service
 public class AccidentService implements IAccidentService{
-    
-    // @Autowired
-    // private AccidentClient accidentClient;
+    Logger logger = (Logger) LoggerFactory.getLogger(AccidentService.class);
 
-    // @Autowired
-    // private AccidentGenerator accidentGenerator;
+    @Autowired
+    private AccidentRepository accidentRepository;
 
-    
 
-    public void newInfo(AccidentDTO accidentDTO){
-        AccidentGenerator accidentGenerator = new AccidentGenerator(); 
-        
-        mapGeneratorDTO(accidentGenerator, accidentDTO);
+    public void newAccidentDetails(AccidentDTO accidentDTO) {
+        logger.info("Accident service - Received accident information: {}", accidentDTO);
 
-        
+        try {
+            AccidentEntity accidentEntity = mapAccidentDTOToEntity(accidentDTO);
+            accidentRepository.save(accidentEntity);
+            logger.info("Accident service - Accident information saved successfully: {}", accidentEntity);
+        } catch (Exception e) {
+            logger.error("Accident service - Error while saving accident information: {}", e.getMessage());
+        }
     }
-    // @Override
-    // public List<AccidentDTO> getAllAccidents() {
-    //     return accidentClient.getAccidents();
-    // }
-
-    // @Override
-    // public AccidentDTO getAccidentById(String accidentId) {
-    //     return accidentClient.getAccident(accidentId);
-    // }
-
-  
-
-    // @Override
-    // public void updateAccident(AccidentDTO accidentDTO, String accidentId) {
-    //     accidentClient.changeAccident(accidentDTO, accidentId);
-    // }
-
-    // @Override
-    // public void deleteAccident(String accidentId) {
-    //    accidentClient.removeAccident(accidentId);
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsBySeverity(String severity) {
-    //    return accidentClient.getAccidentBySeverity();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByDate(String date) {
-    //    return accidentClient.getAccidentByDate();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByHasInjuries(boolean hasInjuries) {
-    //   return accidentClient.getAccidentByHasInjuries();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByHasFatalities(boolean hasFatalities) {
-    //    return accidentClient.getAccidentByHasFatalities();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByAddress(String address) {
-    //   return accidentClient.getAccidentByAddress();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByDescription(String description) {
-    //      return accidentClient.getAccidentByDescription();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByType(String type) {
-    //     return accidentClient.getAccidentByType();
-    // }
-
-    // @Override
-    // public List<AccidentDTO> getAccidentsByHasInfraction(String hasInfraction) {
-    //     return accidentClient.getAccidentByHasInfraction();
-    // }
 
 
-    public void mapGeneratorDTO(AccidentGenerator accidentGenerator, AccidentDTO accidentDTO){
-
-        accidentDTO.setAddress(accidentGenerator.getAddress());
-        accidentDTO.setDate(accidentGenerator.getDate());
-        accidentDTO.setDescription(accidentGenerator.getDescription());
-        accidentDTO.setHasFatalities(accidentGenerator.getHasFatalities());
-        accidentDTO.setHasInfraction(accidentGenerator.getHasInfraction());
-        accidentDTO.setHasInjuries(accidentGenerator.getHasInjuries());
-        accidentDTO.setSeverity(accidentGenerator.getSeverity());
-        accidentDTO.setType(accidentGenerator.getType());
-
+    private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO){
+        AccidentEntity accidentEntity = new AccidentEntity();
+        accidentEntity.setSeverity(accidentDTO.getSeverity());
+        accidentEntity.setDate(accidentDTO.getDate());
+        accidentEntity.setHasInjuries(accidentDTO.isHasInjuries());
+        accidentEntity.setHasFatalities(accidentDTO.isHasFatalities());
+        accidentEntity.setAddress(accidentDTO.getAddress());
+        accidentEntity.setDescription(accidentDTO.getDescription());
+        accidentEntity.setType(accidentDTO.getType());
+        accidentEntity.setHasInfraction(accidentDTO.isHasInfraction());
+        return accidentEntity;
     }
 
 }

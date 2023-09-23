@@ -33,14 +33,9 @@ public class KafkaProducerMessage {
         accidentKafkaTemplate.send(ACCIDENT_KAFKA_TOPIC, accidentDTO);
     }
 
-    @Autowired
-    private KafkaTemplate<String, InfractionDTO> kafkaTemplate;
+   
 
-    private final String KAFKA_TOPIC = "infraction-topic";
 
-    public void sendMessage(InfractionDTO infractionDTO){
-        kafkaTemplate.send(KAFKA_TOPIC, infractionDTO);
-    }
 
     
 }

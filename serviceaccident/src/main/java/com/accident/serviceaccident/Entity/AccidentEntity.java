@@ -1,20 +1,18 @@
-package com.api.api.dto;
+package com.accident.serviceaccident.Entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@JsonInclude
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AccidentDTO{
-    
-    private String accidentId;
+@Document("accident")
+public class AccidentEntity {
+
+
     private String severity;
     private String date;
     private boolean hasInjuries;
@@ -23,5 +21,5 @@ public class AccidentDTO{
     private String description;
     private String type;
     private boolean hasInfraction;
-
+    
 }

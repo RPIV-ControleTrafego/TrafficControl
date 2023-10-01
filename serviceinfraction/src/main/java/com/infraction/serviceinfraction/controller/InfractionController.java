@@ -18,6 +18,7 @@ import org.springframework.expression.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ import com.infraction.serviceinfraction.service.InfractionService;
 
 @Controller
 @RequestMapping("/infraction")
+@CrossOrigin(origins = "*") 
 public class InfractionController {
 
     

@@ -19,9 +19,6 @@ public class KafkaConsumerMessage {
 
     private final Logger LOG = LoggerFactory.getLogger(KafkaConsumerMessage.class);
 
-    // @Autowired
-    // private TrafficService trafficService;
-
     @Autowired
     private InfractionService infractionService;
     

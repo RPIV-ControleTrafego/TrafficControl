@@ -1,14 +1,11 @@
 package com.infraction.serviceinfraction.repository;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.Date;
+
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-// import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 

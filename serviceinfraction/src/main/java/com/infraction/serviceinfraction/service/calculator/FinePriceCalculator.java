@@ -1,11 +1,11 @@
-package com.infraction.serviceinfraction.calculator;
+package com.infraction.serviceinfraction.service.calculator;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.infraction.serviceinfraction.dto.InfractionDTO;
 
-public class FinePriceCalculator {
+public class FinePriceCalculator implements IFinePrice{
     private static final Map<String, Double> finePrices = new HashMap<>();
 
     static {
@@ -28,9 +28,10 @@ public class FinePriceCalculator {
         finePrices.put("no plate", 300.0);
     }
 
-    public static double calculateFinePrice(String violation, InfractionDTO infractionDTO) {
+    @Override
+    public double calculateFine(InfractionDTO infractionDTO) {
         if (infractionDTO == null) {
-            throw new IllegalArgumentException("InfractionDTO não pode ser nulo.");
+            throw new IllegalArgumentException("InfractionDTO cannot be null.");
         }
 
         double finePrice = 0;
@@ -50,7 +51,7 @@ public class FinePriceCalculator {
         return Math.max(0, infractionDTO.getSpeed() - infractionDTO.getMaxSpeed()) * finePrices.get("speeding");
     }
 
-    public static double calculateFinePrice(String violation) {
+    private static double calculateFinePrice(String violation) {
         return finePrices.getOrDefault(violation, 0.0);
     }
 

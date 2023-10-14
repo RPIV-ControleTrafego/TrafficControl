@@ -29,7 +29,9 @@
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
-				<dependency>
+	
+
+		<dependency>
 		<groupId>org.json</groupId>
 		<artifactId>json</artifactId>
 		<version>20210307</version>
@@ -40,6 +42,7 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+		
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>

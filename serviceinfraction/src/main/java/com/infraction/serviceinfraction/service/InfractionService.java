@@ -4,10 +4,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.infraction.serviceinfraction.calculator.FinePriceCalculator;
+
 import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
+import com.infraction.serviceinfraction.service.calculator.FinePriceCalculator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -33,13 +34,23 @@ import org.slf4j.Logger;
 @Service
 public class InfractionService implements IinfractionService{
 
-      private final Logger log = LoggerFactory.getLogger(InfractionService.class);
+    //singleton pattern
+    private static final Logger log = LoggerFactory.getLogger(InfractionService.class);
+
+    //Strategy Pattern  
+    private FinePriceCalculator fineCalculator;
 
     @Autowired
     private InfractionRepository infractionRepository;
 
     @Autowired
     private InfractionEntity infractionEntity;
+
+ 
+    public InfractionService(FinePriceCalculator fineCalculator) {
+        this.fineCalculator = fineCalculator;
+    }
+
 
     @Override
     public void newInfraction(InfractionDTO infractionInfo) {
@@ -158,13 +169,11 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .build();
 }
 
-  private boolean calculateFine(InfractionDTO infractionDTO) {
-      
-        double finePrice = FinePriceCalculator.calculateFinePrice(infractionDTO.getViolation().toLowerCase(), infractionDTO);
-
-        infractionDTO.setFinePrice(finePrice);
-        return finePrice > 0;  
-    }
+private boolean calculateFine(InfractionDTO infractionDTO) {
+    double finePrice = fineCalculator.calculateFine(infractionDTO);  // Usando a estratégia de cálculo de multa apropriada
+    infractionDTO.setFinePrice(finePrice);
+    return finePrice > 0;
+}
 
 
 

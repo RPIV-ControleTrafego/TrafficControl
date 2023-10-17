@@ -25,4 +25,8 @@ public class LoggerInfraction {
     public static Logger getLogger(Class<InfractionService> clazz) {
         return LoggerInfraction.getLogger(clazz);
     }
+
+    public static Logger getLoggerConsumer(Class<KafkaConsumerMessage> clazz) {
+        return LoggerInfraction.getLogger(clazz);
+    }
 }

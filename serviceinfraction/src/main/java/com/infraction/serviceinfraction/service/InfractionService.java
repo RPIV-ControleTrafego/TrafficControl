@@ -34,8 +34,7 @@ import org.slf4j.Logger;
 @Service
 public class InfractionService implements IinfractionService{
 
-    //singleton pattern
-    private static final Logger log = LoggerFactory.getLogger(InfractionService.class);
+  private Logger log;
 
     //Strategy Pattern  
     private FinePriceCalculator fineCalculator;

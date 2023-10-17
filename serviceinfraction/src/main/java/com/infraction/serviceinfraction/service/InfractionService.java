@@ -9,6 +9,7 @@ import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
 import com.infraction.serviceinfraction.service.calculator.FinePriceCalculator;
+import com.infraction.serviceinfraction.service.calculator.GeneralFineCalculator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -45,6 +46,9 @@ public class InfractionService implements IinfractionService{
     @Autowired
     private InfractionEntity infractionEntity;
 
+    @Autowired
+    private GeneralFineCalculator generalFineCalculator = new GeneralFineCalculator();
+
  
     public InfractionService(FinePriceCalculator fineCalculator) {
         this.fineCalculator = fineCalculator;
@@ -56,15 +60,10 @@ public class InfractionService implements IinfractionService{
         log.info("Traffic service - Received traffic information: {}", infractionInfo);
     
         try {
-            infractionEntity = mapInfractionDTOToInfractionEntity(infractionInfo);
-            boolean fineCalculated = calculateFine(infractionInfo);
-    
-            if (fineCalculated) {
-                double finePrice = infractionInfo.getFinePrice();
-                String violation = infractionInfo.getViolation();
-                log.info("Traffic service - Fine price calculated: {} for violation: {}", finePrice, violation);
-                infractionEntity.setFinePrice(finePrice);
-            }
+            InfractionEntity infractionEntity = mapInfractionDTOToInfractionEntity(infractionInfo);
+            double finePrice = generalFineCalculator.calculateFine(infractionInfo);
+            log.info("Traffic service - Fine price calculated: {} for violation: {}", finePrice, infractionInfo.getViolation());
+            infractionEntity.setFinePrice(finePrice);
     
             infractionRepository.save(infractionEntity);
             log.info("Traffic service - Traffic info saved successfully: {}", infractionEntity);

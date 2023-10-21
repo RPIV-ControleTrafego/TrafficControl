@@ -1,12 +1,5 @@
 package com.accident.serviceaccident.message;
-
-
-
-
-
 import com.accident.serviceaccident.dto.AccidentDTO;
-
-
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

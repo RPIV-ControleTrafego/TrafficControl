@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.accident.serviceaccident.Entity.AccidentEntity;
 // import com.accident.serviceaccident.client.AccidentClient;
 import com.accident.serviceaccident.dto.AccidentDTO;
@@ -33,7 +32,6 @@ public class AccidentService implements IAccidentService{
             logger.error("Accident service - Error while saving accident information: {}", e.getMessage());
         }
     }
-
 
     private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO){
         AccidentEntity accidentEntity = new AccidentEntity();

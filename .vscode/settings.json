@@ -6,5 +6,6 @@
         "Novos consumidores e produtores",
         "api spring",
         "Microsserviço de tráfego"
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

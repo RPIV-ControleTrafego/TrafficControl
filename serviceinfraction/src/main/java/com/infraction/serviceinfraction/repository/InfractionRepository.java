@@ -29,6 +29,7 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     List<InfractionEntity> findInfractionByCarPlate(String carPlate);
     @Query("{ 'veiculeOwneCPF' : ?0 }")
     List<InfractionEntity> findInfractionByVeiculeOwnerCpf(String veiculeOwnerCpf);
-
+    @Query("{ 'violations' : ?0 }")
+    List<InfractionEntity> findInfractionByViolations(String violations);
 }
 

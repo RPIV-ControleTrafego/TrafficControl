@@ -31,6 +31,8 @@ public class InfractionEntity {
     private double speed;
     private double maxSpeed;
     private double finePrice;
+    private String sex;
+    private String age;
 
 
 }

@@ -1,9 +1,11 @@
-package com.infraction.serviceinfraction.service.logger;
+package com.infraction.serviceinfraction.logger;
 
 import org.slf4j.Logger;
+import org.springframework.stereotype.Service;
 
-
+import com.infraction.serviceinfraction.message.KafkaConsumerMessage;
 import com.infraction.serviceinfraction.service.InfractionService;
+
 
 public class LoggerInfraction {
 
@@ -27,6 +29,6 @@ public class LoggerInfraction {
     }
 
     public static Logger getLoggerConsumer(Class<KafkaConsumerMessage> clazz) {
-        return LoggerInfraction.getLogger(clazz);
+        return LoggerInfraction.getLoggerConsumer(clazz);
     }
 }

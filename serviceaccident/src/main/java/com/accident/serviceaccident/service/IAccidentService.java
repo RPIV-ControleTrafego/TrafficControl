@@ -9,7 +9,6 @@ import com.accident.serviceaccident.dto.AccidentDTO;
 @Service
 public interface IAccidentService {
     
-     
     private String accidentId;
     private String severity;
     private String date;

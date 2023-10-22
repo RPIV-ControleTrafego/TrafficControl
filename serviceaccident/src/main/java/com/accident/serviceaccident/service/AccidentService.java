@@ -1,26 +1,20 @@
 package com.accident.serviceaccident.service;
-
-import java.util.List;
-
+import com.accident.serviceaccident.Entity.AccidentEntity;
+import com.accident.serviceaccident.dto.AccidentDTO;
+import com.accident.serviceaccident.repository.AccidentRepository;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.accident.serviceaccident.Entity.AccidentEntity;
-// import com.accident.serviceaccident.client.AccidentClient;
-import com.accident.serviceaccident.dto.AccidentDTO;
-import com.accident.serviceaccident.repository.AccidentRepository;
-
 import ch.qos.logback.classic.Logger;
 
-
 @Service
-public class AccidentService implements IAccidentService{
+public class AccidentService implements IAccidentService {
     Logger logger = (Logger) LoggerFactory.getLogger(AccidentService.class);
 
     @Autowired
     private AccidentRepository accidentRepository;
 
-
+    @Override
     public void newAccidentDetails(AccidentDTO accidentDTO) {
         logger.info("Accident service - Received accident information: {}", accidentDTO);
 
@@ -33,7 +27,7 @@ public class AccidentService implements IAccidentService{
         }
     }
 
-    private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO){
+    private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO) {
         AccidentEntity accidentEntity = new AccidentEntity();
         accidentEntity.setSeverity(accidentDTO.getSeverity());
         accidentEntity.setDate(accidentDTO.getDate());
@@ -45,5 +39,4 @@ public class AccidentService implements IAccidentService{
         accidentEntity.setHasInfraction(accidentDTO.isHasInfraction());
         return accidentEntity;
     }
-
 }

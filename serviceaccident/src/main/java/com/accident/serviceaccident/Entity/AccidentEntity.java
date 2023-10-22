@@ -2,9 +2,7 @@ package com.accident.serviceaccident.Entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Component
 @Document("accident")
 public class AccidentEntity {
-
 
     private String severity;
     private String date;

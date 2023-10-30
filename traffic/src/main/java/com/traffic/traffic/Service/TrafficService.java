@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Service;
 
+import com.traffic.traffic.dto.AccidentDTO;
+import com.traffic.traffic.dto.AllTraficDTO;
 import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
+import com.traffic.traffic.dto.Mapper.TrafficMapper;
 import com.traffic.traffic.entity.TrafficEntity;
 import com.traffic.traffic.message.KafkaConsumerMessage;
 import com.traffic.traffic.message.KafkaProducerMessage;
@@ -34,16 +37,22 @@ public class TrafficService implements ITrafficService {
     
   
 
-    public void newCarDetails(TrafficDto trafficDto) {
-     TrafficEntity  trafficEntity = mapCarDtoToEntity(trafficDto);
-   
+    public void newCarDetails(AllTraficDTO trafficInfo) {
+        TrafficDto trafficDto = trafficMapper.mapCarEntityToDTO(trafficMapper.mapCarDtoToEntity(trafficInfo.getTrafficInfo()));
+        InfractionDTO infractionDTO = trafficMapper.mapCarDtoToInfractionDTO(trafficDto);
+        
+        if(trafficInfo.getAccidentInfo() != null){
+            AccidentDTO accidentDTO = trafficInfo.getAccidentInfo();
+            kafkaProducerMessage.sendAccidentMessage(accidentDTO);
+        }
 
-        InfractionDTO infractionDTO = new InfractionDTO();
+        
         verifyInfractionDirection(trafficDto, infractionDTO);
         verifyInfractionspeed(trafficDto, infractionDTO);
         verifyViolations(trafficDto, infractionDTO);
         verifyPlateEmpty(trafficDto, infractionDTO);
         
+        TrafficEntity trafficEntity = trafficMapper.mapCarDtoToEntity(trafficDto);
         
         try {
             // Salvar a entidade no MongoDB
@@ -468,6 +477,14 @@ public List<String> getCarTypes() {
         return infractionDto;
     }
 
+     private TrafficMapper trafficMapper = TrafficMapper.INSTANCE;
+
+    public AllTraficDTO createAllTraficDTO(TrafficDto trafficDto, InfractionDTO infractionDto, AccidentDTO accidentDto) {
+        return trafficMapper.mapToAllTraficDTO(trafficDto, infractionDto, accidentDto);
+    }   
+
+    
+    
    
     
 }

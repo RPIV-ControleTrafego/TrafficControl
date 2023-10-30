@@ -13,6 +13,7 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.stereotype.Component;
 
+import com.traffic.traffic.dto.AccidentDTO;
 import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
 
@@ -65,4 +66,25 @@ public class KafkaProducerConfig {
     public KafkaTemplate<String, InfractionDTO> infractionKafkaTemplate(){
         return new KafkaTemplate<>(infractionProducerFactory());
     }
+
+
+    @Bean
+    public ProducerFactory<String, AccidentDTO> accidentProducerFactory(){
+
+        Map<String,Object> configProps = new HashMap<>();
+
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        configProps.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
+        return new DefaultKafkaProducerFactory<>(configProps);
+}
+
+
+    @Bean
+    public KafkaTemplate<String, AccidentDTO> accidentKafkaTemplate(){
+        return new KafkaTemplate<>(accidentProducerFactory());
+    }
+    
+
 }

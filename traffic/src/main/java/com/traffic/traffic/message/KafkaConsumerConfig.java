@@ -2,6 +2,7 @@ package com.traffic.traffic.message;
 
 
 
+import com.traffic.traffic.dto.AllTraficDTO;
 import com.traffic.traffic.dto.TrafficDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -25,7 +26,7 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConsumerFactory<String, TrafficDto> consumerFactory() {
+    public ConsumerFactory<String, AllTraficDTO> consumerFactory() {
 
         Map<String, Object> props = new HashMap<>();
 
@@ -35,12 +36,12 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-                new JsonDeserializer<>(TrafficDto.class, false));
+                new JsonDeserializer<>(AllTraficDTO.class, false));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, TrafficDto> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, TrafficDto>
+    public ConcurrentKafkaListenerContainerFactory<String, AllTraficDTO> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, AllTraficDTO>
                 factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;

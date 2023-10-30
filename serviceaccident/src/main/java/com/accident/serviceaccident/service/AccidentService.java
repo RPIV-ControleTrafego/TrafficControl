@@ -37,14 +37,12 @@ public class AccidentService implements IAccidentService{
 
     private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO){
         AccidentEntity accidentEntity = new AccidentEntity();
-        accidentEntity.setSeverity(accidentDTO.getSeverity());
-        accidentEntity.setDate(accidentDTO.getDate());
-        accidentEntity.setHasInjuries(accidentDTO.isHasInjuries());
-        accidentEntity.setHasFatalities(accidentDTO.isHasFatalities());
-        accidentEntity.setAddress(accidentDTO.getAddress());
-        accidentEntity.setDescription(accidentDTO.getDescription());
-        accidentEntity.setType(accidentDTO.getType());
-        accidentEntity.setHasInfraction(accidentDTO.isHasInfraction());
+        accidentEntity.setTipo(accidentDTO.getTipo());
+        accidentEntity.setSeveridade(accidentDTO.getSeveridade());
+        accidentEntity.setData(accidentDTO.getData());
+        accidentEntity.setVitimas(accidentDTO.getVitimas());
+        accidentEntity.setHora(accidentDTO.getHora());
+        
         return accidentEntity;
     }
 

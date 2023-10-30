@@ -40,12 +40,8 @@ public class TrafficService implements ITrafficService {
     public void newCarDetails(AllTraficDTO trafficInfo) {
         TrafficDto trafficDto = trafficMapper.mapCarEntityToDTO(trafficMapper.mapCarDtoToEntity(trafficInfo.getTrafficInfo()));
         InfractionDTO infractionDTO = trafficMapper.mapCarDtoToInfractionDTO(trafficDto);
-        
-        if(trafficInfo.getAccidentInfo() != null){
-            AccidentDTO accidentDTO = trafficInfo.getAccidentInfo();
-            kafkaProducerMessage.sendAccidentMessage(accidentDTO);
-        }
-
+        AccidentDTO accidentDTO = trafficMapper.mapAllTrafficToAccident(trafficInfo);
+        kafkaProducerMessage.sendAccidentMessage(accidentDTO);
         
         verifyInfractionDirection(trafficDto, infractionDTO);
         verifyInfractionspeed(trafficDto, infractionDTO);

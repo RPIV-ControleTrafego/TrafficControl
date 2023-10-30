@@ -22,4 +22,6 @@ public interface TrafficMapper {
     InfractionDTO mapCarDtoToInfractionDTO(TrafficDto trafficDto);
 
     AllTraficDTO mapToAllTraficDTO(TrafficDto trafficDto, InfractionDTO infractionDto, AccidentDTO accidentDto);
+
+    AccidentDTO mapAllTrafficToAccident(AllTraficDTO trafficInfo);
 }

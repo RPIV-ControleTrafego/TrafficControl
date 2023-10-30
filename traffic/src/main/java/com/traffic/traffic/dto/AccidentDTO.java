@@ -14,14 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AccidentDTO{
     
-    private String accidentId;
-    private String severity;
-    private String date;
-    private boolean hasInjuries;
-    private boolean hasFatalities;
-    private String address;
-    private String description;
-    private String type;
-    private String hasInfraction;
+   private String tipo;
+    private int severidade;
+    private String data;
+    private int vitimas;
+    private String hora;
 
 }

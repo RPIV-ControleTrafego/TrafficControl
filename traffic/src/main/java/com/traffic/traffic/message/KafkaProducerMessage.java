@@ -26,6 +26,7 @@ public class KafkaProducerMessage {
     private  KafkaTemplate<String, AccidentDTO> kafkaAccidentTemplate;
 
     private final String KAFKA_TOPIC = "infraction-topic";
+    private final String KAFKA_ACCIDENT_TOPIC = "accident-topic";
 
     public void sendMessage(InfractionDTO infractionDTO){
         LOG.info("Infraction service - Sending infraction information: {}", infractionDTO);
@@ -34,7 +35,7 @@ public class KafkaProducerMessage {
 
     public void sendAccidentMessage(AccidentDTO accidentDTO){
         LOG.info("Accident service - Sending accident information: {}", accidentDTO);
-        kafkaAccidentTemplate.send(KAFKA_TOPIC, accidentDTO);
+        kafkaAccidentTemplate.send(KAFKA_ACCIDENT_TOPIC, accidentDTO);
     }
 
     

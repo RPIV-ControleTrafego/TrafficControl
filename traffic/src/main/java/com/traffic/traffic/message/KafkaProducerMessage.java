@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.traffic.traffic.Service.TrafficService;
 import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
+import com.traffic.traffic.dto.AccidentDTO;
 
 
 
@@ -21,7 +22,8 @@ public class KafkaProducerMessage {
     @Autowired
     private KafkaTemplate<String, InfractionDTO> kafkaTemplate;
 
-
+    @Autowired
+    private  KafkaTemplate<String, AccidentDTO> kafkaAccidentTemplate;
 
     private final String KAFKA_TOPIC = "infraction-topic";
 
@@ -30,6 +32,12 @@ public class KafkaProducerMessage {
         kafkaTemplate.send(KAFKA_TOPIC, infractionDTO);
     }
 
+    public void sendAccidentMessage(AccidentDTO accidentDTO){
+        LOG.info("Accident service - Sending accident information: {}", accidentDTO);
+        kafkaAccidentTemplate.send(KAFKA_TOPIC, accidentDTO);
+    }
+
+    
     
     
 }

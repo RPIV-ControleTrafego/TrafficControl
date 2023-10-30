@@ -45,6 +45,11 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+    <groupId>org.mapstruct</groupId>
+    <artifactId>mapstruct</artifactId>
+    <version>1.4.2.Final</version> <!-- Verifique a versão mais recente -->
+</dependency>
 	</dependencies>
 
 	<build>
@@ -61,6 +66,23 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Verifique a versão mais recente -->
+
+            <configuration>
+                <source>1.8</source> <!-- Versão do Java que está usando -->
+                <target>1.8</target> <!-- Versão do Java que está usando -->
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct-processor</artifactId>
+                        <version>1.4.2.Final</version> <!-- Versão correspondente ao MapStruct -->
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
 		</plugins>
 	</build>
 

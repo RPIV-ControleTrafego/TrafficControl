@@ -29,6 +29,9 @@ public class InfractionDTO {
     private double speed;
     private int maxSpeed;
     private double finePrice;
+    private String sex;
+    private String age;
+    
 
 
 

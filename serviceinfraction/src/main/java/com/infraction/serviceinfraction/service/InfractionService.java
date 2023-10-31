@@ -7,38 +7,23 @@ import org.springframework.stereotype.Service;
 
 import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
+import com.infraction.serviceinfraction.logger.LoggerInfraction;
 import com.infraction.serviceinfraction.repository.InfractionRepository;
 import com.infraction.serviceinfraction.service.calculator.CurrencyConverterAdapter;
 import com.infraction.serviceinfraction.service.calculator.FinePriceCalculator;
 import com.infraction.serviceinfraction.service.calculator.GeneralFineCalculator;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import javax.swing.text.html.parser.Entity;
-
-import org.json.JSONObject;
 import org.slf4j.Logger;
 
 @Service
 public class InfractionService implements IinfractionService{
 
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+    private final LoggerInfraction log = LoggerInfraction.getInstance();
 
     // Adapter Pattern
     private final CurrencyConverterAdapter currencyConverter;

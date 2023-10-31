@@ -2,12 +2,6 @@ package com.traffic.traffic.logger;
 
 import org.slf4j.Logger;
 
-import com.traffic.traffic.Service.TrafficService;
-import com.traffic.traffic.controller.TrafficController;
-import com.traffic.traffic.message.KafkaConsumerMessage;
-import com.traffic.traffic.message.KafkaProducerMessage;
-
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TrafficLogger {
@@ -27,11 +21,11 @@ public class TrafficLogger {
     }
 
     public void info(String message) {
-        logger.info(message); // Registra uma mensagem de informação
+        logger.info(message); 
     }
 
     public void error(String message) {
-        logger.error(message); // Registra uma mensagem de erro
+        logger.error(message);
     }
 
     public void error(String message, Exception exception) {

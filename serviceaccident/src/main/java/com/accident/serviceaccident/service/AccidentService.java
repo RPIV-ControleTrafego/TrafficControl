@@ -2,13 +2,14 @@ package com.accident.serviceaccident.service;
 
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.accident.serviceaccident.Entity.AccidentEntity;
 // import com.accident.serviceaccident.client.AccidentClient;
 import com.accident.serviceaccident.dto.AccidentDTO;
+import com.accident.serviceaccident.logger.AccidentLogger;
 import com.accident.serviceaccident.repository.AccidentRepository;
 
 import ch.qos.logback.classic.Logger;
@@ -16,7 +17,8 @@ import ch.qos.logback.classic.Logger;
 
 @Service
 public class AccidentService implements IAccidentService{
-    Logger logger = (Logger) LoggerFactory.getLogger(AccidentService.class);
+    
+    private  final AccidentLogger logger = AccidentLogger.getInstance().logger();
 
     @Autowired
     private AccidentRepository accidentRepository;

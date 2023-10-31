@@ -1,6 +1,6 @@
 package com.accident.serviceaccident.service;
 
-import java.util.List;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,13 @@ import com.accident.serviceaccident.dto.AccidentDTO;
 import com.accident.serviceaccident.logger.AccidentLogger;
 import com.accident.serviceaccident.repository.AccidentRepository;
 
-import ch.qos.logback.classic.Logger;
 
 
 @Service
 public class AccidentService implements IAccidentService{
     
-    private  final AccidentLogger logger = AccidentLogger.getInstance().logger();
+    private final AccidentLogger logger = new AccidentLogger(AccidentService.class);
+
 
     @Autowired
     private AccidentRepository accidentRepository;
@@ -28,7 +28,9 @@ public class AccidentService implements IAccidentService{
         logger.info("Accident service - Received accident information: {}", accidentDTO);
 
         try {
+            
             AccidentEntity accidentEntity = mapAccidentDTOToEntity(accidentDTO);
+           
             accidentRepository.save(accidentEntity);
             logger.info("Accident service - Accident information saved successfully: {}", accidentEntity);
         } catch (Exception e) {
@@ -38,6 +40,11 @@ public class AccidentService implements IAccidentService{
 
 
     private AccidentEntity mapAccidentDTOToEntity(AccidentDTO accidentDTO){
+        
+        if(!isAccidentValid(accidentDTO)) {
+            return null;
+        }
+    
         AccidentEntity accidentEntity = new AccidentEntity();
         accidentEntity.setTipo(accidentDTO.getTipo());
         accidentEntity.setSeveridade(accidentDTO.getSeveridade());
@@ -46,6 +53,19 @@ public class AccidentService implements IAccidentService{
         accidentEntity.setHora(accidentDTO.getHora());
         
         return accidentEntity;
+    }
+
+    private boolean isAccidentValid(AccidentDTO accidentDTO) {
+        if(accidentDTO == null) {
+            logger.info("AccidentDTO is null, not saving accident information");
+            return false;
+        }
+       
+        if (accidentDTO.getTipo() == null || accidentDTO.getSeveridade() == 0 || accidentDTO.getData() == null) {
+            logger.info("AccidentDTO is invalid, not saving accident information");
+            return false;
+        }
+        return true;
     }
 
 }

@@ -29,11 +29,10 @@ public class TrafficLogger {
     }
 
     public void error(String message, Exception exception) {
-        logger.error(message, exception); // Registra uma mensagem de erro com a exceção
+        logger.error(message, exception);
     }
 
     public void error(String message, String exceptionMessage) {
-        // Implementação que aceita uma mensagem de erro e uma String de mensagem de exceção
         logger.error(message + ": " + exceptionMessage);
     }
 

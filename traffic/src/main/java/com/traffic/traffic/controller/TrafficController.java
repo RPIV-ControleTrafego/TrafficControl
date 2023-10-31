@@ -28,7 +28,7 @@ import ch.qos.logback.core.model.Model;
 @Controller
 @RequestMapping("/service/traffic")
 @CrossOrigin(origins = "*")
-public class trafficController {
+public class TrafficController {
 
     @Autowired
     private ITrafficService trafficService;

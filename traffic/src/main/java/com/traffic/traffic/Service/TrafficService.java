@@ -17,18 +17,17 @@ import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.dto.Mapper.TrafficMapper;
 import com.traffic.traffic.entity.TrafficEntity;
+import com.traffic.traffic.logger.TrafficLogger;
 import com.traffic.traffic.message.KafkaConsumerMessage;
 import com.traffic.traffic.message.KafkaProducerMessage;
 import com.traffic.traffic.repository.TrafficRepository;
 
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Service
 public class TrafficService implements ITrafficService {
 
-    private final Logger log = LoggerFactory.getLogger(TrafficService.class);
+  private final TrafficLogger log = TrafficLogger.getInstance();
 
     @Autowired
     private TrafficRepository trafficRepository;
@@ -62,16 +61,19 @@ public class TrafficService implements ITrafficService {
 
     @Override
     public TrafficDto getCarByPlate(String carPlate) {
-    try {
-       
-
-        trafficRepository.findByCarPlate(carPlate);
-        log.info("Pesquisado carro utilizando placa " + carPlate);
-        return mapCarEntityToDTO(trafficRepository.findByCarPlate(carPlate).get(0));
-    } catch (Exception e) {
-        log.error("Placa não encontrada", e.getMessage());
-    }
-    return null;
+        try {
+            List<TrafficEntity> carEntities = trafficRepository.findByCarPlate(carPlate);
+            
+            if (!carEntities.isEmpty()) {
+                log.info("Carro encontrado utilizando a placa: " + carPlate);
+                return mapCarEntityToDTO(carEntities.get(0));
+            } else {
+                log.info("Nenhum carro encontrado para a placa: " + carPlate);
+            }
+        } catch (Exception e) {
+            log.error("Erro ao buscar carro por placa", e.getMessage());
+        }
+        return null;
     }
 
     @Override

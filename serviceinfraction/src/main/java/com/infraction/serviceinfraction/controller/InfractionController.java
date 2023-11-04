@@ -103,82 +103,36 @@ public ResponseEntity<List<Double>> getFinePriceByCpf(@PathVariable("cpf") Strin
 }
 
 
-
-@GetMapping("/total-fine-price/real/{cpf}")
-public ResponseEntity<List<Double>> getTotalFinePriceByCpf(@PathVariable("cpf") String cpf) {
-    InfractionCommand command = new InfractionCommand(cpf, infractionService);
-    ResponseEntity<?> responseEntity = command.applyFineByPlate(cpf);
-    List<Double> finePrices = new ArrayList<>();
-    if (responseEntity.getBody() != null && responseEntity.getBody() instanceof List<?>) {
-        for (Object obj : (List<?>) responseEntity.getBody()) {
-            if (obj instanceof Double) {
-                finePrices.add((Double) obj);
-            }
-        }
-    }
-    return ResponseEntity.status(responseEntity.getStatusCode()).body(finePrices);
+private Double calculateTotalFinePrice(String cpf) {
+    List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
+    return infractions.stream()
+        .mapToDouble(InfractionEntity::getFinePrice)
+        .sum();
 }
 
-@GetMapping("/total-fine-price/dollar/{cpf}")
-public ResponseEntity<String> getTotalFinePriceInDollarsByCpf(@PathVariable("cpf") String cpf) {
+
+
+@GetMapping("/total-fine-price/{currency}/{cpf}")
+public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currency") String currency, @PathVariable("cpf") String cpf) {
     try {
-        List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
-        Double totalFinePrice = infractions.stream()
-                .mapToDouble(InfractionEntity::getFinePrice)
-                .sum();
+        Double totalFinePrice = calculateTotalFinePrice(cpf);
+        Double convertedPrice = 0.0;
+        String formattedPrice = "";
 
-        // Chama a função para converter o total de multas para dólares
-        Double totalFinePriceInDollars = infractionService.convertCurrency(totalFinePrice, "BRL", "USD");
-
-        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
-        String formattedPrice = nf.format(totalFinePriceInDollars);
+        if (currency.equalsIgnoreCase("dollar")) {
+            convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "USD");
+            NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+            formattedPrice = nf.format(convertedPrice);
+        } else if (currency.equalsIgnoreCase("euro")) {
+            convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "EUR");
+            NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+            formattedPrice = nf.format(convertedPrice);
+        } // Add more conditions for other currencies if needed
 
         return ResponseEntity.ok().body(formattedPrice);
     } catch (Exception e) {
         return ResponseEntity.status(500).body(null); // Internal server error
     }
-}
-
-@GetMapping("/total-fine-price/euro/{cpf}")
-public ResponseEntity<String> getTotalFinePriceInEurosByCpf(@PathVariable("cpf") String cpf) {
-    try {
-        List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
-        Double totalFinePrice = infractions.stream()
-                .mapToDouble(InfractionEntity::getFinePrice)
-                .sum();
-
-        // Chama a função para converter o total de multas para euros
-        Double totalFinePriceInEuros = infractionService.convertCurrency(totalFinePrice, "BRL", "EUR");
-
-        NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
-        String formattedPrice = nf.format(totalFinePriceInEuros);
-
-        return ResponseEntity.ok().body(formattedPrice);
-    } catch (Exception e) {
-        return ResponseEntity.status(500).body(null); // Internal server error
-    }
-}
-
-//peso argentino
-@GetMapping("/total-fine-price/argentine-peso/{cpf}")
-public ResponseEntity<String> getTotalFinePriceInArgentinePesoByCpf(@PathVariable("cpf") String cpf) {
-    try {
-        List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
-        Double totalFinePrice = infractions.stream()
-                .mapToDouble(InfractionEntity::getFinePrice)
-                .sum();
-
-        // Chama a função para converter o total de multas para pesos argentinos
-        Double totalFinePriceInArgentinePeso = infractionService.convertCurrency(totalFinePrice, "BRL", "ARS");
-
-        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("es", "AR"));
-        String formattedPrice = nf.format(totalFinePriceInArgentinePeso);
-
-        return ResponseEntity.ok().body(formattedPrice);
-    } catch (Exception e) {
-        return ResponseEntity.status(500).body(null); // Internal server error
-    }
-
 }
 
     @GetMapping("/peak-days")

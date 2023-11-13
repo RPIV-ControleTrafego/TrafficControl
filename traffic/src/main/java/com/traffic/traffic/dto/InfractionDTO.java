@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class InfractionDTO {
     
    
+    
     private String carPlate;
     private String address;
     private String date;
@@ -28,7 +29,11 @@ public class InfractionDTO {
     private String veiculeOwnerName;
     private String veiculeOwneCPF;
     private double speed;
-    private double maxSpeed;
+    private int maxSpeed;
+    private double finePrice;
+    private String sex;
+    private int age;
+
     
 
 

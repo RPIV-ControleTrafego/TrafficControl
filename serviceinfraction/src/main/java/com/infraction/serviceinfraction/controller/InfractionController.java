@@ -179,4 +179,53 @@ public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currenc
         return ResponseEntity.ok(percentage);
     }
 
+
+    @GetMapping("/sex/{sex}")
+    public ResponseEntity<List<InfractionEntity>> getInfractionBySex(@PathVariable String sex) {
+        try {
+            List<InfractionEntity> infractions = infractionService.getInfractionBySex(sex);
+            return ResponseEntity.ok().body(infractions);
+        } catch (RuntimeException e) {
+            log.error("Error retrieving infractions by sex: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @GetMapping("/age/{age}")
+    public ResponseEntity<List<InfractionEntity>> getInfractionByAge(@PathVariable int age) {
+        try {
+            List<InfractionEntity> infractions = infractionService.getInfractionByAge(age);
+            return ResponseEntity.ok().body(infractions);
+        } catch (RuntimeException e) {
+            log.error("Error retrieving infractions by age: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @GetMapping("/most-common-violation-by-sex/{sex}")
+    public ResponseEntity<InfractionEntity> getMostCommonViolationBySex(@PathVariable String sex) {
+        try {
+            InfractionEntity mostCommonInfraction = infractionService.getMostCommonViolationBySex(sex);
+            return ResponseEntity.ok().body(mostCommonInfraction);
+        } catch (RuntimeException e) {
+            log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
+            throw e;
+        }
+    }
+
+    @GetMapping("/most-common-infraction-by-age/{age}")
+    public ResponseEntity<InfractionEntity> getMostCommonInfractionByAge(@PathVariable int age) {
+        try {
+            Optional<InfractionEntity> mostCommonInfraction = infractionService.getMostCommonInfractionByAge(age);
+
+            if (mostCommonInfraction.isPresent()) {
+                return ResponseEntity.ok().body(mostCommonInfraction.get());
+            } else {
+                return ResponseEntity.notFound().build(); 
+            }
+        } catch (RuntimeException e) {
+            log.error("Error retrieving most common infraction by age: {}", e.getMessage());
+            throw e;
+        }
+    }
 }

@@ -418,6 +418,7 @@ public List<String> getCarTypes() {
         trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
         trafficEntity.setViolation(trafficDto.getViolation());
         trafficEntity.setPollutionLevel(trafficDto.getPollutionLevel());
+
        
 
         return trafficEntity;
@@ -467,8 +468,10 @@ public List<String> getCarTypes() {
         infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
         if(trafficDto.getViolation() != null ){
             infractionDto.setViolation(trafficDto.getViolation());
+
         }
-       
+       infractionDto.setSex(trafficDto.getSex());
+         infractionDto.setAge(trafficDto.getAge());
 
 
 

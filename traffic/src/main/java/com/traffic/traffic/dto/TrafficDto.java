@@ -31,5 +31,7 @@ public class TrafficDto {
     private String streetDirection; // north, south, east, west
     private String violation;
     private double pollutionLevel;
+    private int age;
+    private String sex;
     
 }

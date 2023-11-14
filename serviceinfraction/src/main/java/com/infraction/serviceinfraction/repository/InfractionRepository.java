@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 
 import com.infraction.serviceinfraction.entity.InfractionEntity;
+import org.springframework.data.domain.Sort;
 
 
 
@@ -32,5 +33,9 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     List<InfractionEntity> findViolationBySex(String sex);
     @Query("{'age' : ?0}")
     List<InfractionEntity> findViolationByAge(int age);
+    @Query("{ 'veiculeOwnerCpf' : ?0 }")
+    List<InfractionEntity> findByVeiculeOwnerCpf(String veiculeOwnerCpf, Sort sort);
+    @Query("{'date' : ?0}")
+    List<InfractionEntity> findByDate(String date);
 }
 

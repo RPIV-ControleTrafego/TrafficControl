@@ -1,14 +1,19 @@
 package com.infraction.serviceinfraction.controller;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -127,7 +132,12 @@ public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currenc
             convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "EUR");
             NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
             formattedPrice = nf.format(convertedPrice);
-        } // Add more conditions for other currencies if needed
+        } else if(currency.equalsIgnoreCase("real")) {
+            NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+            formattedPrice = nf.format(totalFinePrice);
+        } else {
+            return ResponseEntity.badRequest().body("Invalid currency");
+        }
 
         return ResponseEntity.ok().body(formattedPrice);
     } catch (Exception e) {
@@ -180,52 +190,73 @@ public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currenc
     }
 
 
-    @GetMapping("/sex/{sex}")
-    public ResponseEntity<List<InfractionEntity>> getInfractionBySex(@PathVariable String sex) {
-        try {
-            List<InfractionEntity> infractions = infractionService.getInfractionBySex(sex);
-            return ResponseEntity.ok().body(infractions);
-        } catch (RuntimeException e) {
-            log.error("Error retrieving infractions by sex: {}", e.getMessage());
-            throw e;
+    // @GetMapping("/sex/{sex}")
+    // public ResponseEntity<List<InfractionEntity>> getInfractionBySex(@PathVariable String sex) {
+    //     try {
+    //         List<InfractionEntity> infractions = infractionService.getInfractionBySex(sex);
+    //         return ResponseEntity.ok().body(infractions);
+    //     } catch (RuntimeException e) {
+    //         log.error("Error retrieving infractions by sex: {}", e.getMessage());
+    //         throw e;
+    //     }
+    // }
+
+    // @GetMapping("/age/{age}")
+    // public ResponseEntity<List<InfractionEntity>> getInfractionByAge(@PathVariable int age) {
+    //     try {
+    //         List<InfractionEntity> infractions = infractionService.getInfractionByAge(age);
+    //         return ResponseEntity.ok().body(infractions);
+    //     } catch (RuntimeException e) {
+    //         log.error("Error retrieving infractions by age: {}", e.getMessage());
+    //         throw e;
+    //     }
+    // }
+
+    // @GetMapping("/most-common-violation-by-sex/{sex}")
+    // public ResponseEntity<InfractionEntity> getMostCommonViolationBySex(@PathVariable String sex) {
+    //     try {
+    //         InfractionEntity mostCommonInfraction = infractionService.getMostCommonViolationBySex(sex);
+    //         return ResponseEntity.ok().body(mostCommonInfraction);
+    //     } catch (RuntimeException e) {
+    //         log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
+    //         throw e;
+    //     }
+    // }
+
+    // @GetMapping("/most-common-infraction-by-age/{age}")
+    // public ResponseEntity<InfractionEntity> getMostCommonInfractionByAge(@PathVariable int age) {
+    //     try {
+    //         Optional<InfractionEntity> mostCommonInfraction = infractionService.getMostCommonInfractionByAge(age);
+
+    //         if (mostCommonInfraction.isPresent()) {
+    //             return ResponseEntity.ok().body(mostCommonInfraction.get());
+    //         } else {
+    //             return ResponseEntity.notFound().build(); 
+    //         }
+    //     } catch (RuntimeException e) {
+    //         log.error("Error retrieving most common infraction by age: {}", e.getMessage());
+    //         throw e;
+    //     }
+    // }
+
+
+
+
+ @GetMapping("/latest/{cpf}")
+    public ResponseEntity<InfractionEntity> getLatestInfractionByCPF(@PathVariable("cpf") String cpf) {
+        List<InfractionEntity> allInfractionsForCpf = infractionService.getFinePriceByCpf(cpf);
+
+        if (allInfractionsForCpf.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        Optional<InfractionEntity> lastInfraction = allInfractionsForCpf.stream()
+                .max(Comparator.comparing(infraction -> LocalDate.parse(infraction.getDate(), formatter)));
+
+        return lastInfraction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
-    @GetMapping("/age/{age}")
-    public ResponseEntity<List<InfractionEntity>> getInfractionByAge(@PathVariable int age) {
-        try {
-            List<InfractionEntity> infractions = infractionService.getInfractionByAge(age);
-            return ResponseEntity.ok().body(infractions);
-        } catch (RuntimeException e) {
-            log.error("Error retrieving infractions by age: {}", e.getMessage());
-            throw e;
-        }
-    }
 
-    @GetMapping("/most-common-violation-by-sex/{sex}")
-    public ResponseEntity<InfractionEntity> getMostCommonViolationBySex(@PathVariable String sex) {
-        try {
-            InfractionEntity mostCommonInfraction = infractionService.getMostCommonViolationBySex(sex);
-            return ResponseEntity.ok().body(mostCommonInfraction);
-        } catch (RuntimeException e) {
-            log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
-            throw e;
-        }
-    }
-
-    @GetMapping("/most-common-infraction-by-age/{age}")
-    public ResponseEntity<InfractionEntity> getMostCommonInfractionByAge(@PathVariable int age) {
-        try {
-            Optional<InfractionEntity> mostCommonInfraction = infractionService.getMostCommonInfractionByAge(age);
-
-            if (mostCommonInfraction.isPresent()) {
-                return ResponseEntity.ok().body(mostCommonInfraction.get());
-            } else {
-                return ResponseEntity.notFound().build(); 
-            }
-        } catch (RuntimeException e) {
-            log.error("Error retrieving most common infraction by age: {}", e.getMessage());
-            throw e;
-        }
-    }
 }

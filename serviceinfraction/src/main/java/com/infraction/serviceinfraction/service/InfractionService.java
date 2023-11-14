@@ -2,6 +2,7 @@ package com.infraction.serviceinfraction.service;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -13,11 +14,15 @@ import com.infraction.serviceinfraction.service.calculator.CurrencyConverterAdap
 import com.infraction.serviceinfraction.service.calculator.FinePriceCalculator;
 import com.infraction.serviceinfraction.service.calculator.GeneralFineCalculator;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -322,77 +327,103 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
       }
     }
 
-public InfractionEntity getMostCommonViolationBySex(String sex) {
+// public InfractionEntity getMostCommonViolationBySex(String sex) {
+//     try {
+//         Objects.requireNonNull(sex, "Sex cannot be null");
+
+//         List<InfractionEntity> infractions = infractionRepository.findViolationBySex(sex);
+//         Objects.requireNonNull(infractions, "Infractions list cannot be null");
+
+//         Map<String, Long> countByViolation = countViolations(infractions);
+
+//         if (countByViolation.isEmpty()) {
+//             return null;
+//         }
+
+//         String mostCommonViolation = findMostCommonViolation(countByViolation);
+
+//         return infractions.stream()
+//             .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
+//             .findFirst()
+//             .orElse(null);
+//     } catch (RuntimeException e) {
+//         log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
+//         throw e;
+//     }
+// }
+
+// private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
+//     return infractions.stream()
+//         .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
+// }
+
+// private String findMostCommonViolation(Map<String, Long> countByViolation) {
+//     return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
+// }
+
+// public Optional<InfractionEntity> getMostCommonInfractionByAge(int age) {
+//     try {
+//         if (age <= 0) {
+//             throw new IllegalArgumentException("Age must be greater than zero");
+//         }
+
+//         List<InfractionEntity> infractions = infractionRepository.findViolationByAge(age);
+
+//         if (infractions == null || infractions.isEmpty()) {
+//             return Optional.empty(); 
+//         }
+
+//         Map<String, Long> countByViolation = countViolations(infractions);
+
+//         if (countByViolation.isEmpty()) {
+//             return Optional.empty();  
+//         }
+
+//         String mostCommonViolation = findMostCommonViolation(countByViolation);
+
+//         return infractions.stream()
+//             .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
+//             .findFirst();
+//     } catch (RuntimeException e) {
+//         log.error("Error retrieving most common infraction by age: {}", e.getMessage());
+//         throw e;
+//     }
+// }
+
+// private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
+//     return infractions.stream()
+//         .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
+// }
+
+// private String findMostCommonViolation(Map<String, Long> countByViolation) {
+//     return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
+// }    
+
+public InfractionEntity getLastFineByCpf(String cpf) {
+    List<InfractionEntity> allInfractionsForCpf = getFinePriceByCpf(cpf);
+
+    if (allInfractionsForCpf.isEmpty()) {
+        return null; 
+    }
+
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+  
+    Optional<InfractionEntity> lastInfraction = allInfractionsForCpf.stream()
+            .max(Comparator.comparing(infraction -> LocalDate.parse(infraction.getDate(), formatter)));
+
+    return lastInfraction.orElse(null);
+}
+
+
+public List<InfractionEntity> getFinePriceByDate(String date) {
     try {
-        Objects.requireNonNull(sex, "Sex cannot be null");
-
-        List<InfractionEntity> infractions = infractionRepository.findViolationBySex(sex);
-        Objects.requireNonNull(infractions, "Infractions list cannot be null");
-
-        Map<String, Long> countByViolation = countViolations(infractions);
-
-        if (countByViolation.isEmpty()) {
-            return null;
-        }
-
-        String mostCommonViolation = findMostCommonViolation(countByViolation);
-
-        return infractions.stream()
-            .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
-            .findFirst()
-            .orElse(null);
+        return infractionRepository.findByDate(date);
     } catch (RuntimeException e) {
-        log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
+        log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
         throw e;
     }
-}
-
-private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
-    return infractions.stream()
-        .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
-}
-
-private String findMostCommonViolation(Map<String, Long> countByViolation) {
-    return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
-}
-
-public Optional<InfractionEntity> getMostCommonInfractionByAge(int age) {
-    try {
-        if (age <= 0) {
-            throw new IllegalArgumentException("Age must be greater than zero");
-        }
-
-        List<InfractionEntity> infractions = infractionRepository.findViolationByAge(age);
-
-        if (infractions == null || infractions.isEmpty()) {
-            return Optional.empty(); 
-        }
-
-        Map<String, Long> countByViolation = countViolations(infractions);
-
-        if (countByViolation.isEmpty()) {
-            return Optional.empty();  
-        }
-
-        String mostCommonViolation = findMostCommonViolation(countByViolation);
-
-        return infractions.stream()
-            .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
-            .findFirst();
-    } catch (RuntimeException e) {
-        log.error("Error retrieving most common infraction by age: {}", e.getMessage());
-        throw e;
-    }
-}
-
-private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
-    return infractions.stream()
-        .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
-}
-
-private String findMostCommonViolation(Map<String, Long> countByViolation) {
-    return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
-}
 
 
 }
@@ -402,7 +433,7 @@ private String findMostCommonViolation(Map<String, Long> countByViolation) {
 
 
 
-
+}
 
 
 

@@ -26,13 +26,14 @@ public class InfractionDTO {
     private String carType;
     private String carColor;
     private String carBrand;
-    private String veiculeOwnerName;
+    // private String veiculeOwnerName;
     private String veiculeOwneCPF;
     private double speed;
     private int maxSpeed;
     private double finePrice;
     private String sex;
     private int age;
+    private boolean isPaid;
 
     
 

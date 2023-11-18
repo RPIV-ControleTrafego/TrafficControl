@@ -415,7 +415,7 @@ public List<String> getCarTypes() {
         trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
         trafficEntity.setTime(trafficDto.getTime());
         trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
-        trafficEntity.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+     
         trafficEntity.setViolation(trafficDto.getViolation());
         trafficEntity.setPollutionLevel(trafficDto.getPollutionLevel());
 
@@ -439,7 +439,7 @@ public List<String> getCarTypes() {
                 .streetDirection(trafficEntity.getStreetDirection())
                 .time(trafficEntity.getTime())
                 .veiculeOwneCPF(trafficEntity.getVeiculeOwneCPF())
-                .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
+                // .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
                 .violation(trafficEntity.getViolation())
                 .pollutionLevel(trafficEntity.getPollutionLevel())
                 
@@ -465,7 +465,8 @@ public List<String> getCarTypes() {
         // infractionDto.setStreetDirection(trafficDto.getStreetDirection());
         // infractionDto.setTime(trafficDto.getTime());
         infractionDto.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
-        infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+        // infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
+      
         if(trafficDto.getViolation() != null ){
             infractionDto.setViolation(trafficDto.getViolation());
 

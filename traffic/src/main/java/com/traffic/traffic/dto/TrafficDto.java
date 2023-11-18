@@ -20,7 +20,7 @@ public class TrafficDto {
     private String carType;
     private String carColor;
     private String carBrand;
-    private String veiculeOwnerName;
+    // private String veiculeOwnerName;
     private String veiculeOwneCPF;
     private String time;
     private String date;

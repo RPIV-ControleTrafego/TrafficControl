@@ -84,33 +84,33 @@ public class TrafficController {
         }
     }
 
-    @GetMapping("/car-plate/owner/{carPlate}")
-    public ResponseEntity<String> getOwnerByPlate(@PathVariable String carPlate) {
-        try {
+    // @GetMapping("/car-plate/owner/{carPlate}")
+    // public ResponseEntity<String> getOwnerByPlate(@PathVariable String carPlate) {
+    //     try {
            
-            if (carPlate == null || carPlate.isEmpty()) {
-                // HTTP 400 (Bad Request) para indicar que a entrada é inválida
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+    //         if (carPlate == null || carPlate.isEmpty()) {
+    //             // HTTP 400 (Bad Request) para indicar que a entrada é inválida
+    //             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    //         }
     
           
-            TrafficDto trafficDto = trafficService.getCarByPlate(carPlate);
+    //         TrafficDto trafficDto = trafficService.getCarByPlate(carPlate);
     
           
-            if (trafficDto == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+    //         if (trafficDto == null) {
+    //             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    //         }
     
          
-            String ownerName = trafficDto.getVeiculeOwnerName();
+    //         String ownerName = trafficDto.getVeiculeOwnerName();
             
             
-            return new ResponseEntity<>("Owner Name: "+ownerName, HttpStatus.OK);
-        } catch (Exception e) {
+    //         return new ResponseEntity<>("Owner Name: "+ownerName, HttpStatus.OK);
+    //     } catch (Exception e) {
            
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    //         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
 
 
  @GetMapping("/car/types")

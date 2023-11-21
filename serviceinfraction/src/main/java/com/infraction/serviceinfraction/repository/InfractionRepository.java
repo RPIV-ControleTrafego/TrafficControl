@@ -37,5 +37,8 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     List<InfractionEntity> findByVeiculeOwnerCpf(String veiculeOwnerCpf, Sort sort);
     @Query("{'date' : ?0}")
     List<InfractionEntity> findByDate(String date);
+
+    @Query("{'isPaid': false}")
+    List<InfractionEntity> findByIsPaidFalse();
 }
 

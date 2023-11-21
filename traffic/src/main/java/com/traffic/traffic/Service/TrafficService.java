@@ -442,6 +442,8 @@ public List<String> getCarTypes() {
                 .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
                 .violation(trafficEntity.getViolation())
                 .pollutionLevel(trafficEntity.getPollutionLevel())
+                .age(trafficEntity.getAge())
+                .sex(trafficEntity.getSex())
                 
                 
                 

@@ -117,8 +117,38 @@ private Double calculateTotalFinePrice(String cpf) {
 
 
 
+// @GetMapping("/total-fine-price/{currency}/{cpf}")
+// public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currency") String currency, @PathVariable("cpf") String cpf) {
+//     try {
+//         Double totalFinePrice = calculateTotalFinePrice(cpf);
+//         Double convertedPrice = 0.0;
+//         String formattedPrice = "";
+
+//         if (currency.equalsIgnoreCase("dollar")) {
+//             convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "USD");
+//             NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+//             formattedPrice = nf.format(convertedPrice);
+//         } else if (currency.equalsIgnoreCase("euro")) {
+//             convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "EUR");
+//             NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+//             formattedPrice = nf.format(convertedPrice);
+//         } else if(currency.equalsIgnoreCase("real")) {
+//             NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+//             formattedPrice = nf.format(totalFinePrice);
+//         } else {
+//             return ResponseEntity.badRequest().body("Invalid currency");
+//         }
+
+//         return ResponseEntity.ok().body(formattedPrice);
+//     } catch (Exception e) {
+//         return ResponseEntity.status(500).body(null); // Internal server error
+//     }
+// }
+
 @GetMapping("/total-fine-price/{currency}/{cpf}")
-public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currency") String currency, @PathVariable("cpf") String cpf) {
+public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
+        @PathVariable("currency") String currency,
+        @PathVariable("cpf") String cpf) {
     try {
         Double totalFinePrice = calculateTotalFinePrice(cpf);
         Double convertedPrice = 0.0;
@@ -132,18 +162,22 @@ public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currenc
             convertedPrice = infractionService.convertCurrency(totalFinePrice, "BRL", "EUR");
             NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
             formattedPrice = nf.format(convertedPrice);
-        } else if(currency.equalsIgnoreCase("real")) {
+        } else if (currency.equalsIgnoreCase("real")) {
             NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
             formattedPrice = nf.format(totalFinePrice);
+        
         } else {
             return ResponseEntity.badRequest().body("Invalid currency");
         }
 
         return ResponseEntity.ok().body(formattedPrice);
     } catch (Exception e) {
-        return ResponseEntity.status(500).body(null); // Internal server error
+        // Tratar a exceção apropriadamente, por exemplo, logando-a
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Internal server error");
     }
 }
+
 
     @GetMapping("/peak-days")
     public ResponseEntity<Map<String, Integer>> findPeakDays() {
@@ -257,6 +291,21 @@ public ResponseEntity<String> getTotalFinePriceByCurrency(@PathVariable("currenc
 
         return lastInfraction.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
+
+
+    @GetMapping("/list-by-cpf/{currency}/{cpf}")
+    public ResponseEntity<List<InfractionEntity>> getInfractionsByCpf(@PathVariable String currency, @PathVariable String cpf) {
+        try {
+            List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
+            return ResponseEntity.ok(infractions);
+        } catch (RuntimeException e) {
+        
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
 
 
 }

@@ -158,6 +158,18 @@ public List<InfractionEntity> getSpeedInfractionLowerThan(int speed) {
             throw e;
         }
     }
+    
+    
+    public List<InfractionEntity> getInfractionsByCpf(String cpf) {
+        log.info("Traffic service - Retrieving infractions by CPF: {}", cpf);
+
+        try {
+            return infractionRepository.findInfractionByVeiculeOwnerCpf(cpf);
+        } catch (RuntimeException e) {
+            log.error("Traffic service - Error retrieving infractions by CPF: {}", e.getMessage());
+            throw e;
+        }
+    }
 
 
 

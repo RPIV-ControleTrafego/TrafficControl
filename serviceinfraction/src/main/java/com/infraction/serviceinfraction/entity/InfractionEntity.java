@@ -33,6 +33,7 @@ public class InfractionEntity {
     private double finePrice;
     private String sex;
     private String age;
+    private boolean isPaid;
 
 
 }

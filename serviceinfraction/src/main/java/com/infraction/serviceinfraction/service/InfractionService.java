@@ -188,6 +188,7 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .maxSpeed(infractionDTO.getMaxSpeed())
     .age(infractionDTO.getAge())
     .sex(infractionDTO.getSex())
+    .isPaid(infractionDTO.isPaid())
     .build();
 }
 

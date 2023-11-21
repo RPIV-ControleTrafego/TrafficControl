@@ -31,6 +31,7 @@ public class InfractionDTO {
     private double finePrice;
     private String sex;
     private String age;
+    private boolean isPaid;
     
 
 

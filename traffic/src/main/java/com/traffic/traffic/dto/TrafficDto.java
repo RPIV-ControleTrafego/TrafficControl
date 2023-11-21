@@ -33,5 +33,7 @@ public class TrafficDto {
     private double pollutionLevel;
     private int age;
     private String sex;
+    private boolean isPaid;
+    
     
 }

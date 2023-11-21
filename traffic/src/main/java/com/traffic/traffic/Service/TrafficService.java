@@ -473,7 +473,8 @@ public List<String> getCarTypes() {
 
         }
        infractionDto.setSex(trafficDto.getSex());
-         infractionDto.setAge(trafficDto.getAge());
+       infractionDto.setAge(trafficDto.getAge());
+       infractionDto.setPaid(trafficDto.isPaid());
 
 
 

@@ -28,7 +28,7 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     List<InfractionEntity> findSpeedInfractionLowerThan(int speed);
     @Query("{ 'carPlate' : ?0 }")
     List<InfractionEntity> findInfractionByCarPlate(String carPlate);
-    @Query("{ 'veiculeOwneCPF' : ?0 }")
+    @Query("{'isPaid': false, 'veiculeOwneCPF' : ?0 }")
     List<InfractionEntity> findInfractionByVeiculeOwnerCpf(String veiculeOwnerCpf);
     @Query("{ 'violations' : ?0 }")
     List<InfractionEntity> findInfractionByViolations(String violations);
@@ -41,7 +41,7 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     @Query("{'date' : ?0}")
     List<InfractionEntity> findByDate(String date);
 
-    @Query("{'isPaid': false, 'veiculeOwneCpf': ?0}")
+    @Query("{'isPaid': false, 'veiculeOwneCPF': ?0}")
     List<InfractionEntity> findByIsPaidFalseAndCpf(String cpf);
 
 

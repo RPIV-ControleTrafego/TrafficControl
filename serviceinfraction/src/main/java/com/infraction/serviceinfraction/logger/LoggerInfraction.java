@@ -1,5 +1,7 @@
 package com.infraction.serviceinfraction.logger;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +39,8 @@ public class LoggerInfraction {
         logger.info(string, infractionInfo);
     }
 
-    public void info(String string, double finePrice, String violation) {
-        logger.info(string, finePrice, violation);
+    public void info(String string, String cpf, List<InfractionEntity> infractions) {
+        logger.info(string, cpf, infractions);
     }
 
     public void info(String string, InfractionEntity infractionEntity) {
@@ -51,6 +53,14 @@ public class LoggerInfraction {
 
     public void info(String string, int speed) {
         logger.info(string, speed);
+    }
+
+
+    public void info(String string, String cpf, Double totalFinePrice) {
+    }
+
+
+    public void info(String string, double finePrice, String violation) {
     }
 
    

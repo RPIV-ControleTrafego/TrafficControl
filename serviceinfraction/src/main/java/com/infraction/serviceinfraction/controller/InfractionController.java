@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.infraction.serviceinfraction.entity.InfractionEntity;
+import com.infraction.serviceinfraction.logger.LoggerInfraction;
 import com.infraction.serviceinfraction.service.InfractionService;
 
 @Controller
@@ -32,7 +33,7 @@ import com.infraction.serviceinfraction.service.InfractionService;
 public class InfractionController {
 
     
-
+    private LoggerInfraction log = new LoggerInfraction(InfractionController.class);
     
     @Autowired
     private InfractionService infractionService;
@@ -111,11 +112,19 @@ public ResponseEntity<List<Double>> getFinePriceByCpf(@PathVariable("cpf") Strin
 
 private Double calculateTotalFinePrice(String cpf) {
     List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
-    return infractions.stream()
+
+    // Log para verificar as infrações recuperadas
+    log.info("Infractions for CPF {}: {}", cpf, infractions);
+
+    Double totalFinePrice = infractions.stream()
         .mapToDouble(InfractionEntity::getFinePrice)
         .sum();
-}
 
+    // Log para verificar o total do preço da multa calculado
+    log.info("Total Fine Price for CPF {}: {}", cpf, totalFinePrice);
+
+    return totalFinePrice;
+}
 
 
 // @GetMapping("/total-fine-price/{currency}/{cpf}")

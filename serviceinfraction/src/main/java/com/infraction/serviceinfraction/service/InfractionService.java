@@ -1,10 +1,11 @@
 package com.infraction.serviceinfraction.service;
 
+import org.bson.types.ObjectId;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 import com.infraction.serviceinfraction.dto.InfractionDTO;
 import com.infraction.serviceinfraction.entity.InfractionEntity;
@@ -442,12 +443,67 @@ public List<InfractionEntity> getFinePriceByDate(String date) {
 }
 
 
-
-
-
+public List<InfractionEntity> getNotPaidFine(String cpf) {
+    try {
+        return infractionRepository.findByIsPaidFalseAndCpf(cpf);
+    } catch (RuntimeException e) {
+        log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
+        throw e;
+    }
 
 }
 
 
 
+public InfractionEntity setAsPaid(String id) {
+    try {
+        ObjectId objectId = new ObjectId(id);
+        Optional<InfractionEntity> optionalInfraction = infractionRepository.findById(objectId);
 
+        if (optionalInfraction.isPresent()) {
+            InfractionEntity infraction = optionalInfraction.get();
+
+            if (!infraction.isPaid()) {
+                infraction.setPaid(true);
+                return infractionRepository.save(infraction);
+            } else {
+                log.info("Traffic service - Infraction already paid with id: {}", id);
+                return infraction;
+            }
+        } else {
+            log.info("Traffic service - Infraction not found with id: {}", id);
+           
+        }
+    } catch (IllegalArgumentException e) {
+        log.error("Traffic service - Invalid ObjectId: {}", e.getMessage());
+        throw new IllegalArgumentException("Invalid ObjectId", e);
+    }
+    return infractionEntity;
+}
+
+public List<InfractionEntity> searchAllPaidInfractions(String cpf) {
+    log.info("Searching for paid infractions for CPF: {}", cpf);
+    try {
+        List<InfractionEntity> infractions = infractionRepository.findByIsPaidTrueAndCpf(cpf);
+        log.info("Found {} paid infractions.", infractions.size());
+        return infractions;
+    } catch (RuntimeException e) {
+        log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
+        throw e;
+    }
+}
+
+
+public List<InfractionEntity> allPaidInfractions(){
+    log.info("Searching for paid infractions");
+    try {
+        List<InfractionEntity> infractions = infractionRepository.findByIsPaidTrue();
+        log.info("Found {} paid infractions.", infractions.size());
+        return infractions;
+    } catch (RuntimeException e) {
+        log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
+        throw e;
+    }
+}
+
+}

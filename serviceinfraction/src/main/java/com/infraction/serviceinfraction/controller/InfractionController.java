@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -303,6 +304,55 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+    @GetMapping("/list-non-paid/{cpf}")
+    public ResponseEntity<List<InfractionEntity>> getNonPaidInfractionsByCpf(@PathVariable String cpf) {
+        try {
+            List<InfractionEntity> infractions = infractionService.getNotPaidFine(cpf);
+            return ResponseEntity.ok(infractions);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
+    @PostMapping("/pay/{id}")
+    public ResponseEntity<InfractionEntity> payInfraction(@PathVariable String id) {
+        try {
+            InfractionEntity infraction = infractionService.setAsPaid(id);
+            return ResponseEntity.ok(infraction);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/list-paid/{cpf}")
+    public ResponseEntity<List<InfractionEntity>> getPaidInfractionsByCpf(@PathVariable String cpf) {
+        try {
+            List<InfractionEntity> infractions = infractionService.searchAllPaidInfractions(cpf);
+            return ResponseEntity.ok(infractions);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @GetMapping("/allpaid")
+    public ResponseEntity<List<InfractionEntity>> getAllPaidInfractions() {
+        try {
+            List<InfractionEntity> infractions = infractionService.allPaidInfractions();
+            return ResponseEntity.ok(infractions);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+
+
 
 
 

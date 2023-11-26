@@ -3,7 +3,6 @@ package com.traffic.traffic.dto.Mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-
 import com.traffic.traffic.dto.AccidentDTO;
 import com.traffic.traffic.dto.AllTraficDTO;
 import com.traffic.traffic.dto.InfractionDTO;

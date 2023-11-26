@@ -1,8 +1,6 @@
 package com.traffic.traffic.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TrafficDto {
     
-  
     private String carPlate;
     private String carType;
     private String carColor;

@@ -1,7 +1,6 @@
 package com.traffic.traffic.logger;
 
 import org.slf4j.Logger;
-
 import org.slf4j.LoggerFactory;
 
 public class TrafficLogger {
@@ -10,30 +9,30 @@ public class TrafficLogger {
     private Logger logger;
 
     private TrafficLogger() {
-        logger = LoggerFactory.getLogger(TrafficLogger.class); // Obtém um logger usando SLF4J
+        logger = LoggerFactory.getLogger(TrafficLogger.class);
     }
 
-    public static TrafficLogger getInstance() {
+    public static synchronized TrafficLogger getInstance() {
         if (instance == null) {
             instance = new TrafficLogger();
         }
         return instance;
     }
 
-    public void info(String message) {
-        logger.info(message); 
+    public void logInfo(String message) {
+        logger.info(message);
     }
 
-    public void error(String message) {
+    public void logError(String message) {
         logger.error(message);
     }
 
-    public void error(String message, Exception exception) {
+    public void logError(String message, Exception exception) {
         logger.error(message, exception);
     }
 
-    public void error(String message, String exceptionMessage) {
-        logger.error(message + ": " + exceptionMessage);
+    public void logErrorWithCustomMessage(String message, String exceptionMessage) {
+        String errorMessage = message + ": " + exceptionMessage;
+        logger.error(errorMessage);
     }
-
 }

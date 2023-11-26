@@ -1,10 +1,6 @@
 package com.traffic.traffic.dto;
 
-
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class InfractionDTO {
-    
-   
     
     private String carPlate;
     private String address;
@@ -34,10 +28,5 @@ public class InfractionDTO {
     private String sex;
     private int age;
     private boolean isPaid;
-
-    
-
-
-    
 
 }

@@ -6,11 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators.In;
 import org.springframework.stereotype.Service;
-
 import com.traffic.traffic.dto.AccidentDTO;
 import com.traffic.traffic.dto.AllTraficDTO;
 import com.traffic.traffic.dto.InfractionDTO;
@@ -18,11 +15,8 @@ import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.dto.Mapper.TrafficMapper;
 import com.traffic.traffic.entity.TrafficEntity;
 import com.traffic.traffic.logger.TrafficLogger;
-import com.traffic.traffic.message.KafkaConsumerMessage;
 import com.traffic.traffic.message.KafkaProducerMessage;
 import com.traffic.traffic.repository.TrafficRepository;
-
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 @Service
 public class TrafficService implements ITrafficService {
@@ -33,24 +27,20 @@ public class TrafficService implements ITrafficService {
     private TrafficRepository trafficRepository;
     @Autowired
     private KafkaProducerMessage kafkaProducerMessage;
-    
-  
 
     public void newCarDetails(AllTraficDTO trafficInfo) {
         TrafficDto trafficDto = trafficMapper.mapCarEntityToDTO(trafficMapper.mapCarDtoToEntity(trafficInfo.getTrafficInfo()));
         InfractionDTO infractionDTO = trafficMapper.mapCarDtoToInfractionDTO(trafficDto);
         AccidentDTO accidentDTO = trafficMapper.mapAllTrafficToAccident(trafficInfo);
         kafkaProducerMessage.sendAccidentMessage(accidentDTO);
-        
         verifyInfractionDirection(trafficDto, infractionDTO);
         verifyInfractionspeed(trafficDto, infractionDTO);
         verifyViolations(trafficDto, infractionDTO);
         verifyPlateEmpty(trafficDto, infractionDTO);
-        
+
         TrafficEntity trafficEntity = trafficMapper.mapCarDtoToEntity(trafficDto);
         
         try {
-            // Salvar a entidade no MongoDB
             trafficRepository.save(trafficEntity);
             log.info("Entidade salva com sucesso no MongoDB: " + trafficEntity);
         } catch (Exception e) {
@@ -82,24 +72,19 @@ public class TrafficService implements ITrafficService {
         List<TrafficEntity> carEntities = trafficRepository.findAllCarPlate();
         log.info("Listando carros");
 
-      
         List<TrafficDto> carDtos = new ArrayList<>();
 
-     
         for (TrafficEntity carEntity : carEntities) {
             TrafficDto carDto = mapCarEntityToDTO(carEntity);
             carDtos.add(carDto);
         }
 
-      
         return carDtos;
     } catch (Exception e) {
         log.error("Erro ao listar carros: " + e.getMessage());
         throw new RuntimeException("Erro ao listar carros", e);
     }
 }
-
-
 
     @Override
     public void changeCarPlate(TrafficDto TrafficDto, String carPlate) {
@@ -113,17 +98,11 @@ public class TrafficService implements ITrafficService {
         throw new UnsupportedOperationException("Unimplemented method 'removeCar'");
     }
 
-
-   
-
-
     @Override
 public String getOwnerNameByPlate(String carPlate) {
     try {
      
         String ownerName = trafficRepository.findOwnerNameByPlate(carPlate);
-
-      
         if (ownerName != null) {
             log.info("Pesquisado Nome através da placa" + carPlate);
             return ownerName;
@@ -137,17 +116,11 @@ public String getOwnerNameByPlate(String carPlate) {
     }
 }
 
-    
-
-
     @Override
     public String getVehicleOwnerCPF(String carPlate) {
        try {
      
-        String ownerCPF = trafficRepository.findOwnerCPFByPlate(carPlate);
-
-      
-   
+        String ownerCPF = trafficRepository.findOwnerCPFByPlate(carPlate); 
            log.info("Pesquisado Nome através da placa" + carPlate);
             return ownerCPF;
        
@@ -157,21 +130,14 @@ public String getOwnerNameByPlate(String carPlate) {
     }
     }
 
-
-
     @Override
     public String getCarPlateByCPF(String ownerCpf) {
         
         try{
-            
-
             String carPlate = trafficRepository.findCarPlateByOwnerCPF(ownerCpf);
         
                 log.info("Pesquisado placa através do CPF" + ownerCpf);
                 return carPlate;
-       
-              
-       
 
         }catch(Exception e){
                   log.error("CPF não encontrado em busca de placa por cpf"+ ownerCpf);
@@ -190,52 +156,32 @@ public String getOwnerNameByPlate(String carPlate) {
         
                 log.info("Pesquisado placa através do Nome" + ownerName);
                 return carPlate;
-       
-              
-       
-
         }catch(Exception e){
                   log.error("Nome não encontrado em pesquisa de placa por nome:  " + ownerName);
             return  "CPF não encontrado, verifique o nome";
         }
     }
 
-
-
     @Override
     public String getCarPlateByAdress(String addres) {
            try{
-            
-
             String carPlate = trafficRepository.findCarPlateByAdress(addres);
-        
                 log.info("Pesquisado placa através de Endereço" + addres);
                 return carPlate;
-       
-              
-       
 
         }catch(Exception e){
                   log.error("Placa não encontrada em pesquisa de placa usando endereço:  " + addres);
             return  "Placa não encontrada, verifique o endereço";
         }
     }
-    
-
-
 
     @Override
     public String getCarPlateByDate(String date) {
           try{
-            
-
             String carPlate = trafficRepository.findCarPlateByDate(date);
         
                 log.info("Pesquisado placa através de data" + date);
                 return carPlate;
-       
-              
-       
 
         }catch(Exception e){
                   log.error("Placa não encontrada em pesquisa de placa usando data:  " + date);
@@ -243,15 +189,11 @@ public String getOwnerNameByPlate(String carPlate) {
         }
     }
 
-
-
     @Override
     public List<TrafficDto> getCarPlateByTime(String time) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCarPlateByTime'");
     }
-
-
 
     @Override
 public List<String> getCarPlateBySpeed(double speedMax, double speedMin) {
@@ -276,20 +218,12 @@ public List<String> getCarPlateBySpeed(double speedMax, double speedMin) {
     }
 }
 
-
-   
-
-
-    
-
-
 @Override
 public List<String> getCarTypes() {
     try {
         List<String> carTypes = trafficRepository.findAllCarTypes();
         log.info("Pesquisado tipos de carro: " + carTypes);
 
-        // Remove duplicatas da lista
         Set<String> uniqueCarTypes = new HashSet<>(carTypes);
 
         return new ArrayList<>(uniqueCarTypes);
@@ -316,8 +250,6 @@ public List<String> getCarTypes() {
         }
     }
 
-
-
     @Override
     public List<String> getCarBrands() {
             try {
@@ -327,16 +259,11 @@ public List<String> getCarTypes() {
             log.info("Pesquisado cores de carro" + carBrands);
             return carBrands;
 
-            
         } catch (Exception e) {
             log.error("Ocorreu um erro ao pesquisar marcas de carro", e);
             return Collections.emptyList();
         }
     }
-
-
-
-   
 
     public boolean verifyInfractionspeed(TrafficDto trafficDto, InfractionDTO infractionDto) {
 
@@ -363,25 +290,18 @@ public List<String> getCarTypes() {
 
     public boolean verifyViolations(TrafficDto trafficDto,InfractionDTO infractionDto){
         if(trafficDto.getViolation() != null){
-
-
             mapCarDtoToInfractionDTO(trafficDto, infractionDto);
 
-            
             if(trafficDto.getDirection() != trafficDto.getStreetDirection()){
                 infractionDto.setViolation("wrong direction");
             }
-          
             kafkaProducerMessage.sendMessage(infractionDto);
             return true;
     } 
     else {
         return false;
     }
-
-    
-    }
-
+}
 
     public boolean verifyPlateEmpty(TrafficDto trafficDto,InfractionDTO infractionDto){
         if(trafficDto.getCarPlate() == null){
@@ -393,15 +313,10 @@ public List<String> getCarTypes() {
         else{
             return false;
         }
-
     }
-
-
 
      private TrafficEntity mapCarDtoToEntity(TrafficDto trafficDto) {
         TrafficEntity trafficEntity = new TrafficEntity();
-
-       
 
         trafficEntity.setCarBrand(trafficDto.getCarBrand());
         trafficEntity.setCarColor(trafficDto.getCarColor());
@@ -415,11 +330,8 @@ public List<String> getCarTypes() {
         trafficEntity.setStreetDirection(trafficDto.getStreetDirection());
         trafficEntity.setTime(trafficDto.getTime());
         trafficEntity.setVeiculeOwneCPF(trafficDto.getVeiculeOwneCPF());
-     
         trafficEntity.setViolation(trafficDto.getViolation());
         trafficEntity.setPollutionLevel(trafficDto.getPollutionLevel());
-
-       
 
         return trafficEntity;
     }
@@ -442,13 +354,7 @@ public List<String> getCarTypes() {
                 // .veiculeOwnerName(trafficEntity.getVeiculeOwnerName())
                 .violation(trafficEntity.getViolation())
                 .pollutionLevel(trafficEntity.getPollutionLevel())
-                
-                
-                
                 .build();
-
-                
-
     }
 
     private InfractionDTO mapCarDtoToInfractionDTO(TrafficDto trafficDto, InfractionDTO infractionDto) {
@@ -473,9 +379,6 @@ public List<String> getCarTypes() {
         }
        infractionDto.setSex(trafficDto.getSex());
          infractionDto.setAge(trafficDto.getAge());
-
-
-
         return infractionDto;
     }
 
@@ -484,10 +387,5 @@ public List<String> getCarTypes() {
     public AllTraficDTO createAllTraficDTO(TrafficDto trafficDto, InfractionDTO infractionDto, AccidentDTO accidentDto) {
         return trafficMapper.mapToAllTraficDTO(trafficDto, infractionDto, accidentDto);
     }   
-
-    
-    
-   
-    
 }
 

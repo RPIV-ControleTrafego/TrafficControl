@@ -1,4 +1,6 @@
 package com.traffic.traffic.Service;
+import com.traffic.traffic.logger.TrafficLogger;
+
 
 import java.util.ArrayList;
 import java.util.Collections;

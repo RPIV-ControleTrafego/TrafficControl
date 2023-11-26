@@ -1,9 +1,6 @@
 package com.traffic.traffic.message;
 
-
-
 import com.traffic.traffic.dto.AllTraficDTO;
-import com.traffic.traffic.dto.TrafficDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;

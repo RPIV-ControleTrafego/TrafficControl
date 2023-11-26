@@ -2,21 +2,15 @@ package com.accident.serviceaccident.logger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.accident.serviceaccident.Entity.AccidentEntity;
 import com.accident.serviceaccident.dto.AccidentDTO;
 
 public class AccidentLogger {
 
-
     private Logger logger;
-
     public AccidentLogger(Class<?> clazz) {
         this.logger = LoggerFactory.getLogger(clazz);
     }
-
-    
-
 
     public void info(String message) {
         logger.info(message); 

@@ -1,7 +1,6 @@
 package com.traffic.traffic.Service;
+
 import com.traffic.traffic.logger.TrafficLogger;
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import com.traffic.traffic.dto.InfractionDTO;
 import com.traffic.traffic.dto.TrafficDto;
 import com.traffic.traffic.dto.Mapper.TrafficMapper;
 import com.traffic.traffic.entity.TrafficEntity;
-import com.traffic.traffic.logger.TrafficLogger;
 import com.traffic.traffic.message.KafkaProducerMessage;
 import com.traffic.traffic.repository.TrafficRepository;
 

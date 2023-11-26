@@ -5,21 +5,32 @@ import com.traffic.traffic.Service.TrafficService;
 import com.traffic.traffic.dto.AllTraficDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaConsumerMessage {
 
-    private final Logger LOG = LoggerFactory.getLogger(KafkaConsumerMessage.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KafkaConsumerMessage.class);
 
-    @Autowired
-    private TrafficService trafficService;
-    
-    @KafkaListener(topics = "traffic-topic", groupId = "traffic-topic")
-    public void listening(AllTraficDTO trafficInfo) {
-        LOG.info("Traffic service - Received traffic info: {}", trafficInfo);
+    private final TrafficService trafficService;
 
-        trafficService.newCarDetails(trafficInfo);
+    public KafkaConsumerMessage(TrafficService trafficService) {
+        this.trafficService = trafficService;
+    }
+
+    @KafkaListener(topics = "traffic-topic", groupId = "traffic-group")
+    public void listenToTrafficMessages(AllTraficDTO trafficInfo) {
+        if (trafficInfo != null) {
+            LOG.info("Received traffic info: {}", trafficInfo);
+
+            try {
+                trafficService.newCarDetails(trafficInfo);
+                LOG.info("Traffic info processed successfully.");
+            } catch (Exception e) {
+                LOG.error("Error processing traffic info: {}", e.getMessage());
+            }
+        } else {
+            LOG.warn("Received null traffic information. Skipping processing.");
+        }
     }
 }

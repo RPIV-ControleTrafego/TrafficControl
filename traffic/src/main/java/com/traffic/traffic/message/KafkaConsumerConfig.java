@@ -22,26 +22,31 @@ public class KafkaConsumerConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     @Bean
     public ConsumerFactory<String, AllTraficDTO> consumerFactory() {
-
         Map<String, Object> props = new HashMap<>();
 
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "traffic-topic");
-        props.put(JsonDeserializer.TRUSTED_PACKAGES,"*");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-                new JsonDeserializer<>(AllTraficDTO.class, false));
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "com.traffic.traffic.dto"); // Defina o pacote confiável para desserialização
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(AllTraficDTO.class, false)
+        );
     }
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, AllTraficDTO> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, AllTraficDTO>
-                factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, AllTraficDTO> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
-
 }

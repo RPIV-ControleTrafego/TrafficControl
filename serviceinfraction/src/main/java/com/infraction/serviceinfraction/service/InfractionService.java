@@ -35,7 +35,7 @@ public class InfractionService implements IinfractionService{
 
     // Adapter Pattern
     private final CurrencyConverterAdapter currencyConverter;
-    //Strategy Pattern  
+    //Strategy Pattern
     private FinePriceCalculator fineCalculator;
 
     @Autowired
@@ -47,29 +47,29 @@ public class InfractionService implements IinfractionService{
     @Autowired
     private GeneralFineCalculator generalFineCalculator = new GeneralFineCalculator();
 
-       
+
 
     public InfractionService(FinePriceCalculator fineCalculator, CurrencyConverterAdapter currencyConverter) {
         this.fineCalculator = fineCalculator;
-        this.currencyConverter = currencyConverter; 
+        this.currencyConverter = currencyConverter;
     }
 
 
     @Override
     public void newInfraction(InfractionDTO infractionInfo) {
         log.info("Traffic service - Received traffic information: {}", infractionInfo);
-    
+
         try {
             infractionEntity = mapInfractionDTOToInfractionEntity(infractionInfo);
             boolean fineCalculated = calculateFine(infractionInfo);
-    
+
             if (fineCalculated) {
                 double finePrice = infractionInfo.getFinePrice();
                 String violation = infractionInfo.getViolation();
                 log.info("Traffic service - Fine price calculated: {} for violation: {}", finePrice, violation);
                 infractionEntity.setFinePrice(finePrice);
             }
-    
+
             infractionRepository.save(infractionEntity);
             log.info("Traffic service - Traffic info saved successfully: {}", infractionEntity);
         } catch (RuntimeException e) {
@@ -117,13 +117,13 @@ public List<InfractionEntity> getSpeedInfractionLowerThan(int speed) {
         log.error("Traffic service - Error retrieving infractions with speed lower than: {}", e.getMessage());
         throw e;
     }
-}   
+}
 
 
 
     public List<InfractionEntity> getFinePriceByCarPlate(String carPlate) {
         log.info("Traffic service - Retrieving infractions with car plate: {}", carPlate);
-    
+
         try {
             return infractionRepository.findByCarPlate(carPlate);
         } catch (RuntimeException e) {
@@ -135,7 +135,7 @@ public List<InfractionEntity> getSpeedInfractionLowerThan(int speed) {
 
     public List<InfractionEntity> getFinePriceByCpf(String cpf) {
         log.info("Traffic service - Retrieving infractions with car plate: {}", cpf);
-    
+
         try {
             return infractionRepository.findInfractionByVeiculeOwnerCpf(cpf);
         } catch (RuntimeException e) {
@@ -146,21 +146,21 @@ public List<InfractionEntity> getSpeedInfractionLowerThan(int speed) {
 
  public Double getTotalFinePriceByCpf(String cpf) {
         log.info("Traffic service - Retrieving total fine price with cpf: {}", cpf);
-    
+
         try {
             List<InfractionEntity> infractions = infractionRepository.findInfractionByVeiculeOwnerCpf(cpf);
             Double totalFinePrice = infractions.stream()
                     .mapToDouble(InfractionEntity::getFinePrice)
                     .sum();
-    
+
             return totalFinePrice;
         } catch (RuntimeException e) {
             log.error("Traffic service - Error retrieving total fine price with cpf: {}", e.getMessage());
             throw e;
         }
     }
-    
-    
+
+
     public List<InfractionEntity> getInfractionsByCpf(String cpf) {
         log.info("Traffic service - Retrieving infractions by CPF: {}", cpf);
 
@@ -215,15 +215,15 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
     public Map<Integer, Integer> findPeakHours(List<InfractionEntity> infractions) {
         Map<Integer, Integer> hourFrequency = new HashMap<>();
 
-      
+
         for (InfractionEntity infraction : infractions) {
-          
+
             String dateStr = infraction.getDate();
             int hour = Integer.parseInt(dateStr.substring(11, 13)); // Extrai as horas
             hourFrequency.put(hour, hourFrequency.getOrDefault(hour, 0) + 1);
         }
 
-    
+
         int maxFrequency = 0;
         for (int frequency : hourFrequency.values()) {
             maxFrequency = Math.max(maxFrequency, frequency);
@@ -237,7 +237,7 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
         }
 
         return peakHours;
-    }   
+    }
 
 
     public Map<String, Integer> findPeakDays(List<InfractionEntity> infractions) {
@@ -266,7 +266,7 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
 
 
     public String findInfractionByViolation(String violation){
-        
+
         List<InfractionEntity> infractions = infractionRepository.findInfractionByViolations(violation);
         try {
             infractions = infractionRepository.findInfractionByViolations(violation);
@@ -285,27 +285,27 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
             throw e;
         }
     }
-    
+
     public float percentageInfractionBySex(String sex) {
         List<InfractionEntity> infractions = infractionRepository.findAll();
         return calculatePercentage(infractions);
     }
-    
+
     public float percentageInfractionByAge(String age) {
         List<InfractionEntity> infractions = infractionRepository.findAll();
         return calculatePercentage(infractions);
     }
-    
+
     public float percentageInfractionByCarType(String carType) {
         List<InfractionEntity> infractions = infractionRepository.findAll();
         return calculatePercentage(infractions);
     }
-    
+
     public float percentageInfractionByCarColor(String carColor) {
         List<InfractionEntity> infractions = infractionRepository.findAll();
         return calculatePercentage(infractions);
     }
-    
+
     public float percentageInfractionByCarBrand(String carBrand) {
         List<InfractionEntity> infractions = infractionRepository.findAll();
         return calculatePercentage(infractions);
@@ -327,7 +327,7 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
             log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
             throw e;
         }
-      
+
     }
 
 
@@ -384,13 +384,13 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
 //         List<InfractionEntity> infractions = infractionRepository.findViolationByAge(age);
 
 //         if (infractions == null || infractions.isEmpty()) {
-//             return Optional.empty(); 
+//             return Optional.empty();
 //         }
 
 //         Map<String, Long> countByViolation = countViolations(infractions);
 
 //         if (countByViolation.isEmpty()) {
-//             return Optional.empty();  
+//             return Optional.empty();
 //         }
 
 //         String mostCommonViolation = findMostCommonViolation(countByViolation);
@@ -411,19 +411,19 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
 
 // private String findMostCommonViolation(Map<String, Long> countByViolation) {
 //     return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
-// }    
+// }
 
 public InfractionEntity getLastFineByCpf(String cpf) {
     List<InfractionEntity> allInfractionsForCpf = getFinePriceByCpf(cpf);
 
     if (allInfractionsForCpf.isEmpty()) {
-        return null; 
+        return null;
     }
 
-    
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-  
+
     Optional<InfractionEntity> lastInfraction = allInfractionsForCpf.stream()
             .max(Comparator.comparing(infraction -> LocalDate.parse(infraction.getDate(), formatter)));
 
@@ -454,7 +454,6 @@ public List<InfractionEntity> getNotPaidFine(String cpf) {
 }
 
 
-
 public InfractionEntity setAsPaid(String id) {
     try {
         ObjectId objectId = new ObjectId(id);
@@ -472,14 +471,15 @@ public InfractionEntity setAsPaid(String id) {
             }
         } else {
             log.info("Traffic service - Infraction not found with id: {}", id);
-           
+            // You may want to handle this case differently, like throwing an exception or returning null
+            return null;
         }
     } catch (IllegalArgumentException e) {
         log.error("Traffic service - Invalid ObjectId: {}", e.getMessage());
         throw new IllegalArgumentException("Invalid ObjectId", e);
     }
-    return infractionEntity;
 }
+
 
 public List<InfractionEntity> searchAllPaidInfractions(String cpf) {
     log.info("Searching for paid infractions for CPF: {}", cpf);
@@ -492,6 +492,27 @@ public List<InfractionEntity> searchAllPaidInfractions(String cpf) {
         throw e;
     }
 }
+
+public List<InfractionEntity> setAsPaidForCpf(String cpf) {
+    try {
+        List<InfractionEntity> infractions = infractionRepository.findByIsPaidFalseAndCpf(cpf);
+
+        if (infractions.isEmpty()) {
+            log.info("Traffic service - No unpaid infractions found for CPF: {}", cpf);
+            return Collections.emptyList();
+        }
+
+        for (InfractionEntity infraction : infractions) {
+            infraction.setPaid(true);
+        }
+
+        return infractionRepository.saveAll(infractions);
+    } catch (RuntimeException e) {
+        log.error("Traffic service - Error retrieving infractions with car plate: {}", e.getMessage());
+        throw e;
+    }
+}
+
 
 
 public List<InfractionEntity> allPaidInfractions(){

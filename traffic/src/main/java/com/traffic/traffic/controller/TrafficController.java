@@ -27,59 +27,59 @@ import ch.qos.logback.core.model.Model;
 
 @Controller
 @RequestMapping("/service/traffic")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TrafficController {
 
     @Autowired
     private ITrafficService trafficService;
 
-   
+
     @GetMapping("/car-plate/{carPlate}")
     public ResponseEntity<TrafficDto> getCarByPlate(@PathVariable String carPlate) {
         try {
-            
+
             if (carPlate == null || carPlate.isEmpty()) {
                 // HTTP 400 (Bad Request) para indicar que a entrada é inválida
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-           
+
             TrafficDto trafficDto = trafficService.getCarByPlate(carPlate);
 
             // Verifique se o objeto foi encontrado
             if (trafficDto != null) {
-              
+
                 return new ResponseEntity<>(trafficDto, HttpStatus.OK);
             } else {
-               
+
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-          
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
 
-    
+
 
 
     @GetMapping("/car-plate/list")
     public ResponseEntity<List<TrafficDto>> listCarsPlate() {
         try {
-            
+
             List<TrafficDto> trafficDtos = trafficService.listCarsPlate();
 
-        
+
             if (trafficDtos.isEmpty()) {
-          
+
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
-             
+
                 return new ResponseEntity<>(trafficDtos, HttpStatus.OK);
             }
         } catch (Exception e) {
-          
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -87,27 +87,27 @@ public class TrafficController {
     @GetMapping("/car-plate/owner/{carPlate}")
     public ResponseEntity<String> getOwnerByPlate(@PathVariable String carPlate) {
         try {
-           
+
             if (carPlate == null || carPlate.isEmpty()) {
                 // HTTP 400 (Bad Request) para indicar que a entrada é inválida
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-    
-          
+
+
             TrafficDto trafficDto = trafficService.getCarByPlate(carPlate);
-    
-          
+
+
             if (trafficDto == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-    
-         
+
+
             String ownerName = trafficDto.getVeiculeOwnerName();
-            
-            
+
+
             return new ResponseEntity<>("Owner Name: "+ownerName, HttpStatus.OK);
         } catch (Exception e) {
-           
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -130,13 +130,13 @@ public ResponseEntity<List<String>> getCarTypes() {
             }
         }
 
-    
+
         Set<String> uniqueCarTypes = new HashSet<>(carTypes);
 
         if (uniqueCarTypes.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            
+
             return new ResponseEntity<>(new ArrayList<>(uniqueCarTypes), HttpStatus.OK);
         }
     } catch (Exception e) {
@@ -212,13 +212,13 @@ public ResponseEntity<List<String>> getCarBrands() {
 
 
 
-  
+
 }
 
- 
 
 
-  
+
+
 
 
 

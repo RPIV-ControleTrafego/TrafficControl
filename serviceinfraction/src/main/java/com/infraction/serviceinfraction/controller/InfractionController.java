@@ -1,17 +1,19 @@
 package com.infraction.serviceinfraction.controller;
 
 import java.text.NumberFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +31,12 @@ import com.infraction.serviceinfraction.service.InfractionService;
 
 @Controller
 @RequestMapping("/infraction")
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class InfractionController {
 
-    
+
     private LoggerInfraction log = new LoggerInfraction(InfractionController.class);
-    
+
     @Autowired
     private InfractionService infractionService;
 
@@ -43,7 +45,7 @@ public class InfractionController {
         InfractionCommand command = new InfractionCommand(dateString, infractionService);
         return command.apply(dateString);
     }
-        
+
 
     @GetMapping("/speed-greater/{speed}")
     public ResponseEntity<List<InfractionEntity>> getInfractionBySpeed(@PathVariable("speed") int speed) {
@@ -56,14 +58,14 @@ public class InfractionController {
     // public ResponseEntity<List<InfractionEntity>> getInfractionBySpeed(@PathVariable("speed") int speed) {
     //     try {
     //         List<InfractionEntity> infractions = infractionService.getSpeedInfractionGreaterThan(speed);
-    
+
     //         return ResponseEntity.ok().body(infractions);
     //     } catch (Exception e) {
     //         return ResponseEntity.status(500).body(null); // Internal server error
     //     }
     // }
 
-    
+
     @GetMapping("/speed-lower/{speed}")
     public ResponseEntity<List<InfractionEntity>> getInfractionBySpeedLower(@PathVariable("speed") int speed) {
         InfractionCommand command = new InfractionCommand(String.valueOf(speed), infractionService);
@@ -71,12 +73,12 @@ public class InfractionController {
     }
     //     try {
     //         List<InfractionEntity> infractions = infractionService.getSpeedInfractionLowerThan(speed);
-    
+
     //         return ResponseEntity.ok().body(infractions);
     //     } catch (Exception e) {
     //         return ResponseEntity.status(500).body(null); // Internal server error
     //     }
-    // }   
+    // }
 
     @GetMapping("/car-plate/{carPlate}")
     public ResponseEntity<List<Double>> getFinePriceByCarPlate(@PathVariable("carPlate") String carPlate) {
@@ -175,7 +177,7 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
         } else if (currency.equalsIgnoreCase("real")) {
             NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
             formattedPrice = nf.format(totalFinePrice);
-        
+
         } else {
             return ResponseEntity.badRequest().body("Invalid currency");
         }
@@ -202,7 +204,7 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
         return ResponseEntity.ok(result);
     }
 
-  
+
     @GetMapping("/percentage-infraction-by-sex")
     public ResponseEntity<Float> percentageInfractionBySex(@RequestParam("sex") String sex) {
         float percentage = infractionService.percentageInfractionBySex(sex);
@@ -275,7 +277,7 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
     //         if (mostCommonInfraction.isPresent()) {
     //             return ResponseEntity.ok().body(mostCommonInfraction.get());
     //         } else {
-    //             return ResponseEntity.notFound().build(); 
+    //             return ResponseEntity.notFound().build();
     //         }
     //     } catch (RuntimeException e) {
     //         log.error("Error retrieving most common infraction by age: {}", e.getMessage());
@@ -309,7 +311,7 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
             List<InfractionEntity> infractions = infractionService.getFinePriceByCpf(cpf);
             return ResponseEntity.ok(infractions);
         } catch (RuntimeException e) {
-        
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -327,15 +329,43 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
 
 
 
-    @PostMapping("/pay/{id}")
-    public ResponseEntity<InfractionEntity> payInfraction(@PathVariable String id) {
+@PostMapping("/pay/{id}")
+public ResponseEntity<InfractionEntity> payInfraction(@PathVariable String id) {
+    try {
+        ObjectId objectId;
         try {
-            InfractionEntity infraction = infractionService.setAsPaid(id);
-            return ResponseEntity.ok(infraction);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            // Try parsing as ObjectId directly
+            objectId = new ObjectId(id);
+        } catch (IllegalArgumentException e) {
+            try {
+                // If it's not a valid ObjectId, try parsing it as a timestamp
+                long timestamp = Long.parseLong(id);
+                objectId = new ObjectId(Date.from(Instant.ofEpochMilli(timestamp)));
+            } catch (NumberFormatException ex) {
+                // If it's neither a valid ObjectId nor a timestamp, throw an exception
+                throw new IllegalArgumentException("Invalid id format", ex);
+            }
         }
+
+        InfractionEntity infraction = infractionService.setAsPaid(objectId.toString());
+        return ResponseEntity.ok(infraction);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+}
+
+//setasAllAsPaidForCpf
+@PostMapping("/pay-all/{cpf}")
+public ResponseEntity<List<InfractionEntity>> payAllInfractions(@PathVariable String cpf) {
+    try {
+        List<InfractionEntity> infractions = infractionService.setAsPaidForCpf(cpf);
+        return ResponseEntity.ok(infractions);
+    } catch (RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+}
+
+
 
 
     @GetMapping("/list-paid/{cpf}")

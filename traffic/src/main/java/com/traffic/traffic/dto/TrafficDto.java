@@ -1,6 +1,8 @@
 package com.traffic.traffic.dto;
 
 
+import org.springframework.data.annotation.Id;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +17,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TrafficDto {
     
-  
+    @Id
+    private String idTraffic;
     private String carPlate;
     private String carType;
     private String carColor;

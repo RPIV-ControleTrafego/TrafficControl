@@ -190,6 +190,7 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .age(infractionDTO.getAge())
     .sex(infractionDTO.getSex())
     .isPaid(infractionDTO.isPaid())
+    .idInfraction(infractionDTO.getIdInfraction())
     .build();
 }
 

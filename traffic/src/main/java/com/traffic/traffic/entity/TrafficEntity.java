@@ -8,8 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.springframework.data.annotation.Id;
 // import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Document(collection = "trafficData")
@@ -20,8 +22,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 public class TrafficEntity{
     
-
-    
+    @Id
+    @Field("idTraffic")
+    private String idTraffic;
     private String carPlate;
     private String carType;
     private String carColor;

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InfractionDTO {
     
-   
+   private String idInfraction;
     private String carPlate;
     private String address;
     private String date;

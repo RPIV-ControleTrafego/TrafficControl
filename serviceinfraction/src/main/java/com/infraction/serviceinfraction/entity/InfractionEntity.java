@@ -23,6 +23,7 @@ public class InfractionEntity {
 
     @Id
     private ObjectId id;
+    private String idInfraction;
     private String carPlate;
     private String addres;
     private String date;

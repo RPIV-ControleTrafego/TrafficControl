@@ -3,6 +3,8 @@ package com.traffic.traffic.dto;
 
 
 
+import org.springframework.data.annotation.Id;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -17,8 +19,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InfractionDTO {
     
-   
-    
+   @Id
+    private String idInfraction;
     private String carPlate;
     private String address;
     private String date;

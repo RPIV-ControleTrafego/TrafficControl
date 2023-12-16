@@ -191,6 +191,7 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .sex(infractionDTO.getSex())
     .isPaid(infractionDTO.isPaid())
     .idInfraction(infractionDTO.getIdInfraction())
+    .finePrice(infractionDTO.getFinePrice())
     .build();
 }
 

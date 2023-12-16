@@ -457,8 +457,7 @@ public List<InfractionEntity> getNotPaidFine(String cpf) {
 
 public InfractionEntity setAsPaid(String id) {
     try {
-        ObjectId objectId = new ObjectId(id);
-        Optional<InfractionEntity> optionalInfraction = infractionRepository.findById(objectId);
+        Optional<InfractionEntity> optionalInfraction = infractionRepository.findByIdInfraction(id);
 
         if (optionalInfraction.isPresent()) {
             InfractionEntity infraction = optionalInfraction.get();
@@ -476,10 +475,11 @@ public InfractionEntity setAsPaid(String id) {
             return null;
         }
     } catch (IllegalArgumentException e) {
-        log.error("Traffic service - Invalid ObjectId: {}", e.getMessage());
-        throw new IllegalArgumentException("Invalid ObjectId", e);
+        log.error("Traffic service - Invalid idInfraction: {}", e.getMessage());
+        throw new IllegalArgumentException("Invalid idInfraction", e);
     }
 }
+
 
 
 public List<InfractionEntity> searchAllPaidInfractions(String cpf) {

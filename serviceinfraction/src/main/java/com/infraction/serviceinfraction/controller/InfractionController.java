@@ -329,30 +329,25 @@ public ResponseEntity<String> getTotalFinePriceByCurrencyAndCpf(
 
 
 
-@PostMapping("/pay/{id}")
-public ResponseEntity<InfractionEntity> payInfraction(@PathVariable String id) {
-    try {
-        ObjectId objectId;
+    @PostMapping("/pay/{id}")
+    public ResponseEntity<InfractionEntity> payInfraction(@PathVariable String id) {
         try {
-            // Try parsing as ObjectId directly
-            objectId = new ObjectId(id);
-        } catch (IllegalArgumentException e) {
-            try {
-                // If it's not a valid ObjectId, try parsing it as a timestamp
-                long timestamp = Long.parseLong(id);
-                objectId = new ObjectId(Date.from(Instant.ofEpochMilli(timestamp)));
-            } catch (NumberFormatException ex) {
-                // If it's neither a valid ObjectId nor a timestamp, throw an exception
-                throw new IllegalArgumentException("Invalid id format", ex);
+            InfractionEntity infraction = infractionService.setAsPaid(id);
+            
+            if (infraction != null) {
+                return ResponseEntity.ok(infraction);
+            } else {
+                return ResponseEntity.notFound().build();
             }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
-        InfractionEntity infraction = infractionService.setAsPaid(objectId.toString());
-        return ResponseEntity.ok(infraction);
-    } catch (RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
-}
+    
+
+
 
 //setasAllAsPaidForCpf
 @PostMapping("/pay-all/{cpf}")

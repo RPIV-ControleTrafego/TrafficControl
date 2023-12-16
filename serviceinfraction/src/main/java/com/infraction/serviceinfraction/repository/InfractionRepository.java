@@ -65,6 +65,7 @@ public interface InfractionRepository extends MongoRepository<InfractionEntity, 
     //find paid infractions by cpf
     @Query("{'isPaid': true, 'veiculeOwneCPF': ?0}")
     List<InfractionEntity> findByIsPaidTrueAndCpf(String cpf);
+    Optional<InfractionEntity> findByIdInfraction(String idInfraction);
 
 
 

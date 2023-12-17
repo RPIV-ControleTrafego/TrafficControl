@@ -1,12 +1,8 @@
 package com.infraction.serviceinfraction.service.calculator;
-
-
 import java.util.HashMap;
 import java.util.Map;
-
 public class FinePrices {
     private static final Map<String, Double> finePrices = new HashMap<>();
-
     static {
         finePrices.put("red light", 150.0);
         finePrices.put("stop sign", 120.0);
@@ -26,7 +22,6 @@ public class FinePrices {
         finePrices.put("wrong direction", 25.0);
         finePrices.put("no plate", 300.0);
     }
-
     public static Map<String, Double> getFinePrices() {
         return finePrices;
     }

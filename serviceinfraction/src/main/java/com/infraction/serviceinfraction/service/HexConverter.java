@@ -1,14 +1,10 @@
 package com.infraction.serviceinfraction.service;
-
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
 public class HexConverter {
-
     public static String bytesToHex(byte[] bytes) {
         StringBuilder result = new StringBuilder();
         for (byte aByte : bytes) {
@@ -16,7 +12,6 @@ public class HexConverter {
         }
         return result.toString();
     }
-
     public static String calculateHmac(String data, String key) {
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacSHA256");
@@ -31,5 +26,4 @@ public class HexConverter {
             return null;
         }
     }
-
 }

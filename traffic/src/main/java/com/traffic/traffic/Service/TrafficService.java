@@ -42,11 +42,14 @@ public class TrafficService implements ITrafficService {
         AccidentDTO accidentDTO = trafficMapper.mapAllTrafficToAccident(trafficInfo);
         kafkaProducerMessage.sendAccidentMessage(accidentDTO);
 
-
-        verifyInfractionspeed(trafficDto, infractionDTO);
-        verifyViolations(trafficDto, infractionDTO);
-        verifyPlateEmpty(trafficDto, infractionDTO);
-        log.info("Fine Price " + trafficDto.getFinePrice());
+        boolean hasInfraction = validateAllInfractions(trafficDto, infractionDTO);
+        if (hasInfraction == true) {
+            log.info("Infração encontrada: " + infractionDTO);
+            kafkaProducerMessage.sendMessage(infractionDTO);
+        } else {
+            log.info("Nenhuma infração encontrada");
+        }
+     
         TrafficEntity trafficEntity = trafficMapper.mapCarDtoToEntity(trafficDto);
 
         try {
@@ -343,7 +346,7 @@ public List<String> getCarTypes() {
         if (trafficDto.getSpeed() > trafficDto.getMaxSpeed()) {
             mapCarDtoToInfractionDTO(trafficDto, infractionDto);
             infractionDto.setViolation("speeding");
-            kafkaProducerMessage.sendMessage(infractionDto);
+            
             return true;
         } else {
             return false;
@@ -358,11 +361,10 @@ public List<String> getCarTypes() {
             mapCarDtoToInfractionDTO(trafficDto, infractionDto);
 
 
-            if(trafficDto.getDirection() != trafficDto.getStreetDirection()){
-                infractionDto.setViolation("wrong direction");
-            }
+           
+            trafficDto.setViolation(trafficDto.getViolation());
 
-            kafkaProducerMessage.sendMessage(infractionDto);
+           
             return true;
     }
     else {
@@ -377,7 +379,7 @@ public List<String> getCarTypes() {
         if(trafficDto.getCarPlate() == null){
               mapCarDtoToInfractionDTO(trafficDto, infractionDto);
               infractionDto.setViolation("no plate");
-            kafkaProducerMessage.sendMessage(infractionDto);
+            
             return true;
         }
         else{
@@ -385,6 +387,27 @@ public List<String> getCarTypes() {
         }
 
     }
+
+
+
+    public boolean validateAllInfractions(TrafficDto trafficDto, InfractionDTO infractionDto){
+        log.info("violation is " + trafficDto.getViolation());
+        if(verifyViolations(trafficDto, infractionDto) == true){
+            return true;
+        }
+        else
+        if(verifyInfractionspeed(trafficDto, infractionDto) == true){
+            return true;
+        }
+        else if(verifyPlateEmpty(trafficDto, infractionDto) == true){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
 
 
 
@@ -461,7 +484,6 @@ public List<String> getCarTypes() {
         infractionDto.setVeiculeOwnerName(trafficDto.getVeiculeOwnerName());
         if(trafficDto.getViolation() != null ){
             infractionDto.setViolation(trafficDto.getViolation());
-
         }
        infractionDto.setSex(trafficDto.getSex());
        infractionDto.setAge(trafficDto.getAge());

@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class InfractionService implements IinfractionService{
     private final LoggerInfraction log = new LoggerInfraction(InfractionService.class);
-    // Adapter Pattern
     private final CurrencyConverterAdapter currencyConverter;
-    //Strategy Pattern
     private FinePriceCalculator fineCalculator;
     @Autowired
     private InfractionRepository infractionRepository;
@@ -150,19 +148,18 @@ private InfractionEntity mapInfractionDTOToInfractionEntity(InfractionDTO infrac
     .build();
 }
 private boolean calculateFine(InfractionDTO infractionDTO) {
-    double finePrice = fineCalculator.calculateFine(infractionDTO);  // Usando a estratégia de cálculo de multa apropriada
+    double finePrice = fineCalculator.calculateFine(infractionDTO);  
     infractionDTO.setFinePrice(finePrice);
     return finePrice > 0;
 }
     public Double convertCurrency(Double amount, String fromCurrency, String toCurrency) {
-        // Chame o método do adaptador para realizar a conversão
         return currencyConverter.convertCurrency(amount, fromCurrency, toCurrency);
     }
     public Map<Integer, Integer> findPeakHours(List<InfractionEntity> infractions) {
         Map<Integer, Integer> hourFrequency = new HashMap<>();
         for (InfractionEntity infraction : infractions) {
             String dateStr = infraction.getDate();
-            int hour = Integer.parseInt(dateStr.substring(11, 13)); // Extrai as horas
+            int hour = Integer.parseInt(dateStr.substring(11, 13)); 
             hourFrequency.put(hour, hourFrequency.getOrDefault(hour, 0) + 1);
         }
         int maxFrequency = 0;
@@ -181,7 +178,7 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
         Map<String, Integer> dayFrequency = new HashMap<>();
         for (InfractionEntity infraction : infractions) {
             String dateStr = infraction.getDate();
-            String day = dateStr.substring(0, 10); // Extrai a data
+            String day = dateStr.substring(0, 10); 
             dayFrequency.put(day, dayFrequency.getOrDefault(day, 0) + 1);
         }
         int maxFrequency = 0;
@@ -257,61 +254,6 @@ private boolean calculateFine(InfractionDTO infractionDTO) {
           throw e;
       }
     }
-// public InfractionEntity getMostCommonViolationBySex(String sex) {
-//     try {
-//         Objects.requireNonNull(sex, "Sex cannot be null");
-//         List<InfractionEntity> infractions = infractionRepository.findViolationBySex(sex);
-//         Objects.requireNonNull(infractions, "Infractions list cannot be null");
-//         Map<String, Long> countByViolation = countViolations(infractions);
-//         if (countByViolation.isEmpty()) {
-//             return null;
-//         }
-//         String mostCommonViolation = findMostCommonViolation(countByViolation);
-//         return infractions.stream()
-//             .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
-//             .findFirst()
-//             .orElse(null);
-//     } catch (RuntimeException e) {
-//         log.error("Error retrieving most common infraction by sex: {}", e.getMessage());
-//         throw e;
-//     }
-// }
-// private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
-//     return infractions.stream()
-//         .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
-// }
-// private String findMostCommonViolation(Map<String, Long> countByViolation) {
-//     return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
-// }
-// public Optional<InfractionEntity> getMostCommonInfractionByAge(int age) {
-//     try {
-//         if (age <= 0) {
-//             throw new IllegalArgumentException("Age must be greater than zero");
-//         }
-//         List<InfractionEntity> infractions = infractionRepository.findViolationByAge(age);
-//         if (infractions == null || infractions.isEmpty()) {
-//             return Optional.empty();
-//         }
-//         Map<String, Long> countByViolation = countViolations(infractions);
-//         if (countByViolation.isEmpty()) {
-//             return Optional.empty();
-//         }
-//         String mostCommonViolation = findMostCommonViolation(countByViolation);
-//         return infractions.stream()
-//             .filter(infraction -> infraction.getViolations().equals(mostCommonViolation))
-//             .findFirst();
-//     } catch (RuntimeException e) {
-//         log.error("Error retrieving most common infraction by age: {}", e.getMessage());
-//         throw e;
-//     }
-// }
-// private Map<String, Long> countViolations(List<InfractionEntity> infractions) {
-//     return infractions.stream()
-//         .collect(Collectors.groupingBy(InfractionEntity::getViolations, Collectors.counting()));
-// }
-// private String findMostCommonViolation(Map<String, Long> countByViolation) {
-//     return Collections.max(countByViolation.entrySet(), Map.Entry.comparingByValue()).getKey();
-// }
 public InfractionEntity getLastFineByCpf(String cpf) {
     List<InfractionEntity> allInfractionsForCpf = getFinePriceByCpf(cpf);
     if (allInfractionsForCpf.isEmpty()) {
@@ -352,7 +294,6 @@ public InfractionEntity setAsPaid(String id) {
             }
         } else {
             log.info("Traffic service - Infraction not found with id: {}", id);
-            // You may want to handle this case differently, like throwing an exception or returning null
             return null;
         }
     } catch (IllegalArgumentException e) {

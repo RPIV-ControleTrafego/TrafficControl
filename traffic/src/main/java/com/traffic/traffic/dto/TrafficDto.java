@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TrafficDto {
-    
+
     @Id
     private String idTraffic;
     private String carPlate;
@@ -37,6 +37,8 @@ public class TrafficDto {
     private int age;
     private String sex;
     private boolean isPaid;
-    
-    
+    private double finePrice;
+
+
+
 }

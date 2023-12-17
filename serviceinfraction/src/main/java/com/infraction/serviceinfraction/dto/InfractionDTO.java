@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class InfractionDTO {
-    
+
    private String idInfraction;
     private String carPlate;
     private String address;
@@ -36,6 +36,7 @@ public class InfractionDTO {
 
 
 
-    
+
+
 
 }
